@@ -3,9 +3,12 @@ import { createServer } from 'node:http';
 import { randomBytes, randomInt, randomUUID, createHash, timingSafeEqual } from 'node:crypto';
 import { mkdir, readFile, readdir, rename, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { isIP } from 'node:net';
 import { fileURLToPath } from 'node:url';
+import proxyaddr from 'proxy-addr';
 import { Server } from 'socket.io';
 import * as defaultEngine from '../shared/game.mjs';
+import { canonicalClientAddress, createCreationLimiter } from './creation-limiter.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -13,9 +16,10 @@ const ROOM_CODE = /^[A-HJ-NP-Z2-9]{6}$/;
 const TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 
 class RequestError extends Error {
-  constructor(message, code) {
+  constructor(message, code, retryAfterMs) {
     super(message);
     this.code = code;
+    this.retryAfterMs = retryAfterMs;
   }
 }
 
@@ -43,6 +47,20 @@ function createPlayer(name) {
   return { token, player: { id: randomUUID(), name, tokenHash: tokenHash(token) } };
 }
 
+function compileTrustedProxies(ranges) {
+  if (!Array.isArray(ranges) || ranges.some(range => {
+    if (typeof range !== 'string') return true;
+    const [address, prefix, extra] = range.split('/');
+    const version = isIP(address);
+    // proxy-addr converts mapped /96 to IPv4 /0. Require plain IPv4 CIDR syntax
+    // for mapped ranges so a superficially narrow IPv6 prefix cannot trust everyone.
+    const mappedRange = prefix !== undefined && version === 6 && isIP(canonicalClientAddress(address)) === 4;
+    return !version || mappedRange || extra !== undefined || (prefix !== undefined &&
+      (!/^\d+$/.test(prefix) || Number(prefix) < 1 || Number(prefix) > (version === 4 ? 32 : 128)));
+  })) throw new TypeError('TRUSTED_PROXIES must contain explicit IP addresses or CIDRs; trusting every address is not allowed.');
+  return proxyaddr.compile(ranges);
+}
+
 function matchesToken(player, token) {
   if (typeof token !== 'string' || !TOKEN_PATTERN.test(token)) return false;
   const expected = Buffer.from(player.tokenHash, 'hex');
@@ -56,9 +74,20 @@ export async function createTarokServer({
   distDir = path.resolve(HERE, '../dist'),
   engine = defaultEngine,
   logger = console,
+  creationLimit = {},
+  trustedProxies = (process.env.TRUSTED_PROXIES || '').split(',').map(value => value.trim()).filter(Boolean),
+  now = Date.now,
 } = {}) {
+  const trustProxy = compileTrustedProxies(trustedProxies);
+  const creationLimiter = createCreationLimiter({
+    limit: creationLimit.max ?? Number(process.env.ROOM_CREATE_LIMIT ?? 60),
+    windowMs: creationLimit.windowMs ?? Number(process.env.ROOM_CREATE_WINDOW_MS ?? 3_600_000),
+    maxKeys: creationLimit.maxKeys ?? 10_000,
+    now,
+  });
   await mkdir(dataDir, { recursive: true, mode: 0o700 });
   const rooms = new Map();
+  const unrestoredRoomIds = new Set();
   const queues = new Map();
   const connections = new Map();
   let shuttingDown = false;
@@ -77,6 +106,8 @@ export async function createTarokServer({
       if (room.game) room.players.forEach((player) => engine.viewFor(room.game, player.id));
       rooms.set(room.id, room);
     } catch {
+      // Never reuse the code of a retained file: its contents may still be recoverable.
+      unrestoredRoomIds.add(filename.slice(0, 6));
       logger.warn(`Could not load saved room ${filename}; file retained for recovery.`);
     }
   }
@@ -112,7 +143,16 @@ export async function createTarokServer({
     next();
   });
   app.get('/health', (_request, response) => {
+    response.setHeader('Cache-Control', 'no-store');
     response.status(shuttingDown ? 503 : 200).json({ ok: !shuttingDown });
+  });
+  app.get('/ready', (_request, response) => {
+    const ok = !shuttingDown && unrestoredRoomIds.size === 0;
+    response.setHeader('Cache-Control', 'no-store');
+    response.status(ok ? 200 : 503).json({
+      ok,
+      restoration: { status: unrestoredRoomIds.size ? 'degraded' : 'ok', failedRooms: unrestoredRoomIds.size },
+    });
   });
   app.use(express.static(distDir, { index: false }));
   app.get(/.*/, (request, response, next) => {
@@ -186,6 +226,11 @@ export async function createTarokServer({
   }
 
   io.on('connection', (socket) => {
+    // Socket.IO handles upgrades outside Express, so resolve its original request explicitly.
+    // Only configured proxy hops may contribute X-Forwarded-For addresses.
+    let creationKey;
+    try { creationKey = canonicalClientAddress(proxyaddr(socket.request, trustProxy)); } catch { /* Fall back to the peer. */ }
+    creationKey ||= canonicalClientAddress(socket.request.socket.remoteAddress) || 'unknown-peer';
     // A small per-connection burst limit also bounds pending writes from a misbehaving client.
     let requestTimes = [];
     function handle(event, operation) {
@@ -205,17 +250,27 @@ export async function createTarokServer({
             ok: false,
             error: error instanceof RequestError ? error.message : 'Zahteve ni bilo mogoče shraniti. Poskusi znova.',
             ...(error instanceof RequestError && error.code ? { code: error.code } : {}),
+            ...(error instanceof RequestError && Number.isSafeInteger(error.retryAfterMs)
+              ? { retryAfterMs: error.retryAfterMs } : {}),
           });
         }
       });
     }
 
     handle('room:create', async ({ name }) => {
+      // Process-scoped and synchronous: parallel sockets/reconnects share the same quota.
+      // Count attempts before validation or disk work; join/resume/play never consume it.
+      const allowance = creationLimiter.consume(creationKey);
+      if (!allowance.allowed) {
+        const minutes = Math.max(1, Math.ceil(allowance.retryAfterMs / 60_000));
+        throw new RequestError(`Preveč novih miz s tega omrežja. Poskusi čez ${minutes} min. Obstoječo igro lahko nadaljuješ.`,
+          'ROOM_CREATE_LIMIT', allowance.retryAfterMs);
+      }
       const { token, player } = createPlayer(cleanName(name));
       let roomId;
       do {
         roomId = Array.from({ length: 6 }, () => CODE_ALPHABET[randomInt(CODE_ALPHABET.length)]).join('');
-      } while (rooms.has(roomId) || queues.has(roomId));
+      } while (rooms.has(roomId) || queues.has(roomId) || unrestoredRoomIds.has(roomId));
       return withRoom(roomId, async () => {
         const room = {
           version: 1,

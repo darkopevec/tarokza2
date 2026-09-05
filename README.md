@@ -21,6 +21,8 @@ The container runs as a non-root user. The `tarok-data` volume retains games, se
 
 See [deployment details](docs/deployment.md) for port configuration, reverse proxies and backups.
 
+Public-hosting safeguards include a reconnect-resistant new-table quota (default: 60 attempts per IP per hour), explicit trusted-proxy configuration, and a separate `/ready` restoration check. Existing games are not expired or deleted. `/health` remains the Docker liveness check; degraded restoration alerts an operator while healthy games stay usable. See [limits and recovery](docs/deployment.md#new-table-limits-and-trusted-proxies) before exposing the service publicly.
+
 ## Play
 
 1. Enter your name and select **Ustvari mizo**.

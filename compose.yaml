@@ -8,6 +8,9 @@ services:
       NODE_ENV: production
       PORT: 3000
       DATA_DIR: /app/data
+      ROOM_CREATE_LIMIT: "${ROOM_CREATE_LIMIT:-60}"
+      ROOM_CREATE_WINDOW_MS: "${ROOM_CREATE_WINDOW_MS:-3600000}"
+      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
     volumes:
       - tarok-data:/app/data
     restart: unless-stopped
