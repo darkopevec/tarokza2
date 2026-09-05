@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
 import { cardFor, createDeck } from "../shared/cards.mjs";
+import { explainScoreRow } from "./score-explanation.mjs";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -144,9 +145,9 @@ function Modal({ title, children, onClose, wide = false, className = "" }) {
     const handler = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key === "Tab") {
-        const all = ref.current?.querySelectorAll(
-          "button:not(:disabled),a,input",
-        );
+        const all = [...(ref.current?.querySelectorAll(
+          'button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),summary,[tabindex]:not([tabindex="-1"])',
+        ) || [])].filter(element => element.getClientRects().length > 0 && element.tabIndex >= 0);
         if (!all?.length) return;
         const first = all[0],
           last = all[all.length - 1];
@@ -391,15 +392,18 @@ function ScoreTable({ game }) {
           </tr>
         </thead>
         <tbody>
-          {game.scoreboard.map((row) => (
-            <tr key={row.round} data-testid="scoreboard-row">
+          {game.scoreboard.map((row) => {
+            const explanation = explainScoreRow(row, game.players);
+            return <React.Fragment key={row.round}>
+            <tr data-testid="scoreboard-row">
               <td>
                 <strong>{String(row.round).padStart(2, "0")}</strong>
                 <small>
                   {row.breakdown?.some(entry => entry.kind === "valat")
-                    ? row.announcements?.some(call => call.bonus === "valat") ? "Napovedan valat" : "Tihi valat"
+                    ? row.breakdown.some(entry => entry.kind === "valat" && entry.announced) ? "Napovedan valat" : "Tihi valat"
                     : `${row.contract.kind === "announced" ? "Napovedana" : "Navadna"} igra`}
                 </small>
+                {explanation.bidder && <small className="score-bidder" data-testid="score-bidder">Napoved igre: {explanation.bidder}</small>}
                 {row.scoringVersion !== 2 && <small>Prejšnja pravila</small>}
               </td>
               {row.deltas.map((n, i) => (
@@ -422,7 +426,32 @@ function ScoreTable({ game }) {
                 </td>
               ))}
             </tr>
-          ))}
+            <tr className="score-details-row">
+              <td colSpan={game.players.length + 1}>
+                <details className="score-details" data-testid="score-details" data-round={row.round}>
+                  <summary aria-label={`Izračun za rundo ${row.round}`}>
+                    <CircleHelp size={16} aria-hidden="true" /> Izračun runde {row.round}
+                  </summary>
+                  <div className="score-calculation" aria-label={`Izračun za rundo ${row.round}`}>
+                    {explanation.notes.map((note, index) => <p className="score-calculation-note" key={index}>{note}</p>)}
+                    <div className="score-calculation-players">
+                      {explanation.players.map((player, index) => <section className="score-calculation-player" key={index}>
+                        <h3>{player.name}</h3>
+                        <ul>
+                          {player.lines.map((line, lineIndex) => <li key={lineIndex}>
+                            <span>{line.label}</span>
+                            {line.calculation && <span className="score-formula">{line.calculation}</span>}
+                          </li>)}
+                        </ul>
+                        <p className="score-calculation-total"><span>Rezultat runde</span><strong>{player.total}</strong></p>
+                      </section>)}
+                    </div>
+                  </div>
+                </details>
+              </td>
+            </tr>
+            </React.Fragment>;
+          })}
         </tbody>
         <tfoot>
           <tr>

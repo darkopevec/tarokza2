@@ -31,6 +31,8 @@ See [deployment details](docs/deployment.md) for port configuration, reverse pro
 6. Tap a highlighted card to play it on your turn. Swipe the hand horizontally or tap a suit shortcut to find its cards; the shortcuts only scroll your hand. Playing from a pile is distinct from the **Vzemi v roko** action: during play you may still take exposed taroks/kings later, even on the opponent's turn, without consuming a turn.
 7. After 27 tricks, both players see the round result with a game/bonus/penalty breakdown and cumulative scoreboard. Select **Nova runda**; a new deal starts after both players are ready.
 
+Each historical round identifies who announced the game. Open **Izračun runde** to see that round's saved card points, base-game calculation, bonuses/penalties, and resulting score for each player. This works both at the end of a round and in **Rezultati** during later rounds. Valat replacement and 35–35 ties are explained explicitly. Older rows retain their original scoring; unavailable or inconsistent details are marked instead of inventing a calculation. Opening an explanation never changes a score.
+
 Refresh or reconnect in the same browser to resume your seat. Leaving a table retains its credential; enter its code or reopen its link to return. Private credentials are stored locally in that browser, so clearing browser storage loses your ability to reclaim a full table. A second device should join as the opponent, not copy another player's browser storage.
 
 Card plays carry the displayed round and trick position. If another tab has already advanced play, the server rejects the outdated request and sends the current table instead of letting that card start the next trick. Optional pickups do not invalidate this position; card legality is still checked against the latest table. After upgrading from an older client, refresh the page if a play asks you to do so. Existing saved rounds and scores do not require migration.
@@ -73,6 +75,7 @@ npm start
 npm test
 npm run test:browser
 npm run test:responsive
+npm run test:score-history
 ```
 
 The browser verification requires the running app on port 3000. It uses system Chromium when available; otherwise install Playwright Chromium with `npx playwright install chromium`. Set `BASE_URL` to use a different deployment, or `CHROMIUM_EXECUTABLE_PATH` for a different Chromium executable.
@@ -86,6 +89,8 @@ HEADLESS=0 KEEP_BROWSER_OPEN=1 npm run test:browser
 The suite exercises two isolated touch browser sessions, invitation link prefill, a mid-round refresh, two complete 54-card rounds, scoreboards and readiness for round three. It checks 320px and 390px phone layouts and that the hand fits on a 1024×768 tablet. Screenshots and a report are written to `artifacts/`. Engine tests independently exercise 250 randomized full rounds, private state projections, legal moves, scoring and readiness. Server integration tests verify reconnects, reserved seats, rejection of a third player, and persistence across restarts.
 
 The responsive smoke suite rotates the same live game through ten phone/tablet viewport sizes, from 320×568 portrait and 568×320 landscape to 1180×820. It checks bidding, preparation, manual pickup, actual card play, suit shortcuts and dialogs: no horizontal page overflow, the hand within the viewport, 44px utility controls, unchanged card proportions, and no overlapping/out-of-table phase controls. It also checks invitation-first joining, inline name validation, accessible icon names, touch-accessible announcement help, the non-mutating pickup reminder, polite turn status, contextualized play requests, and reflow under a simulated 150% text increase. Enlarged text may require vertical scrolling. Reports and screenshots go to `artifacts/responsive/`; use `ARTIFACTS_DIR` for another directory or `BASELINE=1` to record layout violations without failing on them. These are Chromium touch-viewport checks, not a claim of testing on physical iOS/Android devices or with native screen readers.
+
+The score-history check starts its own disposable loopback server and deterministic presentation fixtures; no running production game is needed. It checks old-round bidder/calculation accuracy, ties, bonuses, valat, legacy rows, keyboard disclosure controls, phone/tablet layouts, and unchanged stored state after expansion and refresh. Screenshots and its report go to `artifacts/score-history/`. Run `npm run build` first so it tests the current frontend.
 
 Rare announcement eligibility can also be checked against a separate deterministic, local-only fixture server:
 

@@ -10,7 +10,8 @@
     "start": "node server/index.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/verify-browser.mjs",
-    "test:responsive": "node scripts/verify-responsive.mjs"
+    "test:responsive": "node scripts/verify-responsive.mjs",
+    "test:score-history": "node scripts/verify-score-history.mjs"
   },
   "dependencies": {
     "express": "^5.1.0",

@@ -381,3 +381,34 @@
   .site-header:has(+ .game-page) { min-height: calc(44px + env(safe-area-inset-top)); }
   .site-header:has(+ .game-page) .header-inner { min-height: 43px; }
 }
+
+/* Historical calculations are disclosures, never recalculations of saved scores. */
+.score-table .score-bidder { color: #57704e; overflow-wrap: anywhere; line-height: 1.4; }
+.score-table tbody tr:has(+ .score-details-row) > td { padding-bottom: 6px; border-bottom: 0; }
+.score-table .score-details-row > td { width: auto; padding: 0 0 10px; text-align: left; }
+.score-details { min-width: 0; }
+.score-details > summary {
+  min-height: 44px; padding: 10px 12px; font-size: 12px; line-height: 24px;
+  cursor: pointer; color: #405f3f; border-radius: 6px; overflow-wrap: anywhere;
+}
+.score-details > summary svg { vertical-align: middle; margin-right: 4px; }
+.score-details > summary:hover, .score-details[open] > summary { background: #ecf1e4; }
+.score-details > summary:focus-visible { outline: 3px solid #d79357; outline-offset: -3px; }
+.score-calculation { padding: 12px; border: 1px solid #dce5d2; border-radius: 0 0 8px 8px; background: #f7f9f1; }
+.score-calculation-note { font-size: 12px; line-height: 1.6; color: #53664e; overflow-wrap: anywhere; }
+.score-calculation-note + .score-calculation-note { margin-top: 5px; }
+.score-calculation-players { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.score-calculation-player { min-width: 0; padding: 12px; border-radius: 6px; background: #fffefa; }
+.score-calculation-player h3 { margin: 0 0 8px; font-size: 14px; overflow-wrap: anywhere; }
+.score-calculation-player ul { list-style: none; margin: 0; padding: 0; }
+.score-calculation-player li { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.score-formula { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 500; color: #2e513c; overflow-wrap: anywhere; }
+.score-calculation-total { padding-top: 8px; border-top: 1px solid #e1e8d9; line-height: 1.6; }
+.score-calculation-total > span { display: block; font-size: 11px; color: #53664e; }
+.score-table .score-details-row .score-calculation-total > strong { font-family: "DM Sans", sans-serif; font-size: 14px; overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .score-details > summary { padding-inline: 8px; }
+  .score-calculation { padding: 8px; }
+  .score-calculation-players { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .score-calculation-player { padding: 10px; }
+}
