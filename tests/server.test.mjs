@@ -19,6 +19,7 @@ async function client(address) {
   const connection = {
     socket,
     state: null,
+    stateCount: 0,
     async request(event, payload) {
       return socket.timeout(5000).emitWithAck(event, payload);
     },
@@ -41,6 +42,7 @@ async function client(address) {
   };
   socket.on('state', (state) => {
     connection.state = state;
+    connection.stateCount += 1;
     for (const listener of listeners) listener(state);
   });
   await new Promise((resolve, reject) => {
@@ -66,8 +68,15 @@ function stamp(state) {
   ]);
 }
 
+function playContext(game) {
+  return { round: game.round, trickNumber: game.trickNumber, trickSize: game.trick.length };
+}
+
 async function move(clients, index, action) {
-  const result = await clients[index].request('game:action', action);
+  const payload = action.type === 'play' && !Object.hasOwn(action, 'expectedPlay')
+    ? { ...action, expectedPlay: playContext(clients[index].state.game) }
+    : action;
+  const result = await clients[index].request('game:action', payload);
   assert.equal(result.ok, true, JSON.stringify(result));
   const expected = stamp(clients[index].state);
   await Promise.all(clients.map((current) => current.waitFor((state) => stamp(state) === expected)));
@@ -148,7 +157,9 @@ test('private multiplayer games complete two rounds, preserve seats, and survive
       const cardId = clients[index].state.game.legalMoves[0];
       if (played === 0) {
         const before = JSON.stringify(clients[1 - index].state.game);
-        const illegal = await clients[1 - index].request('game:action', { type: 'play', cardId });
+        const illegal = await clients[1 - index].request('game:action', {
+          type: 'play', cardId, expectedPlay: playContext(clients[1 - index].state.game),
+        });
         assert.equal(illegal.ok, false, 'Out-of-turn play must be rejected');
         assert.equal(JSON.stringify(clients[1 - index].state.game), before);
       }
@@ -274,6 +285,12 @@ async function setupRoom(t, engine) {
     get clients() { return clients; },
     sessions,
     roomFile,
+    async openTab(index) {
+      const current = await client(address);
+      sockets.push(current.socket);
+      assert.equal((await current.request('room:resume', sessions[index])).ok, true);
+      return current;
+    },
     async reject(index, action, reason) {
       const before = clients.map((current) => cloneForComparison(current.state.game));
       const diskBefore = await readFile(roomFile, 'utf8');
@@ -283,6 +300,7 @@ async function setupRoom(t, engine) {
         `${reason}: neither private view changes`);
       assert.equal(await readFile(roomFile, 'utf8'), diskBefore,
         `${reason}: the saved game does not change`);
+      return response;
     },
     async restart() {
       const expected = clients.map((current) => cloneForComparison(current.state.game));
@@ -345,7 +363,11 @@ test('private announcement eligibility, frozen preparation, restart, and bonus s
   assert.ok(initial.players.every((player) => player.stacks.every((stack) => stack.top !== null)),
     'Pile tops are public during preparation');
   assert.ok(room.clients.every((current) => current.state.game.legalMoves.length === 0));
-  await room.reject(1, { type: 'play', cardId: room.clients[1].state.game.hand[0].id }, 'Card play is blocked during preparation');
+  const earlyPlay = await room.reject(1, {
+    type: 'play', cardId: room.clients[1].state.game.hand[0].id,
+    expectedPlay: playContext(room.clients[1].state.game),
+  }, 'Card play is blocked during preparation');
+  assert.equal(earlyPlay.code, 'STALE_PLAY');
   await room.reject(1, { type: 'announce', bonus: 'kings', playerId: room.sessions[0].playerId },
     'Supplying another player ID cannot announce their private kings');
   await room.reject(0, { type: 'announce', bonus: 'trula' }, 'Trula requires all three cards in hand');
@@ -382,7 +404,8 @@ test('private announcement eligibility, frozen preparation, restart, and bonus s
   assert.deepEqual(room.clients[0].state.game.legalAnnouncements, []);
   await room.reject(0, { type: 'pickup', cardId: 'tarok-11' }, 'Own confirmation freezes an otherwise legal pickup');
   await room.reject(0, { type: 'announce', bonus: 'kings' }, 'Own confirmation freezes bonus announcements');
-  await room.reject(1, { type: 'play', cardId: room.clients[1].state.game.hand[0].id },
+  await room.reject(1, { type: 'play', cardId: room.clients[1].state.game.hand[0].id,
+    expectedPlay: playContext(room.clients[1].state.game) },
     'One confirmation is insufficient to begin play');
 
   await room.restart();
@@ -472,6 +495,12 @@ test('an underway legacy round retains its scoring until the next deal', { timeo
   }
   await confirmAnnouncements(room.clients);
   assert.deepEqual(room.clients[0].state.game.scoreboard[0].deltas, [35, 0]);
+  const firstPlayer = room.clients.findIndex((current) => current.state.game.legalMoves.length > 0);
+  const previousRoundPlay = await room.reject(firstPlayer, {
+    type: 'play', cardId: room.clients[firstPlayer].state.game.legalMoves[0],
+    expectedPlay: { ...playContext(room.clients[firstPlayer].state.game), round: 1 },
+  }, 'A context from the previous round cannot play a card in the new deal');
+  assert.equal(previousRoundPlay.code, 'STALE_PLAY');
 });
 
 function finalBonusTrickEngine(mode) {
@@ -668,4 +697,123 @@ test('optional honor pickups synchronize privately, reject illegal requests, and
     'Restart restores both private hands, pickup options, public memory, and the incomplete trick');
   await rejectPickup(1, 'tarok-18', 'An already persisted pickup remains stale after restart');
   await pickup(0, 'tarok-21', 0, 'clubs-8');
+});
+
+const staleReplyFixtureEngine = {
+  ...gameEngine,
+  createGame(options) {
+    const game = pickupFixtureEngine.createGame(options);
+    game.phase = 'playing';
+    game.announcementReady = [true, true];
+    gameEngine.act(game, game.players[0].id, { type: 'pickup', cardId: 'tarok-22' });
+    gameEngine.act(game, game.players[0].id, { type: 'pickup', cardId: 'tarok-21' });
+    gameEngine.act(game, game.players[1].id, { type: 'play', cardId: 'tarok-16' });
+    return game;
+  },
+};
+
+test('play context rejects malformed and stale requests and prevents distinct-reply tab races', { timeout: 30_000 }, async (t) => {
+  const room = await setupRoom(t, staleReplyFixtureEngine);
+  const snapshotContext = playContext(room.clients[0].state.game);
+  assert.deepEqual(snapshotContext, { round: 1, trickNumber: 1, trickSize: 1 });
+  const contexts = [
+    ['missing', undefined],
+    ['null', null],
+    ['empty', {}],
+    ['array', [1, 1, 1]],
+    ['string round', { ...snapshotContext, round: '1' }],
+    ['zero round', { ...snapshotContext, round: 0 }],
+    ['fractional trick number', { ...snapshotContext, trickNumber: 1.5 }],
+    ['out-of-range trick number', { ...snapshotContext, trickNumber: 28 }],
+    ['string trick size', { ...snapshotContext, trickSize: '1' }],
+    ['invalid trick size', { ...snapshotContext, trickSize: 2 }],
+    ['same trick before its lead', { ...snapshotContext, trickSize: 0 }],
+    ['different trick', { ...snapshotContext, trickNumber: 2 }],
+  ];
+  for (const [description, expectedPlay] of contexts) {
+    const counts = room.clients.map((current) => current.stateCount);
+    const payload = { type: 'play', cardId: 'tarok-22' };
+    if (expectedPlay !== undefined) payload.expectedPlay = expectedPlay;
+    const response = await room.reject(0, payload, `Reject ${description} play context`);
+    assert.equal(response.code, 'STALE_PLAY');
+    if (description === 'missing') assert.match(response.error, /osveži/i, 'Old clients receive a refresh instruction');
+    await Promise.all(room.clients.map((current, index) => current.waitFor(() => current.stateCount > counts[index])));
+    assert.ok(!room.clients[1].state.game.hand.some((card) => ['tarok-21', 'tarok-22'].includes(card.id)),
+      'Resynchronizing after rejection still keeps the other hand private');
+  }
+
+  const duplicate = await room.openTab(0);
+  assert.deepEqual(duplicate.state.game.hand, room.clients[0].state.game.hand);
+  assert.ok(room.clients[0].state.game.legalMoves.includes('tarok-21'));
+  assert.ok(room.clients[0].state.game.legalMoves.includes('tarok-22'));
+  const beforeHandCount = room.clients[0].state.game.hand.length;
+  // Both tabs construct their distinct replies from the same displayed snapshot.
+  // If the first reply wins, the second must not silently become the next lead.
+  const results = await Promise.all([
+    room.clients[0].request('game:action', { type: 'play', cardId: 'tarok-22', expectedPlay: snapshotContext }),
+    duplicate.request('game:action', { type: 'play', cardId: 'tarok-21', expectedPlay: snapshotContext }),
+  ]);
+  assert.equal(results.filter((result) => result.ok).length, 1);
+  assert.equal(results.find((result) => !result.ok).code, 'STALE_PLAY');
+  const allTabs = [...room.clients, duplicate];
+  await Promise.all(allTabs.map((current) => current.waitFor((state) =>
+    state?.game?.trickNumber === 2 && state.game.trick.length === 0)));
+  const game = room.clients[0].state.game;
+  assert.equal(game.hand.length, beforeHandCount - 1, 'Exactly one intended reply leaves the hand');
+  assert.equal(game.turn, 0, 'The winner still needs to choose the next lead');
+  assert.equal(game.players[0].trickCount, 1);
+  assert.deepEqual(game.trick, []);
+  assert.deepEqual(duplicate.state.game.hand, game.hand);
+  const saved = JSON.parse(await readFile(room.roomFile, 'utf8'));
+  assert.equal(saved.game.trickNumber, 2);
+  assert.equal(saved.game.trick.length, 0, 'The save contains no accidental next-trick lead');
+  assert.equal(saved.game.players[0].hand.length, beforeHandCount - 1);
+  const remainingReply = ['tarok-21', 'tarok-22'].find((id) => game.hand.some((card) => card.id === id));
+  assert.ok(game.legalMoves.includes(remainingReply), 'The rejected card is legal as a deliberately chosen new lead');
+  const stale = await room.reject(0, {
+    type: 'play', cardId: remainingReply, expectedPlay: snapshotContext,
+  }, 'Replaying the old reply context cannot consume the next lead');
+  assert.equal(stale.code, 'STALE_PLAY');
+  await move(room.clients, 0, { type: 'play', cardId: remainingReply });
+  assert.equal(room.clients[0].state.game.trick.length, 1, 'A fresh choice can lead the next trick normally');
+});
+
+test('still-current play contexts survive optional off-turn pickups and server restart', { timeout: 30_000 }, async (t) => {
+  const room = await setupRoom(t, pickupFixtureEngine);
+  await move(room.clients, 1, { type: 'bid', bid: 'play' });
+  await confirmAnnouncements(room.clients);
+  const leadContext = playContext(room.clients[1].state.game);
+  assert.ok(room.clients[1].state.game.legalMoves.includes('tarok-16'));
+  await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-22' });
+  assert.deepEqual(playContext(room.clients[1].state.game), leadContext);
+  await move(room.clients, 1, { type: 'play', cardId: 'tarok-16', expectedPlay: leadContext });
+  const replyContext = playContext(room.clients[0].state.game);
+  assert.ok(room.clients[0].state.game.legalMoves.includes('tarok-22'));
+  await move(room.clients, 1, { type: 'pickup', cardId: 'tarok-19' });
+  assert.deepEqual(playContext(room.clients[0].state.game), replyContext);
+  await room.restart();
+  assert.deepEqual(playContext(room.clients[0].state.game), replyContext);
+  await move(room.clients, 0, { type: 'play', cardId: 'tarok-22', expectedPlay: replyContext });
+  assert.equal(room.clients[0].state.game.trickNumber, 2);
+  assert.equal(room.clients[0].state.game.trick.length, 0);
+});
+
+test('unchanged play context still recalculates follow-suit legality after pickups', { timeout: 30_000 }, async (t) => {
+  const room = await setupRoom(t, pickupFixtureEngine);
+  await move(room.clients, 1, { type: 'bid', bid: 'play' });
+  await confirmAnnouncements(room.clients);
+  const clubLead = room.clients[1].state.game.hand.find((card) => card.suit === 'clubs').id;
+  await move(room.clients, 1, { type: 'play', cardId: clubLead });
+  const context = playContext(room.clients[0].state.game);
+  assert.ok(room.clients[0].state.game.legalMoves.includes('tarok-1'), 'Without clubs exposed, replying with a trump is initially legal');
+  await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-22' });
+  await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-21' });
+  assert.deepEqual(playContext(room.clients[0].state.game), context);
+  assert.deepEqual(room.clients[0].state.game.legalMoves, ['clubs-8'], 'The newly exposed club king must now follow suit');
+  const illegal = await room.reject(0, {
+    type: 'play', cardId: 'tarok-1', expectedPlay: context,
+  }, 'A context match must not bypass ordinary card legality');
+  assert.notEqual(illegal.code, 'STALE_PLAY', 'The context remains current; the selected card is what became illegal');
+  await move(room.clients, 0, { type: 'play', cardId: 'clubs-8', expectedPlay: context });
+  assert.equal(room.clients[0].state.game.trickNumber, 2);
 });

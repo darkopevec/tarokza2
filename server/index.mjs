@@ -12,7 +12,12 @@ const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const ROOM_CODE = /^[A-HJ-NP-Z2-9]{6}$/;
 const TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 
-class RequestError extends Error {}
+class RequestError extends Error {
+  constructor(message, code) {
+    super(message);
+    this.code = code;
+  }
+}
 
 const tokenHash = (token) => createHash('sha256').update(token).digest('hex');
 const clone = (value) => JSON.parse(JSON.stringify(value));
@@ -199,6 +204,7 @@ export async function createTarokServer({
           acknowledge({
             ok: false,
             error: error instanceof RequestError ? error.message : 'Zahteve ni bilo mogoče shraniti. Poskusi znova.',
+            ...(error instanceof RequestError && error.code ? { code: error.code } : {}),
           });
         }
       });
@@ -268,6 +274,22 @@ export async function createTarokServer({
       if (!roomId || !playerId) throw new RequestError('Najprej se pridruži mizi.');
       return withRoom(roomId, async () => {
         const current = rooms.get(roomId);
+        if (action.type === 'play') {
+          const expected = action.expectedPlay;
+          const validContext = expected && typeof expected === 'object' && !Array.isArray(expected) &&
+            Number.isSafeInteger(expected.round) && expected.round >= 1 &&
+            Number.isSafeInteger(expected.trickNumber) && expected.trickNumber >= 1 && expected.trickNumber <= 27 &&
+            Number.isSafeInteger(expected.trickSize) && (expected.trickSize === 0 || expected.trickSize === 1);
+          if (!validContext) {
+            emitState(roomId);
+            throw new RequestError('Podatki o potezi niso veljavni. Osveži stran in poskusi znova.', 'STALE_PLAY');
+          }
+          if (current?.game?.phase !== 'playing' || expected.round !== current.game.round ||
+              expected.trickNumber !== current.game.trickNumber || expected.trickSize !== current.game.trick.length) {
+            emitState(roomId);
+            throw new RequestError('Igra se je medtem spremenila. Preveri trenutno stanje in izberi potezo znova.', 'STALE_PLAY');
+          }
+        }
         if (!current?.game) throw new RequestError('Počakaj, da se pridruži še drugi igralec.');
         const room = clone(current);
         try {

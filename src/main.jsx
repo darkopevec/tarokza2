@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
 import { cardFor, createDeck } from "../shared/cards.mjs";
 import {
@@ -306,23 +307,37 @@ function Rules({ onClose }) {
 }
 
 function AnnouncementPanel({ game, busy, action }) {
+  const [showInfo, setShowInfo] = useState(false);
   const ready = game.announcementReady || [false, false];
   const mine = (game.announcements || []).filter(call => call.player === game.you);
+  const pickupCount = (game.legalPickups || []).length;
   const requirements = {
     kings: "V roki potrebuješ vse štiri kralje.",
     trula: "V roki potrebuješ pagata, monda in škisa.",
     valat: "Na vsakem tvojem kupčku sme ostati največ ena odprta karta.",
+  };
+  const outcomes = {
+    kings: "V svojih štihih zberi vse štiri kralje. Uspešna napoved prinese +20, neuspešna −20. Brez napovedi je cel komplet v štihih vreden +10.",
+    trula: "V svojih štihih zberi pagata, monda in škisa. Uspešna napoved prinese +20, neuspešna −20. Brez napovedi je cel komplet v štihih vreden +10.",
+    valat: "Osvoji vseh 27 štihov. Uspešna napoved prinese +500, neuspešna −500. Valat nadomesti igro, kralje in trulo; mondfang se obračuna posebej.",
+  };
+  const showPickups = () => {
+    const options = document.querySelector('.pickup-options');
+    options?.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    options?.focus({ preventScroll: true });
   };
   return <div className="announcement-panel" data-testid="announcement-panel">
     <div className="announcement-heading">
       <h2>Napovedi</h2>
       <span data-testid="announcement-ready-count">{ready.filter(Boolean).length}/2 pripravljena</span>
     </div>
+    <p className="announcement-warning" id="announcement-warning">Napoved je javna in dokončna.</p>
     <div className="announcement-actions">
       {Object.entries(bonusNames).map(([bonus, name]) => {
         const called = mine.some(call => call.bonus === bonus);
         return <button key={bonus} type="button" data-testid={`announce-${bonus}`}
           aria-label={`Napovej ${{ kings: "kralje", trula: "trulo", valat: "valat" }[bonus]}`} aria-pressed={called}
+          aria-describedby="announcement-warning"
           disabled={busy || ready[game.you] || !(game.legalAnnouncements || []).includes(bonus)}
           title={called ? `${name}: napovedano` : requirements[bonus]}
           onClick={() => action({ type: "announce", bonus })}>
@@ -330,11 +345,36 @@ function AnnouncementPanel({ game, busy, action }) {
           <small>{called ? "Napovedano" : bonus === "valat" ? "+500 / −500" : "+20 / −20"}</small>
         </button>;
       })}
+      <button className="announcement-info-button" type="button" data-testid="announcement-info"
+        aria-label="Pogoji in točke napovedi" aria-haspopup="dialog" onClick={() => setShowInfo(true)}>
+        <CircleHelp size={18} />
+      </button>
     </div>
-    <button className="announcement-confirm" type="button" data-testid="confirm-announcements"
-      disabled={busy || ready[game.you]} onClick={() => action({ type: "confirmAnnouncements" })}>
-      {ready[game.you] ? <><Check size={15} /> Čakam soigralca</> : <>Pripravljen <ArrowRight size={15} /></>}
-    </button>
+    <div className="announcement-footer">
+      {!ready[game.you] && pickupCount > 0 && <button className="prep-pickup-reminder" type="button"
+        data-testid="prep-pickup-reminder" aria-label={`Pred potrditvijo preveri neobvezne prevzeme: ${pickupCount}. Pokaži možnosti.`}
+        onClick={showPickups}>
+        <ArrowDownToLine size={15} /><span>Preveri prevzeme <strong>({pickupCount})</strong></span>
+      </button>}
+      <button className="announcement-confirm" type="button" data-testid="confirm-announcements"
+        disabled={busy || ready[game.you]} onClick={() => action({ type: "confirmAnnouncements" })}>
+        {ready[game.you] ? <><Check size={15} /> Čakam soigralca</> : <>Pripravljen <ArrowRight size={15} /></>}
+      </button>
+    </div>
+    {showInfo && createPortal(<Modal title="Napovedi: pogoji in točke" className="announcement-info-modal" onClose={() => setShowInfo(false)}>
+      <p className="announcement-info-intro">Napoved ni obvezna. Je javna in dokončna obljuba, da boš cilj dosegel v svojih štihih, ne nagrada za karte v roki.</p>
+      {Object.entries(bonusNames).map(([bonus, name]) => <section className="announcement-info-section" key={bonus}>
+        <h3>{name}</h3>
+        <p>{requirements[bonus]}</p>
+        <p>{outcomes[bonus]}</p>
+        <p className="announcement-eligibility">{mine.some(call => call.bonus === bonus)
+          ? "Že napovedano. Napovedi ni mogoče umakniti."
+          : ready[game.you] ? "Priprava je potrjena; novih napovedi ne moreš dodati."
+            : (game.legalAnnouncements || []).includes(bonus) ? "To napoved lahko zdaj oddaš."
+              : "Pogoj za to napoved še ni izpolnjen."}</p>
+      </section>)}
+      <p className="announcement-info-note">Odprte taroke in kralje lahko pred potrditvijo po želji vzameš v roko. Prevzem ne odigra karte in ne porabi poteze. S »Pripravljen« zakleneš svoje izbire do začetka igranja; oba morata potrditi.</p>
+    </Modal>, document.body)}
   </div>;
 }
 
@@ -413,9 +453,55 @@ function Landing({
   online,
   onRules,
 }) {
+  const invitation = Boolean(new URLSearchParams(window.location.search).get("room"));
+  const [joinAttempted, setJoinAttempted] = useState(false);
+  const joinNameRef = useRef(null);
+  const joinCodeRef = useRef(null);
+  const validName = Boolean(name.trim());
+  const validCode = /^[A-HJ-NP-Z2-9]{6}$/.test(code);
+  const joinForm = <form className={`join-panel ${invitation ? "join-panel-first" : ""}`}
+    onSubmit={event => {
+      event.preventDefault();
+      if (busy || !online) return;
+      setJoinAttempted(true);
+      if (!validName) { joinNameRef.current?.focus(); return; }
+      if (!validCode) { joinCodeRef.current?.focus(); return; }
+      join();
+    }}>
+    <div className="panel-heading">
+      <span className="section-icon light"><Users size={20} /></span>
+      <div><h2>{invitation ? "Pridruži se mizi" : "Že imaš povabilo?"}</h2><p>Vpiši svoje ime in kodo povabila.</p></div>
+    </div>
+    <div className="join-name-field">
+      <label htmlFor="join-name">Tvoje ime pri tej mizi</label>
+      <input id="join-name" data-testid="join-name" ref={joinNameRef}
+        placeholder="Tvoje ime" maxLength={24} autoComplete="nickname"
+        value={name} onChange={event => setName(event.target.value)}
+        aria-describedby="join-name-help" aria-invalid={joinAttempted && !validName} />
+      <p id="join-name-help" data-testid="join-name-error"
+        className={`join-validation ${joinAttempted && !validName ? "is-invalid" : ""}`}
+        role={joinAttempted && !validName ? "alert" : undefined}>{!validName ? "Vpiši ime za to mizo." : ""}</p>
+    </div>
+    <label htmlFor="join-code">Koda mize</label>
+    <div className="join-fields">
+      <input id="join-code" data-testid="join-code" ref={joinCodeRef}
+        placeholder="NPR. ABC234" maxLength={6} autoComplete="off" autoCapitalize="characters"
+        value={code} onChange={event => setCode(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
+        aria-describedby="join-code-help" aria-invalid={joinAttempted && !validCode} />
+      <button className="join-button" data-testid="join-room" disabled={busy || !online}
+        aria-label="Pridruži se mizi"><span>Pridruži se</span><ArrowRight size={19} /></button>
+    </div>
+    <p id="join-code-help" data-testid="join-code-error"
+      className={`join-validation ${joinAttempted && !validCode ? "is-invalid" : ""}`}
+      role={joinAttempted && !validCode ? "alert" : undefined}>{!validCode ? "Vpiši 6 znakov iz povabila: črke brez I in O ter številke 2–9." : ""}</p>
+  </form>;
   return (
-    <main className="landing">
-      <section className="landing-top">
+    <main className={`landing ${invitation ? "invitation-focused" : ""}`}>
+      {invitation ? <header className="invitation-heading">
+        <span className="eyebrow">POVABILO ZA MIZO</span>
+        <h1>Prisedi k prijatelju.</h1>
+        <p>Za pridružitev potrebuješ le svoje ime in kodo povabila.</p>
+      </header> : <section className="landing-top">
         <div className="hero-copy">
           <div className="eyebrow">
             <span className="tiny-diamond" /> MALA MIZA. VELIKA IGRA.
@@ -461,10 +547,11 @@ function Landing({
             <span>ŽE OD NEKDAJ</span>
           </div>
         </div>
-      </section>
+      </section>}
       <section className="lobby-layout">
+        {invitation && joinForm}
         <form
-          className="new-table-panel"
+          className={`new-table-panel ${invitation ? "invitation-secondary" : ""}`}
           onSubmit={(e) => {
             e.preventDefault();
             create();
@@ -475,7 +562,7 @@ function Landing({
               <Plus size={21} />
             </span>
             <div>
-              <h2>Tvoja miza čaka.</h2>
+              <h2>{invitation ? "Raje ustvariš svojo mizo?" : "Tvoja miza čaka."}</h2>
               <p>Vpiši ime in povabi prijatelja.</p>
             </div>
             <span className="step-number">01</span>
@@ -509,48 +596,9 @@ function Landing({
             <Link size={13} /> Zasebna miza. Prijatelj se pridruži s povezavo.
           </p>
         </form>
-        <form
-          className="join-panel"
-          onSubmit={(e) => {
-            e.preventDefault();
-            join();
-          }}
-        >
-          <div className="panel-heading">
-            <span className="section-icon light">
-              <Users size={20} />
-            </span>
-            <div>
-              <h2>Že imaš povabilo?</h2>
-              <p>Prisedi k prijateljevi mizi.</p>
-            </div>
-          </div>
-          <label htmlFor="join-code">Koda mize</label>
-          <div className="join-fields">
-            <input
-              id="join-code"
-              data-testid="join-code"
-              placeholder="NPR. ABC123"
-              maxLength={6}
-              autoComplete="off"
-              autoCapitalize="characters"
-              value={code}
-              onChange={(e) =>
-                setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))
-              }
-            />
-            <button
-              className="join-button"
-              data-testid="join-room"
-              disabled={busy || !online || code.length !== 6 || !name.trim()}
-              aria-label="Pridruži se mizi"
-            >
-              <ArrowRight size={21} />
-            </button>
-          </div>
-        </form>
+        {!invitation && joinForm}
       </section>
-      <section className="how-it-works">
+      {!invitation && <section className="how-it-works">
         <div>
           <span className="mini-number">1</span>
           <p>
@@ -574,7 +622,7 @@ function Landing({
             <span>Naj zmaga boljši list.</span>
           </p>
         </div>
-      </section>
+      </section>}
       <div className="landing-bottom">
         <span>
           <Diamond size={14} /> Tradicija, ki gre s tabo.
@@ -741,7 +789,12 @@ function Game({ state, busy, action, onScore, onRules }) {
   }, [g.lastTrick?.number, g.round]);
   const cardsOnTable = settling && g.lastTrick ? g.lastTrick.cards : g.trick;
   busy = busy || settling;
-  const play = (cardId) => action({ type: "play", cardId });
+  // Bind the intent to the table the player actually saw, not a newer socket
+  // snapshot: a reply from another tab must never become the next trick's lead.
+  const play = (cardId) => action({
+    type: "play", cardId,
+    expectedPlay: { round: g.round, trickNumber: g.trickNumber, trickSize: g.trick.length },
+  });
   const last = g.scoreboard.at(-1);
   const valats = last?.breakdown?.filter(entry => entry.kind === "valat") || [];
   const myValat = valats.find(entry => entry.player === you);
@@ -772,6 +825,13 @@ function Game({ state, busy, action, onScore, onRules }) {
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
   };
+  const liveStatus = g.phase === "bidding"
+    ? `Runda ${g.round}. ${myTurn ? "Izberi Igram ali Naprej." : `${other.name} izbira igro.`}`
+    : g.phase === "announcements"
+      ? `Priprava. ${(g.announcementReady || []).filter(Boolean).length}/2 pripravljena. ${g.announcementReady?.[you] ? `Čakamo ${other.name}.` : "Prevzemi in napovedi so po želji. Nato potrdi."}`
+      : g.phase === "playing"
+        ? `Štih ${g.trickNumber} od 27. ${myTurn ? "Na potezi si." : `Na potezi je ${other.name}.`}`
+        : `Runda ${g.round} je končana. Za novo rundo morata potrditi oba.`;
   return (
     <main className="game-page" data-phase={g.phase} data-round={g.round}
       data-turn={g.turn ?? ""} data-you={you} data-trick-number={g.trickNumber}
@@ -779,6 +839,7 @@ function Game({ state, busy, action, onScore, onRules }) {
       data-pickup-count={g.pickups?.length || 0}
       data-announcement-ready={(g.announcementReady || [false, false]).join(",")}
       data-announcements={JSON.stringify(g.announcements || [])}>
+      <span className="sr-only" data-testid="game-status" role="status" aria-live="polite" aria-atomic="true">{liveStatus}</span>
       <div className="game-toolbar">
         <div className="table-title">
           <span className="eyebrow">VAJINA MIZA</span>
@@ -787,7 +848,8 @@ function Game({ state, busy, action, onScore, onRules }) {
           <strong>Runda {g.round}</strong>
           {g.phase === "playing" && <span className="compact-trick-progress">Štih {Math.min(g.trickNumber, 27)}/27</span>}
         </div>
-        <button className="score-button" onClick={onScore}>
+        <button className="score-button" onClick={onScore}
+          aria-label={`Rezultati: ${me.name} ${signed(me.score)} točk, ${other.name} ${signed(other.score)} točk.`}>
           <Trophy size={17} />
           <span>Rezultati</span>
           <b>
@@ -1089,9 +1151,13 @@ function Game({ state, busy, action, onScore, onRules }) {
                 {g.phase === "bidding"
                   ? "Najprej izberi »Igram« ali »Naprej«."
                   : g.phase === "announcements"
-                    ? "Napovedi zahtevajo cel komplet v roki; valat vse tvoje karte odkrite. Nato potrdi."
+                    ? g.announcementReady?.[you]
+                      ? "Priprava je potrjena. Ko potrdita oba, se začne igra."
+                      : "Prevzemi in napovedi so po želji. S potrditvijo jih zakleneš do začetka igre."
                   : myTurn
-                    ? "Označene karte lahko igraš. Upoštevaj tudi svoje kupčke."
+                    ? g.hand.length > 0 && g.trick.length === 0
+                      ? "Štih začneš s karto iz roke; s kupčka šele, ko je roka prazna."
+                      : "Sledi barvi tudi s kupčka; če je nimaš, igraj tarok."
                     : "Karte so razvrščene po barvi in moči."}
               </span>
               <button onClick={onRules}>
@@ -1111,7 +1177,7 @@ function Game({ state, busy, action, onScore, onRules }) {
               </div>
             )}
             {!!pickupChoices.length && (
-              <div className="pickup-options" data-testid="pickup-options">
+              <div className="pickup-options" data-testid="pickup-options" tabIndex={-1} aria-label="Neobvezni prevzemi s kupčkov">
                 <div className="pickup-options-heading">
                   <span><ArrowDownToLine size={13} /> Vzemi v roko</span>
                   <small>Po želji · ne porabi poteze</small>
@@ -1293,7 +1359,7 @@ function App() {
                 </>
               )}
             </span>
-            <button className="header-cards" data-testid="deck-gallery" onClick={() => setModal("deck")}>
+            <button className="header-cards" data-testid="deck-gallery" aria-label="Karte" onClick={() => setModal("deck")}>
               <Layers3 size={17}/><span>Karte</span>
             </button>
             <button className="header-rules" aria-label="Kako igrati" onClick={() => setModal("rules")}>

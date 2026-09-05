@@ -15,7 +15,7 @@ const viewports = [
 const report = {
   baseURL, baseline, startedAt: new Date().toISOString(), viewports,
   measurements: [], violations: [], screenshots: [], browserErrors: [],
-  rooms: [], actions: [], lifecycle: [], navigationChecks: [],
+  rooms: [], actions: [], lifecycle: [], navigationChecks: [], guidanceChecks: [], playContexts: [],
 };
 const gameSelector = '.game-page';
 const cardSelector = '[data-testid="play-card"]';
@@ -242,9 +242,35 @@ async function createRoom() {
   const code = (await pages[0].getByTestId('room-code').textContent()).trim();
   await pages[1].goto(`${baseURL}/?room=${encodeURIComponent(code)}`, { waitUntil: 'networkidle' });
   assert.equal(await pages[1].getByTestId('join-code').inputValue(), code, 'Invitation link must prefill its room code.');
-  await pages[1].getByTestId('player-name').fill('Luka');
+  await pages[1].setViewportSize({ width: 390, height: 844 });
+  const invitation = await pages[1].evaluate(() => {
+    const field = document.querySelector('[data-testid="join-name"]');
+    const button = document.querySelector('[data-testid="join-room"]');
+    return { firstForm: document.querySelector('.lobby-layout form')?.className,
+      nameBottom: field?.getBoundingClientRect().bottom, joinBottom: button?.getBoundingClientRect().bottom };
+  });
+  assert.ok(invitation.firstForm.includes('join-panel'), 'An invitation must put joining first in the DOM.');
+  assert.ok(invitation.nameBottom <= 844 && invitation.joinBottom <= 844, 'Invited newcomers must see the complete join action without scrolling past a hero.');
+  await pages[1].getByTestId('join-name').fill('');
+  await pages[1].getByTestId('join-room').click();
+  assert.equal(await pages[1].getByTestId('join-name').getAttribute('aria-invalid'), 'true', 'Missing names need explicit inline feedback, not a silently disabled join button.');
+  assert.equal(await pages[1].locator('.game-page').count(), 0);
+  await pages[1].getByTestId('join-name').fill('Luka');
+  await pages[1].getByTestId('join-code').fill('ABC123');
+  await pages[1].getByTestId('join-room').click();
+  assert.equal(await pages[1].getByTestId('join-code').getAttribute('aria-invalid'), 'true', 'Code validation must match the server alphabet (no 1, I, or O).');
+  await pages[1].getByTestId('join-code').fill(code);
+  await pages[1].setViewportSize({ width: 320, height: 568 });
+  await pages[1].evaluate(() => scrollTo(0, 0));
+  const compactJoin = await pages[1].getByTestId('join-room').boundingBox();
+  const compactCode = await pages[1].getByTestId('join-code').boundingBox();
+  assert.ok(compactCode.width >= 110 && compactCode.height >= 44, 'All six code characters must fit in a full-size touch input.');
+  assert.ok(compactJoin.y + compactJoin.height <= 568, 'The join action also fits the smallest portrait phone.');
+  await pages[1].screenshot({ path: path.join(artifacts, 'invitation-join-320.png'), animations: 'disabled' });
   await pages[1].getByTestId('join-room').click();
   await waitPhase('bidding');
+  await pages[1].setViewportSize({ width: 1024, height: 768 });
+  report.guidanceChecks.push({ kind: 'invitation-first-join', passed: true, ...invitation });
   report.rooms.push({ code });
   report.roomCode = code;
   return code;
@@ -293,6 +319,7 @@ async function bid() {
 
 async function pickup() {
   const before = await state(pages[0]);
+  const statusBefore = await pages[0].getByTestId('game-status').textContent();
   const choice = before.pickupOptions[0];
   assert.ok(choice, 'The selected room must expose an optional honor for the first context.');
   await pages[0].locator(`[data-testid="pickup-card"][data-card-id="${choice.id}"]`).click();
@@ -303,17 +330,80 @@ async function pickup() {
   assert.equal(after.ownStacks[choice.stackIndex].count, before.ownStacks[choice.stackIndex].count - 1);
   assert.equal(after.turn, before.turn, 'A pickup must not consume the turn.');
   assert.equal(after.trickCards, before.trickCards, 'A pickup must not play the card.');
+  assert.equal(await pages[0].getByTestId('game-status').textContent(), statusBefore, 'An optional pickup must not repeat or change the live turn announcement.');
   report.pickup = { cardId: choice.id, before, after, passed: true };
+}
+
+async function preparationGuidance() {
+  const page = pages[0];
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.evaluate(() => scrollTo(0, 0));
+  const before = persistentState(await state(page));
+  assert.equal(await page.getByRole('button', { name: 'Karte', exact: true }).count(), 1, 'Gallery icon retains its accessible name on phones.');
+  assert.equal(await page.getByRole('button', { name: /^Rezultati/ }).count(), 1, 'Score button has a meaningful accessible name, not just numbers.');
+  assert.equal(await page.getByTestId('game-status').getAttribute('aria-live'), 'polite');
+  await page.getByTestId('announcement-info').click();
+  const modal = page.getByRole('dialog', { name: 'Napovedi: pogoji in točke' });
+  await modal.waitFor();
+  assert.equal(await modal.locator('.announcement-info-section').count(), 3);
+  assert.match(await modal.innerText(), /javna in dokončna/);
+  assert.match(await modal.innerText(), /vse štiri kralje/);
+  assert.match(await modal.innerText(), /največ ena odprta karta/);
+  await page.screenshot({ path: path.join(artifacts, 'announcement-help-320.png'), animations: 'disabled' });
+  await page.keyboard.press('Escape');
+  assert.equal(await page.getByRole('dialog').count(), 0);
+  assert.equal(await page.getByTestId('announcement-info').evaluate(element => document.activeElement === element), true);
+  assert.deepEqual(persistentState(await state(page)), before, 'Reading requirements must not announce, pick up, or play.');
+  const reminder = page.getByTestId('prep-pickup-reminder');
+  const reminderBox = await reminder.boundingBox();
+  assert.ok(reminderBox.y >= 0 && reminderBox.y + reminderBox.height <= 568, 'Pickup reminder must be visible beside preparation confirmation.');
+  await reminder.click();
+  assert.equal(await page.getByTestId('pickup-options').evaluate(element => document.activeElement === element), true);
+  assert.deepEqual(persistentState(await state(page)), before, 'The reminder only scrolls/focuses; pickup remains optional.');
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.evaluate(() => {
+    window.__tarokTextProbe = [...document.querySelectorAll('body *')]
+      .filter(element => element instanceof HTMLElement)
+      .map(element => ({ element, style: element.getAttribute('style'), size: parseFloat(getComputedStyle(element).fontSize) }));
+    for (const { element, size } of window.__tarokTextProbe) element.style.fontSize = `${size * 1.5}px`;
+  });
+  try {
+    const enlarged = await page.evaluate(() => {
+      const table = document.querySelector('.game-table').getBoundingClientRect();
+      const controls = [...document.querySelectorAll('.announcement-panel button')].map(element => {
+        const r = element.getBoundingClientRect();
+        return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+      });
+      return { width: innerWidth, documentWidth: document.documentElement.scrollWidth,
+        table: { left: table.left, right: table.right, top: table.top, bottom: table.bottom }, controls };
+    });
+    assert.ok(enlarged.documentWidth <= enlarged.width + 1, '150% text must reflow without horizontal page overflow.');
+    for (const r of enlarged.controls) assert.ok(r.left >= enlarged.table.left && r.right <= enlarged.table.right + 1
+      && r.top >= enlarged.table.top && r.bottom <= enlarged.table.bottom + 1, 'Enlarged preparation controls must remain inside the table.');
+    await page.screenshot({ path: path.join(artifacts, 'preparation-text-150percent-320.png'), fullPage: true, animations: 'disabled' });
+    report.guidanceChecks.push({ kind: 'text-enlargement-150percent', passed: true, ...enlarged });
+  } finally {
+    await page.evaluate(() => {
+      for (const { element, style } of window.__tarokTextProbe) {
+        if (style === null) element.removeAttribute('style'); else element.setAttribute('style', style);
+      }
+      delete window.__tarokTextProbe;
+    });
+  }
+  report.guidanceChecks.push({ kind: 'accessible-controls-info-and-optional-reminder', passed: true });
 }
 
 async function confirm() {
   assert.ok((await Promise.all(pages.map(state))).every(snapshot => snapshot.enabledCards.length === 0));
   await pages[0].getByTestId('confirm-announcements').click();
   await pages[0].waitForFunction(() => document.querySelector('.game-page')?.dataset.announcementReady?.startsWith('true'));
+  assert.match(await pages[0].getByTestId('game-status').textContent(), /1\/2 pripravljena/);
   assert.ok((await Promise.all(pages.map(state))).every(snapshot => snapshot.phase === 'announcements' && snapshot.enabledCards.length === 0),
     'One player confirming must not start play.');
   await pages[1].getByTestId('confirm-announcements').click();
   await waitPhase('playing');
+  assert.ok((await Promise.all(pages.map(page => page.getByTestId('game-status').textContent())))
+    .every(text => /Štih 1 od 27\. Na potezi/.test(text)), 'The polite status must transition from preparation readiness to the current turn.');
   report.bothConfirmationsRequired = true;
 }
 
@@ -364,6 +454,11 @@ try {
   pages.forEach((page, index) => {
     page.setDefaultTimeout(10_000);
     page.on('pageerror', error => report.browserErrors.push({ player: index, message: error.message }));
+    page.on('websocket', socket => socket.on('framesent', ({ payload }) => {
+      if (typeof payload !== 'string' || !/^42\d*\[/.test(payload)) return;
+      const [event, action] = JSON.parse(payload.slice(payload.indexOf('[')));
+      if (event === 'game:action' && action?.type === 'play') report.playContexts.push({ player: index, expectedPlay: action.expectedPlay });
+    }));
   });
   await Promise.all(pages.map(page => page.goto(baseURL, { waitUntil: 'networkidle' })));
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -380,6 +475,7 @@ try {
   assert.ok(prep.every(snapshot => snapshot.hand.length === 15 && snapshot.pickups === 0 && snapshot.enabledCards.length === 0),
     'Preparation must preserve the original hands, leave honors untouched, and disable play.');
   await matrix('preparation');
+  await preparationGuidance();
   await pickup();
   await matrix('optional-pickup');
   await confirm();
@@ -388,6 +484,9 @@ try {
   for (let index = 0; index < 3; index++) await playCard();
   assert.equal(report.actions.length, 4, 'The smoke test must exercise four actual UI plays, separate from pickup.');
   assert.equal(new Set(report.actions.map(action => action.cardId)).size, 4);
+  assert.equal(report.playContexts.length, 4, 'Every UI play must send exactly one contextualized request.');
+  for (const { expectedPlay: context } of report.playContexts) assert.ok(context && Number.isInteger(context.round)
+    && Number.isInteger(context.trickNumber) && [0, 1].includes(context.trickSize), 'UI play requests must carry their displayed table position.');
   await pages[0].waitForTimeout(900);
   await modalMatrix('last-trick');
   await modalMatrix('rules');

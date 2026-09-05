@@ -470,7 +470,7 @@ async function verifyAnnouncementFixtures(fixtureURL) {
   await pages[0].getByTestId('create-room').click();
   await pages[0].getByTestId('room-code').waitFor();
   const roomCode = (await pages[0].getByTestId('room-code').textContent()).trim();
-  await pages[1].getByTestId('player-name').fill('Luka');
+  await pages[1].getByTestId('join-name').fill('Luka');
   await pages[1].getByTestId('join-code').fill(roomCode);
   await pages[1].getByTestId('join-room').click();
   await waitForBothPhase('bidding', 1);
@@ -804,7 +804,7 @@ try {
   await pages[1].goto(`${baseURL}/?room=${encodeURIComponent(roomCode)}`, { waitUntil: 'networkidle' });
   assert.equal(await pages[1].getByTestId('join-code').inputValue(), roomCode,
     'Opening an invitation link must prefill the room code.');
-  await pages[1].getByTestId('player-name').fill('Luka');
+  await pages[1].getByTestId('join-name').fill('Luka');
   await pages[1].getByTestId('join-room').click();
   log(`Ana invited Luka into room ${roomCode}; browsers have isolated session storage.`);
 
