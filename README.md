@@ -2,6 +2,8 @@
 
 A mobile and tablet first Slovenian tarok game for two real players. Create a private table, send its invitation link or six-character code, and play in separate browsers. No account is required.
 
+Continuing development? Read the short [agent handoff](HANDOFF.md) first.
+
 ## Run with Docker
 
 ```sh
