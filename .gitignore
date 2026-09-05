@@ -1,0 +1,12 @@
+node_modules/
+dist/
+data/
+.env
+.env.*
+!.env.example
+/artifacts/
+.agents/
+.codex/
+*.log
+playwright-report/
+test-results/

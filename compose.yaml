@@ -1,0 +1,17 @@
+services:
+  tarokza2:
+    build: .
+    init: true
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATA_DIR: /app/data
+    volumes:
+      - tarok-data:/app/data
+    restart: unless-stopped
+    stop_grace_period: 20s
+
+volumes:
+  tarok-data:

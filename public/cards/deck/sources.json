@@ -1,0 +1,394 @@
+{
+  "deck": "S. Modiano — Tarok Študentski servis Maribor (1995)",
+  "photographer": "Martin Okrslar",
+  "source": "Wikimedia Commons",
+  "sourceClassification": "PD-old-100 / Public Domain Mark 1.0, as stated by Commons",
+  "retrieved": "2026-09-05",
+  "cards": [
+    {
+      "id": "back",
+      "file": "back.jpg",
+      "title": "File:SPKW-Q2171-IMG 8568-rueckseite.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8568-rueckseite.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/SPKW-Q2171-IMG_8568-rueckseite.jpg/330px-SPKW-Q2171-IMG_8568-rueckseite.jpg"
+    },
+    {
+      "id": "clubs-1",
+      "file": "clubs-1.jpg",
+      "title": "File:SPKW-Q2171-IMG 8557-tarock-kreuz-7.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg/330px-SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg"
+    },
+    {
+      "id": "clubs-2",
+      "file": "clubs-2.jpg",
+      "title": "File:SPKW-Q2171-IMG 8558-tarock-kreuz-8.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg/330px-SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg"
+    },
+    {
+      "id": "clubs-3",
+      "file": "clubs-3.jpg",
+      "title": "File:SPKW-Q2171-IMG 8559-tarock-kreuz-9.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg/330px-SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg"
+    },
+    {
+      "id": "clubs-4",
+      "file": "clubs-4.jpg",
+      "title": "File:SPKW-Q2171-IMG 8564-tarock-kreuz-10.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg/330px-SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg"
+    },
+    {
+      "id": "clubs-5",
+      "file": "clubs-5.jpg",
+      "title": "File:SPKW-Q2171-IMG 8560-tarock-kreuz-bube.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg/330px-SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg"
+    },
+    {
+      "id": "clubs-6",
+      "file": "clubs-6.jpg",
+      "title": "File:SPKW-Q2171-IMG 8565-tarock-kreuz-cavall.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg/330px-SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg"
+    },
+    {
+      "id": "clubs-7",
+      "file": "clubs-7.jpg",
+      "title": "File:SPKW-Q2171-IMG 8566-tarock-kreuz-dame.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg/330px-SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg"
+    },
+    {
+      "id": "clubs-8",
+      "file": "clubs-8.jpg",
+      "title": "File:SPKW-Q2171-IMG 8567-tarock-kreuz-koenig.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg/330px-SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg"
+    },
+    {
+      "id": "diamonds-1",
+      "file": "diamonds-1.jpg",
+      "title": "File:SPKW-Q2171-IMG 8537-tarock-karo-4.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8537-tarock-karo-4.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/SPKW-Q2171-IMG_8537-tarock-karo-4.jpg/330px-SPKW-Q2171-IMG_8537-tarock-karo-4.jpg"
+    },
+    {
+      "id": "diamonds-2",
+      "file": "diamonds-2.jpg",
+      "title": "File:SPKW-Q2171-IMG 8534-tarock-karo-3.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8534-tarock-karo-3.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/SPKW-Q2171-IMG_8534-tarock-karo-3.jpg/330px-SPKW-Q2171-IMG_8534-tarock-karo-3.jpg"
+    },
+    {
+      "id": "diamonds-3",
+      "file": "diamonds-3.jpg",
+      "title": "File:SPKW-Q2171-IMG 8535-tarock-karo-2.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8535-tarock-karo-2.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/SPKW-Q2171-IMG_8535-tarock-karo-2.jpg/330px-SPKW-Q2171-IMG_8535-tarock-karo-2.jpg"
+    },
+    {
+      "id": "diamonds-4",
+      "file": "diamonds-4.jpg",
+      "title": "File:SPKW-Q2171-IMG 8533-tarock-karo-1.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8533-tarock-karo-1.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8533-tarock-karo-1.jpg/330px-SPKW-Q2171-IMG_8533-tarock-karo-1.jpg"
+    },
+    {
+      "id": "diamonds-5",
+      "file": "diamonds-5.jpg",
+      "title": "File:SPKW-Q2171-IMG 8536-tarock-karo-bube.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg/330px-SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg"
+    },
+    {
+      "id": "diamonds-6",
+      "file": "diamonds-6.jpg",
+      "title": "File:SPKW-Q2171-IMG 8539-tarock-karo-cavall.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg/330px-SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg"
+    },
+    {
+      "id": "diamonds-7",
+      "file": "diamonds-7.jpg",
+      "title": "File:SPKW-Q2171-IMG 8538-tarock-karo-dame.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg/330px-SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg"
+    },
+    {
+      "id": "diamonds-8",
+      "file": "diamonds-8.jpg",
+      "title": "File:SPKW-Q2171-IMG 8540-tarock-karo-koenig.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg/330px-SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg"
+    },
+    {
+      "id": "hearts-1",
+      "file": "hearts-1.jpg",
+      "title": "File:SPKW-Q2171-IMG 8545-tarock-herz-4.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8545-tarock-herz-4.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/SPKW-Q2171-IMG_8545-tarock-herz-4.jpg/330px-SPKW-Q2171-IMG_8545-tarock-herz-4.jpg"
+    },
+    {
+      "id": "hearts-2",
+      "file": "hearts-2.jpg",
+      "title": "File:SPKW-Q2171-IMG 8542-tarock-herz-3.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8542-tarock-herz-3.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/SPKW-Q2171-IMG_8542-tarock-herz-3.jpg/330px-SPKW-Q2171-IMG_8542-tarock-herz-3.jpg"
+    },
+    {
+      "id": "hearts-3",
+      "file": "hearts-3.jpg",
+      "title": "File:SPKW-Q2171-IMG 8543-tarock-herz-2.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8543-tarock-herz-2.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/SPKW-Q2171-IMG_8543-tarock-herz-2.jpg/330px-SPKW-Q2171-IMG_8543-tarock-herz-2.jpg"
+    },
+    {
+      "id": "hearts-4",
+      "file": "hearts-4.jpg",
+      "title": "File:SPKW-Q2171-IMG 8541-tarock-herz-1.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8541-tarock-herz-1.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/SPKW-Q2171-IMG_8541-tarock-herz-1.jpg/330px-SPKW-Q2171-IMG_8541-tarock-herz-1.jpg"
+    },
+    {
+      "id": "hearts-5",
+      "file": "hearts-5.jpg",
+      "title": "File:SPKW-Q2171-IMG 8547-tarock-herz-bube.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg/330px-SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg"
+    },
+    {
+      "id": "hearts-6",
+      "file": "hearts-6.jpg",
+      "title": "File:SPKW-Q2171-IMG 8544-tarock-herz-cavall.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg/330px-SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg"
+    },
+    {
+      "id": "hearts-7",
+      "file": "hearts-7.jpg",
+      "title": "File:SPKW-Q2171-IMG 8546-tarock-herz-dame.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg/330px-SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg"
+    },
+    {
+      "id": "hearts-8",
+      "file": "hearts-8.jpg",
+      "title": "File:SPKW-Q2171-IMG 8548-tarock-herz-koenig.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg/330px-SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg"
+    },
+    {
+      "id": "spades-1",
+      "file": "spades-1.jpg",
+      "title": "File:SPKW-Q2171-IMG 8550-tarock-pik-7.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8550-tarock-pik-7.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/SPKW-Q2171-IMG_8550-tarock-pik-7.jpg/330px-SPKW-Q2171-IMG_8550-tarock-pik-7.jpg"
+    },
+    {
+      "id": "spades-2",
+      "file": "spades-2.jpg",
+      "title": "File:SPKW-Q2171-IMG 8552-tarock-pik-8.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8552-tarock-pik-8.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/SPKW-Q2171-IMG_8552-tarock-pik-8.jpg/330px-SPKW-Q2171-IMG_8552-tarock-pik-8.jpg"
+    },
+    {
+      "id": "spades-3",
+      "file": "spades-3.jpg",
+      "title": "File:SPKW-Q2171-IMG 8551-tarock-pik-9.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8551-tarock-pik-9.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/SPKW-Q2171-IMG_8551-tarock-pik-9.jpg/330px-SPKW-Q2171-IMG_8551-tarock-pik-9.jpg"
+    },
+    {
+      "id": "spades-4",
+      "file": "spades-4.jpg",
+      "title": "File:SPKW-Q2171-IMG 8554-tarock-pik-10.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8554-tarock-pik-10.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/SPKW-Q2171-IMG_8554-tarock-pik-10.jpg/330px-SPKW-Q2171-IMG_8554-tarock-pik-10.jpg"
+    },
+    {
+      "id": "spades-5",
+      "file": "spades-5.jpg",
+      "title": "File:SPKW-Q2171-IMG 8556-tarock-pik-bube.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg/330px-SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg"
+    },
+    {
+      "id": "spades-6",
+      "file": "spades-6.jpg",
+      "title": "File:SPKW-Q2171-IMG 8553-tarock-pik-cavall.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg/330px-SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg"
+    },
+    {
+      "id": "spades-7",
+      "file": "spades-7.jpg",
+      "title": "File:SPKW-Q2171-IMG 8555-tarock-pik-dame.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg/330px-SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg"
+    },
+    {
+      "id": "spades-8",
+      "file": "spades-8.jpg",
+      "title": "File:SPKW-Q2171-IMG 8549-tarock-pik-koenig.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg/330px-SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg"
+    },
+    {
+      "id": "tarok-1",
+      "file": "tarok-1.jpg",
+      "title": "File:SPKW-Q2171-IMG 8529-tarock-1.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8529-tarock-1.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/SPKW-Q2171-IMG_8529-tarock-1.jpg/330px-SPKW-Q2171-IMG_8529-tarock-1.jpg"
+    },
+    {
+      "id": "tarok-10",
+      "file": "tarok-10.jpg",
+      "title": "File:SPKW-Q2171-IMG 8522-tarock-10.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8522-tarock-10.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/SPKW-Q2171-IMG_8522-tarock-10.jpg/330px-SPKW-Q2171-IMG_8522-tarock-10.jpg"
+    },
+    {
+      "id": "tarok-11",
+      "file": "tarok-11.jpg",
+      "title": "File:SPKW-Q2171-IMG 8523-tarock-11.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8523-tarock-11.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/SPKW-Q2171-IMG_8523-tarock-11.jpg/330px-SPKW-Q2171-IMG_8523-tarock-11.jpg"
+    },
+    {
+      "id": "tarok-12",
+      "file": "tarok-12.jpg",
+      "title": "File:SPKW-Q2171-IMG 8520-tarock-12.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8520-tarock-12.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/SPKW-Q2171-IMG_8520-tarock-12.jpg/330px-SPKW-Q2171-IMG_8520-tarock-12.jpg"
+    },
+    {
+      "id": "tarok-13",
+      "file": "tarok-13.jpg",
+      "title": "File:SPKW-Q2171-IMG 8521-tarock-13.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8521-tarock-13.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/SPKW-Q2171-IMG_8521-tarock-13.jpg/330px-SPKW-Q2171-IMG_8521-tarock-13.jpg"
+    },
+    {
+      "id": "tarok-14",
+      "file": "tarok-14.jpg",
+      "title": "File:SPKW-Q2171-IMG 8518-tarock-14.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8518-tarock-14.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/SPKW-Q2171-IMG_8518-tarock-14.jpg/330px-SPKW-Q2171-IMG_8518-tarock-14.jpg"
+    },
+    {
+      "id": "tarok-15",
+      "file": "tarok-15.jpg",
+      "title": "File:SPKW-Q2171-IMG 8519-tarock-15.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8519-tarock-15.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/SPKW-Q2171-IMG_8519-tarock-15.jpg/330px-SPKW-Q2171-IMG_8519-tarock-15.jpg"
+    },
+    {
+      "id": "tarok-16",
+      "file": "tarok-16.jpg",
+      "title": "File:SPKW-Q2171-IMG 8516-tarock-16.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8516-tarock-16.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/SPKW-Q2171-IMG_8516-tarock-16.jpg/330px-SPKW-Q2171-IMG_8516-tarock-16.jpg"
+    },
+    {
+      "id": "tarok-17",
+      "file": "tarok-17.jpg",
+      "title": "File:SPKW-Q2171-IMG 8517-tarock-17.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8517-tarock-17.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/SPKW-Q2171-IMG_8517-tarock-17.jpg/330px-SPKW-Q2171-IMG_8517-tarock-17.jpg"
+    },
+    {
+      "id": "tarok-18",
+      "file": "tarok-18.jpg",
+      "title": "File:SPKW-Q2171-IMG 8514-tarock-18.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8514-tarock-18.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/SPKW-Q2171-IMG_8514-tarock-18.jpg/330px-SPKW-Q2171-IMG_8514-tarock-18.jpg"
+    },
+    {
+      "id": "tarok-19",
+      "file": "tarok-19.jpg",
+      "title": "File:SPKW-Q2171-IMG 8515-tarock-19.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8515-tarock-19.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/SPKW-Q2171-IMG_8515-tarock-19.jpg/330px-SPKW-Q2171-IMG_8515-tarock-19.jpg"
+    },
+    {
+      "id": "tarok-2",
+      "file": "tarok-2.jpg",
+      "title": "File:SPKW-Q2171-IMG 8530-tarock-2.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8530-tarock-2.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8530-tarock-2.jpg/330px-SPKW-Q2171-IMG_8530-tarock-2.jpg"
+    },
+    {
+      "id": "tarok-20",
+      "file": "tarok-20.jpg",
+      "title": "File:SPKW-Q2171-IMG 8562-tarock-20.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8562-tarock-20.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/SPKW-Q2171-IMG_8562-tarock-20.jpg/330px-SPKW-Q2171-IMG_8562-tarock-20.jpg"
+    },
+    {
+      "id": "tarok-21",
+      "file": "tarok-21.jpg",
+      "title": "File:SPKW-Q2171-IMG 8563-tarock-21.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8563-tarock-21.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/SPKW-Q2171-IMG_8563-tarock-21.jpg/330px-SPKW-Q2171-IMG_8563-tarock-21.jpg"
+    },
+    {
+      "id": "tarok-22",
+      "file": "tarok-22.jpg",
+      "title": "File:SPKW-Q2171-IMG 8561-tarock-skus.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8561-tarock-skus.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/SPKW-Q2171-IMG_8561-tarock-skus.jpg/330px-SPKW-Q2171-IMG_8561-tarock-skus.jpg"
+    },
+    {
+      "id": "tarok-3",
+      "file": "tarok-3.jpg",
+      "title": "File:SPKW-Q2171-IMG 8531-tarock-3.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8531-tarock-3.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/SPKW-Q2171-IMG_8531-tarock-3.jpg/330px-SPKW-Q2171-IMG_8531-tarock-3.jpg"
+    },
+    {
+      "id": "tarok-4",
+      "file": "tarok-4.jpg",
+      "title": "File:SPKW-Q2171-IMG 8532-tarock-4.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8532-tarock-4.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/SPKW-Q2171-IMG_8532-tarock-4.jpg/330px-SPKW-Q2171-IMG_8532-tarock-4.jpg"
+    },
+    {
+      "id": "tarok-5",
+      "file": "tarok-5.jpg",
+      "title": "File:SPKW-Q2171-IMG 8528-tarock-5.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8528-tarock-5.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/SPKW-Q2171-IMG_8528-tarock-5.jpg/330px-SPKW-Q2171-IMG_8528-tarock-5.jpg"
+    },
+    {
+      "id": "tarok-6",
+      "file": "tarok-6.jpg",
+      "title": "File:SPKW-Q2171-IMG 8526-tarock-6.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8526-tarock-6.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8526-tarock-6.jpg/330px-SPKW-Q2171-IMG_8526-tarock-6.jpg"
+    },
+    {
+      "id": "tarok-7",
+      "file": "tarok-7.jpg",
+      "title": "File:SPKW-Q2171-IMG 8527-tarock-7.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8527-tarock-7.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/SPKW-Q2171-IMG_8527-tarock-7.jpg/330px-SPKW-Q2171-IMG_8527-tarock-7.jpg"
+    },
+    {
+      "id": "tarok-8",
+      "file": "tarok-8.jpg",
+      "title": "File:SPKW-Q2171-IMG 8524-tarock-8.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8524-tarock-8.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/SPKW-Q2171-IMG_8524-tarock-8.jpg/330px-SPKW-Q2171-IMG_8524-tarock-8.jpg"
+    },
+    {
+      "id": "tarok-9",
+      "file": "tarok-9.jpg",
+      "title": "File:SPKW-Q2171-IMG 8525-tarock-9.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8525-tarock-9.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/SPKW-Q2171-IMG_8525-tarock-9.jpg/330px-SPKW-Q2171-IMG_8525-tarock-9.jpg"
+    }
+  ]
+}
