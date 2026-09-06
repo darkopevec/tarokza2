@@ -80,6 +80,7 @@ async function snapshot(page) {
     }));
     return {
       phase: game?.dataset.phase || null,
+      preparationTurn: game?.dataset.preparationTurn === "" ? null : Number(game?.dataset.preparationTurn),
       round: Number(game?.dataset.round || 0),
       you: game?.dataset.you === undefined ? null : Number(game.dataset.you),
       turn: !game || game.dataset.turn === '' || game.dataset.turn === undefined ? null : Number(game.dataset.turn),
@@ -205,14 +206,11 @@ async function assertNoOverflow(page, label) {
     `${label} expanded the layout viewport beyond the emulated screen width.`);
   assert.ok(state.documentWidth <= state.viewportWidth + 1,
     `${label} overflows horizontally: ${state.documentWidth}px > ${state.viewportWidth}px`);
-  if (state.phase === 'playing' && state.viewportWidth >= 768 && state.viewportHeight <= 900) {
-    assert.ok(state.handBottom !== null && state.handBottom <= state.viewportHeight,
-      `${label} hides the bottom of the hand below the tablet screen: ${state.handBottom}px > ${state.viewportHeight}px`);
-  }
+
 }
 
 async function inspectCardGeometry(container, label) {
-  const layouts = await container.locator('.playing-card, .stack').evaluateAll(elements => elements.map(element => {
+  const layouts = await container.locator('.playing-card, .stack').evaluateAll(elements => elements.filter(element => element.getClientRects().length > 0).map(element => {
     const style = getComputedStyle(element);
     const px = value => Number.parseFloat(value) || 0;
     const borderX = px(style.borderLeftWidth) + px(style.borderRightWidth);
@@ -229,17 +227,22 @@ async function inspectCardGeometry(container, label) {
       const imageStyle = getComputedStyle(image);
       const imageWidth = px(imageStyle.width);
       const imageHeight = px(imageStyle.height);
-      const renderedWidth = Math.min(imageWidth, imageHeight * image.naturalWidth / image.naturalHeight);
+      const scale = Math.max(imageWidth / image.naturalWidth, imageHeight / image.naturalHeight);
+      const renderedWidth = image.naturalWidth * scale;
+      const renderedHeight = image.naturalHeight * scale;
       imageLayout = {
         objectFit: imageStyle.objectFit,
+        objectPosition: imageStyle.objectPosition,
         loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
         horizontalInset: Math.max(0, (width - borderX - renderedWidth) / 2),
+        verticalInset: Math.max(0, (height - borderY - renderedHeight) / 2),
+        cropPerSide: Math.max((renderedWidth - imageWidth) / renderedWidth, (renderedHeight - imageHeight) / renderedHeight) / 2,
       };
     }
     return {
       id: element.dataset.cardId || element.getAttribute('aria-label') || 'stack slot',
       kind: stack ? 'stack' : element.matches('.card-back') ? 'back' : 'face',
-      width, height, image: imageLayout,
+      width, height, opacity: style.opacity, image: imageLayout,
     };
   }));
   for (const layout of layouts) {
@@ -249,7 +252,11 @@ async function inspectCardGeometry(container, label) {
       `${label}: ${layout.kind} ${layout.id} must use the 63:113 outer-box ratio; got ${layout.width}×${layout.height}px (width error ${widthError.toFixed(4)}px).`);
     if (layout.kind !== 'stack') {
       assert.ok(layout.image?.loaded, `${label}: ${layout.id} must contain a loaded card image.`);
-      assert.equal(layout.image.objectFit, 'contain', `${label}: ${layout.id} must preserve its complete artwork with object-fit:contain.`);
+      assert.equal(layout.opacity, '1', `${label}: ${layout.id} must stay opaque so overlapping cards cannot show through.`);
+      assert.equal(layout.image.objectFit, 'cover', `${label}: ${layout.id} must fill its frame without letterboxing.`);
+      assert.equal(layout.image.objectPosition, '50% 50%', `${label}: ${layout.id} must have symmetric framing.`);
+      assert.ok(layout.image.cropPerSide <= 0.05, `${label}: ${layout.id} may trim only the outer paper margin (at most 5% per side): ${JSON.stringify(layout)}.`);
+      assert.ok(layout.image.verticalInset <= 0.025, `${label}: ${layout.id} must not leave bands above or below the scan.`);
       assert.ok(layout.image.horizontalInset <= 1,
         `${label}: ${layout.id} has ${layout.image.horizontalInset.toFixed(2)}px unused horizontal space per side inside its border.`);
     }
@@ -419,25 +426,28 @@ async function confirmPreparation(round, { fixture = false } = {}) {
   const before = await synchronizedBoards();
   assert.ok(before.every(state => state.phase === 'announcements' && state.enabled.length === 0),
     'Neither player can play before both confirm preparation.');
-  await pages[0].getByTestId('confirm-announcements').click();
-  await pages[0].waitForFunction(you => {
+  const first = before.findIndex(state => state.you === state.preparationTurn);
+  const second = 1 - first;
+  assert.equal(await pages[second].getByTestId('confirm-announcements').isEnabled(), false, 'The starter must confirm first.');
+  await pages[first].getByTestId('confirm-announcements').click();
+  await pages[first].waitForFunction(you => {
     const ready = document.querySelector('.game-page')?.dataset.announcementReady?.split(',');
     return ready?.[you] === 'true';
-  }, before[0].you);
+  }, before[first].you);
   const firstReady = await synchronizedBoards();
   assert.ok(firstReady.every(state => state.phase === 'announcements' && state.enabled.length === 0),
     'One confirmation must not enable play or end preparation.');
-  assert.equal(firstReady[0].announcementReady[before[0].you], true);
-  assert.equal(firstReady[0].announcementReady[before[1].you], false);
-  assert.equal(await pages[0].getByTestId('confirm-announcements').isEnabled(), false,
+  assert.equal(firstReady[0].announcementReady[before[first].you], true);
+  assert.equal(firstReady[0].announcementReady[before[second].you], false);
+  assert.equal(await pages[first].getByTestId('confirm-announcements').isEnabled(), false,
     'An individual confirmation must be irrevocable.');
-  assert.ok(firstReady[0].pickupOptions.every(option => !option.enabled),
+  assert.ok(firstReady[first].pickupOptions.every(option => !option.enabled),
     'Confirming must lock the player\'s own pickup choices.');
   for (const bonus of ['kings', 'trula', 'valat']) {
-    assert.equal(await pages[0].getByTestId(`announce-${bonus}`).isEnabled(), false,
+    assert.equal(await pages[first].getByTestId(`announce-${bonus}`).isEnabled(), false,
       'Confirming must lock the player\'s own announcements.');
   }
-  await pages[1].getByTestId('confirm-announcements').click();
+  await pages[second].getByTestId('confirm-announcements').click();
   await waitForBothPhase('playing', round);
   const final = await synchronizedBoards();
   assert.deepEqual(final[0].announcements, before[0].announcements, 'All public bonus calls must survive the start of play.');

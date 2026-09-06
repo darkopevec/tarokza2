@@ -167,7 +167,8 @@ test('exhausting creation quota does not block joining, resuming, or legal game 
     const bids = bidder.state.game.bids.length;
     await Promise.all(players.map((player) => player.waitFor((state) => state?.game?.bids.length === bids)));
   }
-  for (const player of players) {
+  const starter = resumed.state.game.preparationTurn;
+  for (const player of [players[starter], players[1 - starter]]) {
     assert.equal((await player.request('game:action', { type: 'confirmAnnouncements' })).ok, true);
   }
   await Promise.all(players.map((player) => player.waitFor((state) => state?.game?.phase === 'playing')));

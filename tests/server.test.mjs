@@ -84,12 +84,13 @@ async function move(clients, index, action) {
 
 async function confirmAnnouncements(clients) {
   assert.equal(clients[0].state.game.phase, 'announcements');
-  await move(clients, 0, { type: 'confirmAnnouncements' });
+  const starter = clients[0].state.game.preparationTurn;
+  await move(clients, starter, { type: 'confirmAnnouncements' });
   assert.equal(clients[0].state.game.phase, 'announcements',
     'One confirmation must not start card play');
-  assert.deepEqual(clients[0].state.game.announcementReady, [true, false]);
+  assert.deepEqual(clients[0].state.game.announcementReady, [starter === 0, starter === 1]);
   assert.deepEqual(clients[0].state.game.legalMoves, []);
-  await move(clients, 1, { type: 'confirmAnnouncements' });
+  await move(clients, 1 - starter, { type: 'confirmAnnouncements' });
   assert.equal(clients[0].state.game.phase, 'playing');
 }
 
@@ -319,10 +320,98 @@ async function setupRoom(t, engine) {
   };
 }
 
+test('starter confirms first with either dealer while the other seat can pick up and resume after restart', { timeout: 30_000 }, async (t) => {
+  for (const readySeat of [0, 1]) {
+    await t.test(`seat ${readySeat} confirms first`, async (scenario) => {
+      const engine = { ...pickupFixtureEngine, createGame(options) {
+        const game = pickupFixtureEngine.createGame(options);
+        game.dealer = 1 - readySeat;
+        game.turn = readySeat;
+        return game;
+      } };
+      const room = await setupRoom(scenario, engine);
+      const preparingSeat = 1 - readySeat;
+      const firstCards = ['tarok-22', 'tarok-19'];
+      const nextCards = ['tarok-21', 'tarok-18'];
+      await move(room.clients, readySeat, { type: 'bid', bid: 'play' });
+      assert.equal(room.clients[0].state.game.preparationTurn, readySeat);
+      const rejection = await room.reject(preparingSeat, { type: 'confirmAnnouncements' },
+        'The dealer cannot confirm before the player who starts the first trick');
+      assert.match(rejection.error, /Najprej mora pripravljenost potrditi/);
+      await move(room.clients, readySeat, { type: 'confirmAnnouncements' });
+
+      const before = cloneForComparison(room.clients[preparingSeat].state.game);
+      assert.equal(before.phase, 'announcements');
+      assert.equal(before.preparationTurn, preparingSeat);
+      assert.deepEqual(before.announcementReady, [readySeat === 0, readySeat === 1]);
+      assert.ok(before.legalPickups.includes(firstCards[preparingSeat]));
+      assert.deepEqual(room.clients[readySeat].state.game.legalPickups, []);
+      await room.reject(readySeat, { type: 'pickup', cardId: firstCards[readySeat] },
+        'Only the confirmed player is frozen');
+
+      await move(room.clients, preparingSeat, { type: 'pickup', cardId: firstCards[preparingSeat] });
+      const after = room.clients[preparingSeat].state.game;
+      assert.deepEqual(unchangedByPickup(after), unchangedByPickup(before));
+      assert.deepEqual(after.announcementReady, before.announcementReady);
+      assert.equal(after.hand.length, before.hand.length + 1);
+      assert.ok(after.hand.some(card => card.id === firstCards[preparingSeat]));
+      assert.equal(after.players[preparingSeat].stacks[0].count, 3);
+      assert.equal(after.players[preparingSeat].stacks[0].top.id, nextCards[preparingSeat]);
+      assert.equal(after.pickups.length, 1);
+      assert.deepEqual(room.clients[readySeat].state.game.pickups, after.pickups);
+      assert.ok(after.legalPickups.includes(nextCards[preparingSeat]),
+        'The next exposed honor remains available as a separate choice');
+      assert.ok(room.clients.every(current => current.state.game.legalMoves.length === 0));
+
+      await room.restart();
+      await move(room.clients, preparingSeat, { type: 'pickup', cardId: nextCards[preparingSeat] });
+      assert.equal(room.clients[preparingSeat].state.game.pickups.length, 2);
+      await move(room.clients, preparingSeat, { type: 'confirmAnnouncements' });
+      assert.ok(room.clients.every(current => current.state.game.phase === 'playing'));
+      assert.deepEqual(room.clients[0].state.game.announcementReady, [true, true]);
+      assert.ok(room.clients[readySeat].state.game.legalPickups.includes(firstCards[readySeat]),
+        'The initially confirmed player can pick up again once both are ready');
+      const leader = room.clients[0].state.game.turn;
+      await move(room.clients, leader, { type: 'play', cardId: room.clients[leader].state.game.legalMoves[0] });
+      assert.ok(room.clients.every(current => current.state.game.trick.length === 1),
+        'Both players see the first actual play after preparation');
+    });
+  }
+});
+
+test('saved preparation keeps an already-ready dealer and lets the starter confirm after restart', { timeout: 30_000 }, async (t) => {
+  for (const dealer of [0, 1]) {
+    await t.test(`saved dealer ${dealer} is already ready`, async scenario => {
+      const engine = { ...pickupFixtureEngine, createGame(options) {
+        const game = pickupFixtureEngine.createGame(options);
+        game.dealer = dealer;
+        game.turn = 1 - dealer;
+        game.phase = 'announcements';
+        game.announcementReady[dealer] = true;
+        return game;
+      } };
+      const room = await setupRoom(scenario, engine);
+      await room.restart();
+      const before = cloneForComparison(room.clients[dealer].state.game);
+      assert.equal(before.preparationTurn, 1 - dealer);
+      await move(room.clients, dealer, { type: 'confirmAnnouncements' });
+      assert.deepEqual(room.clients[dealer].state.game, before,
+        'Existing confirmations remain idempotent without reopening preparation');
+      const starter = 1 - dealer;
+      const pickup = room.clients[starter].state.game.legalPickups[0];
+      await move(room.clients, starter, { type: 'pickup', cardId: pickup });
+      await move(room.clients, starter, { type: 'confirmAnnouncements' });
+      assert.equal(room.clients[0].state.game.phase, 'playing');
+      assert.equal(room.clients[0].state.game.turn, starter);
+      assert.equal(room.clients[0].state.game.preparationTurn, null);
+    });
+  }
+});
+
 const announcementFixtureEngine = {
   ...gameEngine,
   createGame(options) {
-    const game = gameEngine.createGame({ ...options, dealer: 0 });
+    const game = gameEngine.createGame({ ...options, dealer: 1 });
     const handIds = [
       'clubs-8', 'spades-8', 'hearts-8', 'diamonds-8',
       ...Array.from({ length: 10 }, (_, index) => `tarok-${index + 1}`),
@@ -349,7 +438,7 @@ test('private announcement eligibility, frozen preparation, restart, and bonus s
   const room = await setupRoom(t, announcementFixtureEngine);
   await room.reject(0, { type: 'announce', bonus: 'kings' }, 'Bonuses cannot be announced during bidding');
   await room.reject(0, { type: 'confirmAnnouncements' }, 'Preparation cannot be confirmed before bidding ends');
-  await move(room.clients, 1, { type: 'bid', bid: 'play' });
+  await move(room.clients, 0, { type: 'bid', bid: 'play' });
   const initial = room.clients[0].state.game;
   assert.equal(initial.phase, 'announcements');
   assert.equal(initial.scoringVersion, 2);

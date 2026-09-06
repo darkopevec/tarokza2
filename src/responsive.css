@@ -21,7 +21,11 @@
 .hand-navigation small { color: #677d5c; font-size: 10px; }
 .hand-swipe { margin-left: auto; min-width: 20px; text-align: center; font-size: 21px; color: #587546; }
 .hand-scroll { position: relative; scroll-padding-inline: 4px; -webkit-overflow-scrolling: touch; }
-.hand-cards > .playing-card { --card-height: 112px; margin-left: -10px; }
+.hand-cards > .playing-card {
+  --card-height: 112px;
+  /* Compact the hand while leaving at least 44px of each card exposed. */
+  margin-left: min(0px, max(-24px, calc(44px - var(--card-height) * var(--card-width-ratio))));
+}
 .hand-heading { gap: 12px; }
 .hand-identity { min-width: 0; }
 .hand-identity strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -60,7 +64,7 @@
 .toast { bottom: max(16px, env(safe-area-inset-bottom)); }
 @media (pointer: coarse), (max-width: 1180px) {
   input, .create-fields input, .join-panel input { font-size: 16px; }
-  .hand-cards > .playing-card.legal:hover, .my-stacks .playing-card.legal:hover { transform: none; }
+  .my-stacks .playing-card.legal:hover { transform: none; }
   .header-inner { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
   .site-header { padding-top: env(safe-area-inset-top); height: calc(68px + env(safe-area-inset-top)); }
   .site-header:has(+ .game-page) { height: calc(52px + env(safe-area-inset-top)); }
@@ -89,7 +93,7 @@
   .opponent-stacks .stacks-label { font-size: 8px; letter-spacing: .6px; }
   .stack-cards { gap: 10px; }
   .stack, .stack .small.playing-card { --card-height: 84px; }
-  .hand-cards > .playing-card { --card-height: 118px; margin-left: -10px; }
+  .hand-cards > .playing-card { --card-height: 118px; }
   .hand-scroll { gap: 18px; }
   .hand-hint > span { max-width: none; }
   .score-table td small, .score-breakdown > span { font-size: 11px; }
@@ -193,7 +197,7 @@
   .hand-navigation button { flex: 1 1 0; padding: 4px 2px; gap: 4px; font-size: 10px; }
   .hand-navigation small { font-size: 9px; }
   .hand-scroll { padding: 5px 3px 8px; gap: 14px; margin: 0; }
-  .hand-cards > .playing-card { --card-height: clamp(84px, calc(100dvh * .14), 118px); margin-left: -2px; }
+  .hand-cards > .playing-card { --card-height: clamp(84px, calc(100dvh * .14), 118px); }
   .suit-group-label { display: none; }
   .hand-hint { font-size: 10px; align-items: center; gap: 8px; }
   .hand-hint > span { max-width: none; }
@@ -271,7 +275,7 @@
   .hand-navigation small { font-size: 9px; }
   .hand-scroll { gap: 12px; padding: 5px 3px 8px; margin: 0; }
   .suit-group-label { display: none; }
-  .hand-cards > .playing-card { --card-height: clamp(88px, calc(100dvh * .25), 112px); margin-left: -4px; }
+  .hand-cards > .playing-card { --card-height: clamp(88px, calc(100dvh * .25), 112px); }
   .hand-hint { font-size: 10px; align-items: center; }
   .hand-hint > span { max-width: none; }
   .pickup-options { margin-top: 6px; }
@@ -333,13 +337,6 @@
 .announcement-footer { display: flex; gap: 5px; align-items: stretch; }
 .announcement-footer > button { min-width: 0; flex: 1 1 0; min-height: 44px; white-space: normal; }
 .announcement-confirm { padding: 6px 8px; gap: 5px; }
-.prep-pickup-reminder {
-  border: 1px solid #adc598; border-radius: 5px; padding: 5px 7px;
-  background: #274f3e; color: #edf2df; font-size: 10px; line-height: 1.25;
-  display: flex; align-items: center; justify-content: center; gap: 4px;
-}
-.prep-pickup-reminder > svg { flex-shrink: 0; }
-.prep-pickup-reminder:hover { background: #355f48; }
 .prep-pickup-empty { font-size: 10px; line-height: 1.3; color: #ccdac1; }
 .announcement-info-section { margin: 18px 0; line-height: 1.6; }
 .announcement-info-section h3 { color: #31513a; margin-bottom: 5px; }
@@ -363,7 +360,6 @@
   .announcement-actions > button > span { font-size: 11px; }
   .announcement-actions small { font-size: 9px; }
   .announcement-footer .announcement-confirm { font-size: 11px; }
-  .prep-pickup-reminder { font-size: 10px; }
   .prep-pickup-empty { display: none; }
   .stacks-label { white-space: normal; }
   .player-seat > div > span { white-space: normal; }
@@ -411,4 +407,97 @@
   .score-calculation { padding: 8px; }
   .score-calculation-players { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .score-calculation-player { padding: 10px; }
+}
+
+/* Keep each optional pickup beside its source card and distinct from a play. */
+.stack-slot { display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 44px; }
+.stack-pickup-space { min-height: 44px; width: 100%; }
+.stack-pickup {
+  width: 100%; min-width: 44px; min-height: 44px; padding: 4px 2px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: #e3bf8e; color: #243e2b; border: 1px solid #edcca0; border-radius: 5px;
+  font-size: 10px; line-height: 1.25; font-weight: 600;
+}
+.stack-pickup:hover:not(:disabled) { background: #f3d3a5; }
+.stack-pickup:disabled { opacity: .55; }
+.my-stacks:focus-visible { outline: 3px solid #e3bf8e; outline-offset: 4px; border-radius: 6px; }
+.preparation-status { color: #eff2de; font-size: 12px; line-height: 1.4; }
+.preparation-lock-note, .prep-pickup-empty { color: #d9dfcb; font-size: 10px; line-height: 1.3; }
+.prep-pickup-empty { display: block; }
+.pickup-feedback { color: #375239; font-size: 11px; line-height: 1.4; order: 2; }
+.pickup-feedback:empty { display: none; }
+
+/* The table always reads from opponent, through the trick, to your piles and hand. */
+.game-page .play-layout { display: block; }
+.game-page:not([data-phase="roundEnd"]) .game-table {
+  display: flex; flex-direction: column; height: auto; min-height: 0;
+  gap: 8px; padding: 12px;
+}
+.game-page .game-table .table-topline { display: none; }
+.opponent-zone { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; min-width: 0; }
+.game-page .game-table .player-seat { display: flex; position: static; margin: 0; padding: 0; min-width: 0; align-self: flex-start; }
+.game-page .game-table .opponent-hand { display: none; }
+.game-page .game-table .opponent-stacks { position: static; transform: none; min-width: 0; flex-shrink: 0; }
+.game-page .game-table .stacks-label { order: 0; margin: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: center; letter-spacing: .5px; }
+.game-page .game-table .center-play { position: static; inset: auto; padding: 8px 0; min-width: 0; min-height: 100px; }
+.game-page .game-table .bottom-table {
+  display: grid; position: static; margin: 0;
+  grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr); align-items: end; gap: 8px;
+}
+.game-page .game-table .bottom-table .stacks { grid-area: auto; position: static; transform: none; background: none; padding: 0; }
+.game-page .game-table .last-trick { grid-area: auto; min-width: 0; max-width: 100%; align-self: end; justify-self: start; }
+.game-page .game-table .trick-stat { grid-area: auto; display: flex; }
+.game-page .game-table .stack-cards { gap: 8px; }
+.game-page .game-table .stack, .game-page .game-table .stack .playing-card { --card-height: 84px; }
+.game-page .game-table .opponent-stacks .stack,
+.game-page .game-table .opponent-stacks .stack .playing-card { --card-height: 70px; }
+.game-page .game-table .contract-tag { position: static; align-self: center; margin-top: -8px; max-width: 100%; }
+.game-page .hand-panel { padding-top: 8px; }
+.game-page .game-table .trick-cards { margin: 6px 0 12px; }
+.game-page[data-phase="bidding"] .stack-pickup-space,
+.my-stacks:not(:has(.stack-pickup)) .stack-pickup-space { display: none; }
+.preparation-intro { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 3px 8px; }
+.preparation-intro .announcement-heading { grid-column: 1; }
+.preparation-intro .preparation-status { grid-column: 1; }
+.preparation-intro .announcement-info-button {
+  grid-column: 2; grid-row: 1 / 3; align-self: start;
+  min-width: 44px; min-height: 44px; border: 1px solid #b6caaa60; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center; background: #a9c09b20; color: #eff2de;
+}
+.announcement-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.announcement-actions[hidden], .announcement-warning[hidden] { display: none; }
+@media (max-width: 700px) {
+  .game-page:not([data-phase="roundEnd"]) .game-table { padding: 8px; gap: 6px; }
+  .game-page .game-table .last-trick > span, .game-page .game-table .last-trick > small { display: none; }
+  .game-page .game-table .last-trick button { width: 44px; height: 44px; padding: 8px; font-size: 0; justify-content: center; }
+  .game-page .game-table .last-trick button::before { content: none; }
+  .game-page .game-table .last-trick button svg:first-child { display: block; width: 20px; height: 20px; }
+  .game-page .game-table .last-trick button svg:last-child { display: none; }
+  .game-page .game-table .trick-stat > span { font-size: 8px; letter-spacing: 0; text-align: right; }
+  .game-page .game-table .stack-cards { gap: 5px; }
+  .game-page .game-table .player-seat .avatar { width: 26px; height: 26px; flex-shrink: 0; }
+  .game-page .game-table .player-seat { gap: 5px; }
+  .game-page .game-table .player-seat > div > span { white-space: normal; }
+  .game-page .game-table .dealer-badge { display: none; }
+  .game-page .game-table .preparation-status { font-size: 11px; }
+  .game-page .game-table .preparation-lock-note, .game-page .game-table .prep-pickup-empty { font-size: 10px; }
+  .game-page .game-table .announcement-footer { flex-wrap: nowrap; }
+  .game-page .game-table .bottom-table { grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr); gap: 4px; }
+}
+
+.game-toolbar { flex-wrap: wrap; gap: 4px 12px; }
+.round-end .trick-stat {
+  display: flex; flex-direction: row; align-items: center; gap: 8px;
+  margin: 16px 0; padding: 6px 10px; border-color: #dce3d4; background: #edf1e7;
+}
+.round-end .trick-stat:hover { background: #dfe9d5; }
+.round-end .trick-stat strong, .round-end .trick-stat > span { color: #375239; }
+.round-end .trick-stat > span { font-size: 10px; }
+.won-tricks-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.won-tricks-list > section { padding: 12px; border: 1px solid #dce3d4; border-radius: 8px; background: #f3f5ed; }
+.won-tricks-list h3 { margin: 0 0 10px; font-size: 13px; color: #375239; }
+.won-trick-cards { display: flex; justify-content: center; gap: 10px; }
+.won-trick-cards .playing-card { --card-height: 140px; }
+@media (max-width: 560px) {
+  .won-tricks-list { grid-template-columns: minmax(0, 1fr); }
 }

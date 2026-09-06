@@ -10,7 +10,9 @@
     "start": "node server/index.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/verify-browser.mjs",
+    "test:preparation": "node scripts/verify-preparation.mjs",
     "test:responsive": "node scripts/verify-responsive.mjs",
+    "test:trick-history": "node scripts/verify-trick-history.mjs",
     "test:score-history": "node scripts/verify-score-history.mjs"
   },
   "dependencies": {

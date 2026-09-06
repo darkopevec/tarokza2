@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { act, countPoints, createDeck, createGame, exactPoints, legalMoves, legalPickups, legalAnnouncements, viewFor } from '../shared/game.mjs';
+import { act, countPoints, createDeck, createGame, exactPoints, legalMoves, legalPickups, legalAnnouncements, preparationTurn, viewFor } from '../shared/game.mjs';
 import { CARD_BY_ID, cardFor, createDeck as createCanonicalDeck } from '../shared/cards.mjs';
 
 function seeded(seed) {
@@ -15,7 +15,7 @@ const card = id => createDeck().find(item => item.id === id);
 const takeTurn = (game, action) => act(game, game.players[game.turn].id, action);
 const confirmBoth = game => {
   if (game.phase === 'announcements') {
-    for (const player of game.players) act(game, player.id, { type: 'confirmAnnouncements' });
+    while (game.phase === 'announcements') act(game, game.players[preparationTurn(game)].id, { type: 'confirmAnnouncements' });
   }
 };
 
@@ -379,7 +379,7 @@ test('hundreds of randomized rounds conserve cards, finish exactly 27 tricks and
       if (seed % 3 === 1) takeTurn(game, { type: 'bid', bid: 'pass' });
       takeTurn(game, { type: 'bid', bid: 'play' });
     }
-    for (const player of game.players) {
+    for (const player of [game.players[1 - game.dealer], game.players[game.dealer]]) {
       if (seed % 5 !== 0) {
         let choices = legalPickups(game, player.id);
         while (choices.length && rng() < 0.6) {
@@ -558,8 +558,8 @@ test('a full legacy round preserves the same moves, points and score as canonica
 const kings = ['clubs-8', 'spades-8', 'hearts-8', 'diamonds-8'];
 const trula = ['tarok-1', 'tarok-21', 'tarok-22'];
 
-function announcementGame() {
-  const game = makeGame();
+function announcementGame(dealer = 0) {
+  const game = createGame({ playerIds: ['ana', 'bor'], names: ['Ana', 'Bor'], dealer, rng: seeded(42) });
   takeTurn(game, { type: 'bid', bid: 'play' });
   return game;
 }
@@ -583,6 +583,50 @@ test('new deals require both announcement confirmations before any card play', (
   const started = JSON.stringify(game);
   assert.throws(() => act(game, 'ana', { type: 'confirmAnnouncements' }));
   assert.equal(JSON.stringify(game), started);
+});
+
+test('readiness follows the first-trick starter for either dealer without restricting optional preparation', () => {
+  for (const dealer of [0, 1]) {
+    const game = announcementGame(dealer);
+    const starter = 1 - dealer;
+    assert.equal(preparationTurn(game), starter);
+    assert.equal(viewFor(game, game.players[dealer].id).preparationTurn, starter);
+    const before = JSON.stringify(game);
+    assert.throws(() => act(game, game.players[dealer].id, { type: 'confirmAnnouncements' }), /Najprej mora pripravljenost potrditi/);
+    assert.equal(JSON.stringify(game), before);
+    for (const player of game.players) {
+      const pickup = legalPickups(game, player.id)[0];
+      if (pickup) act(game, player.id, { type: 'pickup', cardId: pickup });
+    }
+    act(game, game.players[starter].id, { type: 'confirmAnnouncements' });
+    assert.equal(preparationTurn(game), dealer);
+    const confirmed = JSON.stringify(game);
+    act(game, game.players[starter].id, { type: 'confirmAnnouncements' });
+    assert.equal(JSON.stringify(game), confirmed, 'Repeated own confirmation is idempotent');
+    const restored = JSON.parse(JSON.stringify(game));
+    assert.equal(preparationTurn(restored), dealer);
+    act(restored, restored.players[dealer].id, { type: 'confirmAnnouncements' });
+    assert.equal(restored.turn, starter);
+    assert.equal(preparationTurn(restored), null);
+    assert.equal(restored.phase, 'playing');
+  }
+  assert.equal(preparationTurn(makeGame()), null);
+});
+
+test('saved preparation with the dealer already ready preserves that confirmation and lets the starter finish', () => {
+  for (const dealer of [0, 1]) {
+    const game = announcementGame(dealer);
+    game.announcementReady[dealer] = true;
+    const restored = JSON.parse(JSON.stringify(game));
+    assert.equal(preparationTurn(restored), 1 - dealer);
+    assert.deepEqual(legalPickups(restored, restored.players[dealer].id), []);
+    const before = JSON.stringify(restored);
+    act(restored, restored.players[dealer].id, { type: 'confirmAnnouncements' });
+    assert.equal(JSON.stringify(restored), before);
+    act(restored, restored.players[1 - dealer].id, { type: 'confirmAnnouncements' });
+    assert.equal(restored.phase, 'playing');
+    assert.deepEqual(restored.announcementReady, [true, true]);
+  }
 });
 
 test('king and trula declarations require the full set in hand, including manually picked cards', () => {
@@ -622,7 +666,7 @@ test('valat requires no hidden own pile cards, allows face-up cards, and never d
 });
 
 test('confirmation freezes only that player until play begins; declarations stay public and eligibility private', () => {
-  const game = announcementGame();
+  const game = announcementGame(1);
   game.players[0].hand = kings.map(card);
   game.players[0].stacks = [[card('tarok-22'), card('hearts-1')], [], []];
   game.players[1].hand = [card('clubs-1')];
@@ -645,7 +689,7 @@ test('confirmation freezes only that player until play begins; declarations stay
   assert.equal(game.phase, 'playing');
   assert.deepEqual(legalPickups(game, 'ana'), ['tarok-22']);
   act(game, 'ana', { type: 'pickup', cardId: 'tarok-22' });
-  assert.equal(game.turn, 1);
+  assert.equal(game.turn, 0);
   assert.deepEqual(legalAnnouncements(game, 'ana'), []);
 });
 
@@ -740,7 +784,7 @@ test('mondfang records one public capture and a separate -21 penalty, including 
 });
 
 test('announcements, confirmations, chosen pickups and mondfang survive JSON save and restore', () => {
-  let game = announcementGame();
+  let game = announcementGame(1);
   game.players[0].hand = kings.map(card);
   game.players[0].stacks = [[card('tarok-22'), card('clubs-1')], [], []];
   act(game, 'ana', { type: 'announce', bonus: 'kings' });
@@ -775,4 +819,47 @@ test('unmarked running rounds retain old phases and scoring; the next deal upgra
   assert.deepEqual(game.players.map(player => player.score), oldTotals);
   takeTurn(game, { type: 'bid', bid: 'play' });
   assert.equal(game.phase, 'announcements');
+});
+
+test('own won-trick history preserves completed pairs, survives old saves, and resets only on a new deal', () => {
+  let game = makeGame(71);
+  takeTurn(game, { type: 'bid', bid: 'play' });
+  confirmBoth(game);
+  const expected = [[], []];
+  while (game.phase === 'playing') {
+    takeTurn(game, { type: 'play', cardId: legalMoves(game, game.players[game.turn].id)[0] });
+    for (const [seat, player] of game.players.entries()) {
+      assert.deepEqual(viewFor(game, player.id).wonTricks.map(pair => pair.map(card => card.id)), expected[seat],
+        'An unfinished trick must not appear among won tricks');
+    }
+    takeTurn(game, { type: 'play', cardId: legalMoves(game, game.players[game.turn].id)[0] });
+    const completed = game.lastTrick;
+    expected[completed.winner].push(completed.cards.map(play => play.card.id));
+    for (const [seat, player] of game.players.entries()) {
+      const view = viewFor(game, player.id);
+      assert.deepEqual(view.wonTricks.map(pair => pair.map(card => card.id)), expected[seat],
+        'Each viewer sees only their own completed pairs, in winning order');
+      assert.equal(view.wonTricks.length, player.trickCount);
+      assert.ok(view.wonTricks.flat().every(card => card.image === cardFor(card.id).image));
+    }
+    assertConservation(game);
+    if (completed.number === 9) game = JSON.parse(JSON.stringify(game));
+  }
+  assert.equal(expected.flat().length, 27);
+  assert.ok(expected.every(tricks => tricks.length > 0));
+  assert.ok(!('wonTricks' in game), 'History is derived from existing captured cards, with no save migration');
+  const saved = JSON.stringify(game);
+  game = JSON.parse(saved);
+  for (const [seat, player] of game.players.entries()) {
+    const view = viewFor(game, player.id);
+    assert.deepEqual(view.wonTricks.map(pair => pair.map(card => card.id)), expected[seat]);
+    view.wonTricks[0][0].name = 'Changed client view';
+  }
+  assert.equal(JSON.stringify(game), saved, 'Reading or changing a private history view must not alter the saved game');
+  act(game, 'ana', { type: 'ready' });
+  assert.deepEqual(viewFor(game, 'ana').wonTricks.map(pair => pair.map(card => card.id)), expected[0]);
+  act(game, 'bor', { type: 'ready' });
+  assert.equal(game.round, 2);
+  assert.deepEqual(viewFor(game, 'ana').wonTricks, []);
+  assert.deepEqual(viewFor(game, 'bor').wonTricks, []);
 });

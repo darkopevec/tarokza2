@@ -232,7 +232,7 @@ function Rules({ onClose }) {
           <li>
             <strong>Odpri kupčke.</strong> Po napovedi se vrhnje karte
             razkrijejo. Taroka ali kralja lahko vzameš v roko ali ga pustiš
-            na kupčku. Pod roko izberi »Vzemi v roko« za posamezno karto.
+            na kupčku. Ob kupčku izberi »Vzemi v roko« za posamezno karto.
             Prevzem je dovoljen tudi med nasprotnikovo potezo in ga lahko
             opraviš pozneje. Razkrije se naslednja karta; tudi zanjo se
             odločiš posebej. Prevzem ne porabi poteze.
@@ -242,7 +242,7 @@ function Rules({ onClose }) {
             ko imaš vse štiri v roki; trulo, ko imaš pagata, monda in škisa.
             Štejejo tudi karte, ki jih pred tem vzameš s kupčkov. Valat lahko
             napoveš, ko na nobenem tvojem kupčku ni več skrite karte: vsak
-            je prazen ali ima le eno odprto karto. Oba izbereta »Pripravljen«,
+            je prazen ali ima le eno odprto karto. Najprej izbere »Pripravljen« igralec, ki začne igro, nato drugi,
             preden lahko kdorkoli odigra prvo karto. Po svoji potrditvi
             priprave ne moreš več spreminjati; med igro je prevzem spet dovoljen.
           </li>
@@ -312,6 +312,9 @@ function AnnouncementPanel({ game, busy, action }) {
   const ready = game.announcementReady || [false, false];
   const mine = (game.announcements || []).filter(call => call.player === game.you);
   const pickupCount = (game.legalPickups || []).length;
+  const confirming = game.preparationTurn ?? [1 - game.dealer, game.dealer].find(seat => !ready[seat]);
+  const canConfirm = !ready[game.you] && confirming === game.you;
+  const hasCalls = mine.length > 0 || (game.legalAnnouncements || []).length > 0;
   const requirements = {
     kings: "V roki potrebuješ vse štiri kralje.",
     trula: "V roki potrebuješ pagata, monda in škisa.",
@@ -322,18 +325,28 @@ function AnnouncementPanel({ game, busy, action }) {
     trula: "V svojih štihih zberi pagata, monda in škisa. Uspešna napoved prinese +20, neuspešna −20. Brez napovedi je cel komplet v štihih vreden +10.",
     valat: "Osvoji vseh 27 štihov. Uspešna napoved prinese +500, neuspešna −500. Valat nadomesti igro, kralje in trulo; mondfang se obračuna posebej.",
   };
-  const showPickups = () => {
-    const options = document.querySelector('.pickup-options');
-    options?.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    options?.focus({ preventScroll: true });
-  };
   return <div className="announcement-panel" data-testid="announcement-panel">
-    <div className="announcement-heading">
-      <h2>Napovedi</h2>
-      <span data-testid="announcement-ready-count">{ready.filter(Boolean).length}/2 pripravljena</span>
+    <div className="preparation-intro">
+      <div className="announcement-heading">
+        <h2>Priprava</h2>
+        <span data-testid="announcement-ready-count">{ready.filter(Boolean).length}/2 pripravljena</span>
+      </div>
+      <p className="preparation-status" data-testid="preparation-status">
+        {ready[game.you]
+          ? `Pripravo si potrdil. Čakamo še: ${game.players[1 - game.you].name}.`
+          : !canConfirm
+            ? `Prvi potrdi ${game.players[confirming].name}, ki začne igro. Karte lahko že prevzemaš.`
+            : ready[1 - game.you]
+              ? `${game.players[1 - game.you].name} je pripravljen. Zdaj potrdi še ti.`
+              : "Začneš ti. Prevzemi po želji in potrdi pripravo."}
+      </p>
+      <button className="announcement-info-button" type="button" data-testid="announcement-info"
+        aria-label="Pogoji in točke napovedi" aria-haspopup="dialog" onClick={() => setShowInfo(true)}>
+        <CircleHelp size={18} />
+      </button>
     </div>
-    <p className="announcement-warning" id="announcement-warning">Napoved je javna in dokončna.</p>
-    <div className="announcement-actions">
+    <p className="announcement-warning" id="announcement-warning" hidden={!hasCalls}>Napovedi niso obvezne. Oddana napoved je javna in dokončna.</p>
+    <div className="announcement-actions" hidden={!hasCalls}>
       {Object.entries(bonusNames).map(([bonus, name]) => {
         const called = mine.some(call => call.bonus === bonus);
         return <button key={bonus} type="button" data-testid={`announce-${bonus}`}
@@ -346,22 +359,15 @@ function AnnouncementPanel({ game, busy, action }) {
           <small>{called ? "Napovedano" : bonus === "valat" ? "+500 / −500" : "+20 / −20"}</small>
         </button>;
       })}
-      <button className="announcement-info-button" type="button" data-testid="announcement-info"
-        aria-label="Pogoji in točke napovedi" aria-haspopup="dialog" onClick={() => setShowInfo(true)}>
-        <CircleHelp size={18} />
-      </button>
     </div>
+    {!ready[game.you] && pickupCount === 0 && <p className="prep-pickup-empty" data-testid="pickup-empty">Na kupčkih ni taroka ali kralja za prevzem.</p>}
     <div className="announcement-footer">
-      {!ready[game.you] && pickupCount > 0 && <button className="prep-pickup-reminder" type="button"
-        data-testid="prep-pickup-reminder" aria-label={`Pred potrditvijo preveri neobvezne prevzeme: ${pickupCount}. Pokaži možnosti.`}
-        onClick={showPickups}>
-        <ArrowDownToLine size={15} /><span>Preveri prevzeme <strong>({pickupCount})</strong></span>
-      </button>}
       <button className="announcement-confirm" type="button" data-testid="confirm-announcements"
-        disabled={busy || ready[game.you]} onClick={() => action({ type: "confirmAnnouncements" })}>
-        {ready[game.you] ? <><Check size={15} /> Čakam soigralca</> : <>Pripravljen <ArrowRight size={15} /></>}
+        disabled={busy || !canConfirm} onClick={() => action({ type: "confirmAnnouncements" })}>
+        {ready[game.you] ? <><Check size={15} /> Čakam soigralca</> : !canConfirm ? <>Najprej {game.players[confirming].name}</> : <>Pripravljen <ArrowRight size={15} /></>}
       </button>
     </div>
+    {!ready[game.you] && <p className="preparation-lock-note">Igra se začne, ko potrdita oba.</p>}
     {showInfo && createPortal(<Modal title="Napovedi: pogoji in točke" className="announcement-info-modal" onClose={() => setShowInfo(false)}>
       <p className="announcement-info-intro">Napoved ni obvezna. Je javna in dokončna obljuba, da boš cilj dosegel v svojih štihih, ne nagrada za karte v roki.</p>
       {Object.entries(bonusNames).map(([bonus, name]) => <section className="announcement-info-section" key={bonus}>
@@ -374,7 +380,7 @@ function AnnouncementPanel({ game, busy, action }) {
             : (game.legalAnnouncements || []).includes(bonus) ? "To napoved lahko zdaj oddaš."
               : "Pogoj za to napoved še ni izpolnjen."}</p>
       </section>)}
-      <p className="announcement-info-note">Odprte taroke in kralje lahko pred potrditvijo po želji vzameš v roko. Prevzem ne odigra karte in ne porabi poteze. S »Pripravljen« zakleneš svoje izbire do začetka igranja; oba morata potrditi.</p>
+      <p className="announcement-info-note">Odprte taroke in kralje lahko pred potrditvijo po želji vzameš v roko. Prevzem ne odigra karte in ne porabi poteze. Po »Pripravljen« ne moreš več napovedovati. Karte s kupčkov lahko spet jemlješ, ko se začne igra.</p>
     </Modal>, document.body)}
   </div>;
 }
@@ -752,33 +758,44 @@ function Waiting({ state, onCopy, copied, onLeave }) {
   );
 }
 
-function Stacks({ player, mine, legalMoves, onPlay, disabled }) {
+function Stacks({ player, mine, legalMoves, legalPickups = [], onPlay, onPickup, disabled }) {
   return (
-    <div className={`stacks ${mine ? "my-stacks" : ""}`}>
-      <span className="stacks-label">{mine ? "TVOJI KUPČKI" : "SOIGRALČEVI KUPČKI"}</span>
+    <div className={`stacks ${mine ? "my-stacks" : ""}`} tabIndex={mine ? -1 : undefined}
+      data-testid={mine ? "pickup-options" : undefined} aria-label={mine ? "Tvoji kupčki in neobvezni prevzemi" : undefined}>
+      <span className="stacks-label">{mine ? "TVOJI KUPČKI" : `${player.name} · KUPČKI`}</span>
       <div className="stack-cards">
         {player.stacks.map((stack, i) => (
-          <div className={`stack ${!stack.count ? "empty-stack" : ""}`} key={i}
-            data-stack-index={i} data-stack-count={stack.count} data-top-card-id={stack.top?.id || ""}>
-            {stack.count ? (
-              <>
-                <span className="stack-under" />
-                {stack.top ? (
-                  <Card
-                    card={stack.top}
-                    small
-                    onPlay={mine ? onPlay : undefined}
-                    legal={legalMoves.includes(stack.top.id)}
-                    disabled={disabled}
-                  />
-                ) : (
-                  <Card back small />
-                )}
-                <span className="stack-count">{stack.count}</span>
-              </>
-            ) : (
-              <span className="empty-stack-mark">·</span>
-            )}
+          <div className="stack-slot" key={i}>
+            <div className={`stack ${!stack.count ? "empty-stack" : ""}`}
+              data-stack-index={i} data-stack-count={stack.count} data-top-card-id={stack.top?.id || ""}>
+              {stack.count ? (
+                <>
+                  <span className="stack-under" />
+                  {stack.top ? (
+                    <Card
+                      card={stack.top}
+                      small
+                      onPlay={mine ? onPlay : undefined}
+                      legal={legalMoves.includes(stack.top.id)}
+                      disabled={disabled}
+                    />
+                  ) : (
+                    <Card back small />
+                  )}
+                  <span className="stack-count">{stack.count}</span>
+                </>
+              ) : (
+                <span className="empty-stack-mark">·</span>
+              )}
+            </div>
+            {mine && <div className="stack-pickup-space">
+              {stack.top && legalPickups.includes(stack.top.id) && <button type="button" className="stack-pickup"
+                data-testid="pickup-card" data-card-id={stack.top.id} data-stack-index={i}
+                aria-label={`Vzemi ${stack.top.name} v roko`} disabled={disabled}
+                onClick={() => onPickup(stack.top.id)}>
+                <span>Vzemi</span><span>v roko</span>
+              </button>}
+            </div>}
           </div>
         ))}
       </div>
@@ -842,9 +859,8 @@ function Game({ state, busy, action, onScore, onRules }) {
   const groups = Object.keys(suits)
     .map((suit) => ({ suit, cards: g.hand.filter((c) => c.suit === suit) }))
     .filter((x) => x.cards.length);
-  const pickupChoices = me.stacks
-    .map((stack, index) => ({ card: stack.top, index }))
-    .filter(({ card }) => card && g.legalPickups?.includes(card.id));
+  const latestPickup = g.pickups?.at(-1);
+  const pickup = (cardId) => action({ type: "pickup", cardId });
   const showSuit = (suit) => {
     const hand = handRef.current;
     const group = hand?.querySelector(`[data-suit="${suit}"]`);
@@ -854,10 +870,18 @@ function Game({ state, busy, action, onScore, onRules }) {
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
   };
+  const tricksButton = (
+    <button className="trick-stat" type="button" data-testid="my-tricks"
+      aria-label={`Tvoji štihi (${me.trickCount})`} aria-haspopup="dialog"
+      onClick={() => action({ type: "showMyTricks" })}>
+      <strong>{me.trickCount}<ArrowUpRight size={12} aria-hidden="true" /></strong>
+      <span>TVOJI ŠTIHI</span>
+    </button>
+  );
   const liveStatus = g.phase === "bidding"
     ? `Runda ${g.round}. ${myTurn ? "Izberi Igram ali Naprej." : `${other.name} izbira igro.`}`
     : g.phase === "announcements"
-      ? `Priprava. ${(g.announcementReady || []).filter(Boolean).length}/2 pripravljena. ${g.announcementReady?.[you] ? `Čakamo ${other.name}.` : "Prevzemi in napovedi so po želji. Nato potrdi."}`
+      ? `Priprava. ${(g.announcementReady || []).filter(Boolean).length}/2 pripravljena. ${g.announcementReady?.[you] ? `Čakamo ${other.name}.` : g.preparationTurn === you ? "Ti potrdiš pripravo. Prevzemi in napovedi so po želji." : `Najprej potrdi ${other.name}, ki začne igro. Prevzemi in napovedi so po želji.`}`
       : g.phase === "playing"
         ? `Štih ${g.trickNumber} od 27. ${myTurn ? "Na potezi si." : `Na potezi je ${other.name}.`}`
         : `Runda ${g.round} je končana. Za novo rundo morata potrditi oba.`;
@@ -866,6 +890,7 @@ function Game({ state, busy, action, onScore, onRules }) {
       data-turn={g.turn ?? ""} data-you={you} data-trick-number={g.trickNumber}
       data-trick-card-ids={g.trick.map(({ card }) => card.id).join(",")}
       data-pickup-count={g.pickups?.length || 0}
+      data-preparation-turn={g.preparationTurn ?? ""}
       data-announcement-ready={(g.announcementReady || [false, false]).join(",")}
       data-announcements={JSON.stringify(g.announcements || [])}>
       <span className="sr-only" data-testid="game-status" role="status" aria-live="polite" aria-atomic="true">{liveStatus}</span>
@@ -923,6 +948,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                   : "Navadna igra: zmagovalcu se prišteje razlika nad 35."}
               </span>
             </div>
+            {tricksButton}
             <div className="next-round">
               <div>
                 <h3>Še eno?</h3>
@@ -969,8 +995,9 @@ function Game({ state, busy, action, onScore, onRules }) {
                   : `ŠTIH ${Math.min(g.trickNumber, 27)} / 27`}
               </span>
             </div>
+            <div className="opponent-zone">
             <div
-              className={`player-seat opponent ${!myTurn ? "active-seat" : ""}`}
+              className={`player-seat opponent ${g.phase !== "announcements" && !myTurn ? "active-seat" : ""}`}
             >
               <Avatar name={other.name} connected={conn} />
               <div>
@@ -998,6 +1025,7 @@ function Game({ state, busy, action, onScore, onRules }) {
             </div>
             <div className="opponent-stacks">
               <Stacks player={other} legalMoves={[]} />
+            </div>
             </div>
             <div className="center-play">
               {g.phase === "bidding" ? (
@@ -1103,13 +1131,12 @@ function Game({ state, busy, action, onScore, onRules }) {
                 player={me}
                 mine
                 legalMoves={g.legalMoves}
+                legalPickups={g.legalPickups}
+                onPickup={pickup}
                 onPlay={play}
                 disabled={busy}
               />
-              <div className="trick-stat">
-                <strong>{me.trickCount}</strong>
-                <span>TVOJI ŠTIHI</span>
-              </div>
+              {tricksButton}
             </div>
           </section>
           <section className="hand-panel">
@@ -1127,14 +1154,14 @@ function Game({ state, busy, action, onScore, onRules }) {
                   </small>
                 </div>
               </div>
-              <span className={`turn-indicator ${myTurn ? "your-turn" : ""}`}>
+              <span className={`turn-indicator ${(g.phase === "announcements" ? g.preparationTurn === you : myTurn) ? "your-turn" : ""}`}>
                 <i />
                 {g.phase === "bidding"
                   ? myTurn
                     ? "Izberi igro"
                     : "Čakamo napoved"
                   : g.phase === "announcements"
-                    ? g.announcementReady?.[you] ? "Pripravljen si" : "Prevzemi, napovej, potrdi"
+                    ? g.announcementReady?.[you] ? "Pripravljen si" : g.preparationTurn === you ? "Ti potrdiš pripravo" : `Najprej potrdi ${other.name}`
                   : myTurn
                     ? "Na potezi si"
                     : "Na potezi je " + other.name}
@@ -1182,7 +1209,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                   : g.phase === "announcements"
                     ? g.announcementReady?.[you]
                       ? "Priprava je potrjena. Ko potrdita oba, se začne igra."
-                      : "Prevzemi in napovedi so po želji. S potrditvijo jih zakleneš do začetka igre."
+                      : "Po želji vzemi odprte taroke in kralje. Nato potrdi, da si pripravljen."
                   : myTurn
                     ? g.hand.length > 0 && g.trick.length === 0
                       ? "Štih začneš s karto iz roke; s kupčka šele, ko je roka prazna."
@@ -1205,26 +1232,9 @@ function Game({ state, busy, action, onScore, onRules }) {
                 </span>)}
               </div>
             )}
-            {!!pickupChoices.length && (
-              <div className="pickup-options" data-testid="pickup-options" tabIndex={-1} aria-label="Neobvezni prevzemi s kupčkov">
-                <div className="pickup-options-heading">
-                  <span><ArrowDownToLine size={13} /> Vzemi v roko</span>
-                  <small>Po želji · ne porabi poteze</small>
-                </div>
-                <div className="pickup-actions">
-                  {pickupChoices.map(({ card, index }) => (
-                    <button key={card.id} type="button" data-testid="pickup-card"
-                      data-card-id={card.id} data-stack-index={index}
-                      aria-label={`Vzemi ${card.name} v roko`}
-                      disabled={busy}
-                      onClick={() => action({ type: "pickup", cardId: card.id })}>
-                      <span><small>{index + 1}. kupček</small><strong>{card.name}</strong></span>
-                      <ArrowDownToLine size={15} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <p className="pickup-feedback" role="status" aria-live="polite" aria-atomic="true">
+              {latestPickup?.player === you && g.hand.some(card => card.id === latestPickup.card.id) ? `${latestPickup.card.name} je zdaj v roki.` : ""}
+            </p>
             {!!g.pickups?.length && (
               <button
                 className="pickup-note"
@@ -1342,6 +1352,10 @@ function App() {
   function action(action) {
     if (action.type === "showPickups") {
       setModal("pickups");
+      return;
+    }
+    if (action.type === "showMyTricks") {
+      setModal("my-tricks");
       return;
     }
     if (action.type === "showLastTrick") {
@@ -1500,6 +1514,18 @@ function App() {
               </section>
             ))}
           </div>
+        </Modal>
+      )}
+      {modal === "my-tricks" && state?.game && (
+        <Modal title="Tvoji štihi" className="won-tricks-modal" onClose={() => setModal(null)}>
+          <p className="last-trick-description">Runda {state.game.round} · {trickCountLabel(state.game.wonTricks?.length || 0)}.
+            {state.game.wonTricks?.length > 0 && " Po vrsti, kot si jih osvojil."}</p>
+          {state.game.wonTricks?.length ? <div className="won-tricks-list">
+            {state.game.wonTricks.map((cards, index) => <section key={index} data-testid="won-trick">
+              <h3>{index + 1}. osvojeni štih</h3>
+              <div className="won-trick-cards">{cards.map(card => <Card key={card.id} card={card} />)}</div>
+            </section>)}
+          </div> : <p data-testid="won-tricks-empty">V tej rundi še nisi osvojil nobenega štiha.</p>}
         </Modal>
       )}
       {modal === "last" && state?.game?.lastTrick && (

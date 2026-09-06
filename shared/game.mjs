@@ -101,6 +101,11 @@ function startPlay(game) {
   game.turn = 1 - game.dealer;
 }
 
+export function preparationTurn(game) {
+  if (game.phase !== 'announcements') return null;
+  return [1 - game.dealer, game.dealer].find(seat => !game.announcementReady?.[seat]) ?? null;
+}
+
 export function legalPickups(game, playerId) {
   const seat = playerIndex(game, playerId);
   if (game.phase !== 'playing' && !(game.phase === 'announcements' && !game.announcementReady?.[seat])) return [];
@@ -222,6 +227,9 @@ export function act(game, playerId, action) {
   }
   if (action.type === 'confirmAnnouncements') {
     if (game.phase !== 'announcements') throw new Error('Potrjevanje napovedi ni na vrsti.');
+    if (game.announcementReady[seat]) return game;
+    const next = preparationTurn(game);
+    if (next !== seat) throw new Error(`Najprej mora pripravljenost potrditi ${game.players[next].name}, ki začne prvi štih. Medtem lahko prevzemaš in napoveduješ.`);
     game.announcementReady[seat] = true;
     if (game.announcementReady.every(Boolean)) game.phase = 'playing';
     return game;
@@ -293,6 +301,7 @@ const publicPlay = play => ({ ...play, card: publicCard(play.card) });
 
 export function viewFor(game, playerId) {
   const you = playerIndex(game, playerId);
+  const captured = game.players[you].captured;
   // Deliberately construct the public projection. Never spread an internal player.
   const view = {
     phase: game.phase, round: game.round, dealer: game.dealer, turn: game.turn, you,
@@ -303,11 +312,16 @@ export function viewFor(game, playerId) {
       trickCount: player.trickCount, score: player.score, ready: player.ready,
     })),
     hand: game.players[you].hand.map(publicCard),
+    // Captured cards are already saved in completed pairs, in winning order.
+    // Derive history for existing rounds too, without adding or migrating state.
+    wonTricks: Array.from({ length: Math.ceil(captured.length / 2) }, (_, index) =>
+      captured.slice(index * 2, index * 2 + 2).map(publicCard)),
     legalMoves: legalMoves(game, playerId),
     legalPickups: legalPickups(game, playerId),
     legalAnnouncements: legalAnnouncements(game, playerId),
     announcements: game.announcements ?? [],
     announcementReady: game.announcementReady ?? [false, false],
+    preparationTurn: preparationTurn(game),
     mondfangs: game.mondfangs ?? [],
     legalBids: game.phase === 'bidding' && game.turn === you ? ['play', 'pass'] : [],
     trick: game.trick.map(publicPlay),

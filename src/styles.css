@@ -771,9 +771,9 @@ h1 em {
   height: var(--card-height);
   aspect-ratio: var(--card-aspect-ratio);
   background: var(--card-fill);
-  border: 1px solid #d9d6c7;
+  border: 0 solid #e6e2d4;
   border-radius: 5px;
-  box-shadow: 0 2px 4px #0002;
+  box-shadow: 0 1px 2px #233d3512;
   color: #283f39;
   display: flex;
   align-items: center;
@@ -789,6 +789,16 @@ h1 em {
 .playing-card.hearts,
 .playing-card.diamonds {
   color: #a9433a;
+}
+.playing-card::after {
+  /* Overlay the rim so small cards keep the same image proportions. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid;
+  border-color: inherit;
+  border-radius: inherit;
+  pointer-events: none;
 }
 .playing-card.tarok {
   color: #9b7748;
@@ -1057,7 +1067,6 @@ h1 em {
 }
 .opponent-hand > .playing-card {
   --card-height: 38px;
-  border-width: 2px;
   margin-left: -11px;
   transform: rotate(7deg);
 }
@@ -1298,8 +1307,20 @@ h1 em {
   flex-direction: column;
   gap: 4px;
   align-items: flex-end;
+  justify-self: end;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 6px;
+  border: 1px solid #b6caaa60;
+  border-radius: 6px;
+  background: #a9c09b16;
 }
+.trick-stat:hover { background: #a9c09b30; }
 .trick-stat strong {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 23px;
   font-family: "Manrope", sans-serif;
   font-weight: 400;
@@ -1309,6 +1330,7 @@ h1 em {
   font-size: 6px;
   letter-spacing: 1.2px;
   color: #b5c69b88;
+  line-height: 1.4;
 }
 .trick-cards {
   display: flex;
@@ -1461,6 +1483,7 @@ h1 em {
 }
 .hand-cards {
   display: flex;
+  padding-top: 10px;
   padding-right: 0;
 }
 .hand-cards > .playing-card {
@@ -1476,19 +1499,20 @@ h1 em {
     0 3px 5px #21331915;
   cursor: pointer;
 }
-.hand-cards > .playing-card.legal:hover {
-  transform: translateY(-7px);
-  box-shadow: 0 3px 8px #21331933;
-  border-color: #4d7036;
-  z-index: 2;
+@media (hover: hover) and (pointer: fine) {
+  .hand-cards > .playing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 3px 8px #21331933;
+    border-color: #4d7036;
+    z-index: 2;
+  }
 }
 .hand-cards > .playing-card.unplayable {
   filter: saturate(0.55);
-  background: #f0eee6;
-  --card-fill: #f0eee6;
-  opacity: 0.64;
+  opacity: 1;
 }
 .hand-cards > .playing-card:focus-visible {
+  transform: translateY(-8px);
   z-index: 3;
 }
 .my-stacks .playing-card.legal {
@@ -1501,7 +1525,7 @@ h1 em {
   transform: translateY(-4px);
 }
 .my-stacks .playing-card.unplayable {
-  opacity: 0.86;
+  opacity: 1;
 }
 .hand-hint {
   display: flex;
@@ -3353,12 +3377,15 @@ h1 em {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  /* Fill the 63:113 frame without stretching. Only the scans' outer paper
+     margins are clipped; contain left mismatched bands above/below the face. */
+  object-fit: cover;
+  object-position: center;
   pointer-events: none;
   user-select: none;
 }
 .playing-card { background: #fffdf4; }
-.card-back { padding: 0; border-width: 1px; background: #fffdf4; }
+.card-back { padding: 0; border-width: 0; background: #fffdf4; }
 .header-cards { display: flex; align-items: center; gap: 7px; background: none; padding: 10px 0; font-size: 12px; }
 .header-cards:hover { color: #a7693e; }
 .deck-modal { max-width: 930px; }

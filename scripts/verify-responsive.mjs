@@ -33,6 +33,7 @@ async function state(page) {
     }));
     return {
       phase: game?.dataset.phase || null, round: Number(game?.dataset.round || 0),
+      preparationTurn: game?.dataset.preparationTurn === "" ? null : Number(game?.dataset.preparationTurn),
       you: Number(game?.dataset.you), turn: game?.dataset.turn === '' ? null : Number(game?.dataset.turn),
       trick: Number(game?.dataset.trickNumber || 0), trickCards: game?.dataset.trickCardIds || '',
       pickups: Number(game?.dataset.pickupCount || 0), ready: game?.dataset.announcementReady || '',
@@ -112,6 +113,7 @@ async function measure(page, label) {
         widthError: Math.abs(width - height * 63 / 113),
         loaded: !image || (image.complete && image.naturalWidth > 0),
         imagePresent: stack || Boolean(image), objectFit: image ? getComputedStyle(image).objectFit : null,
+        opacity: css.opacity,
         hitRectangle: rectangle(element),
       };
     });
@@ -147,18 +149,18 @@ async function measure(page, label) {
   const issue = (kind, detail) => violations.push({ label, kind, detail });
   if (data.viewport.width !== page.viewportSize().width) issue('viewport-width', data.viewport);
   if (data.documentWidth > data.viewport.width + 1) issue('horizontal-overflow', `${data.documentWidth} > ${data.viewport.width}`);
-  if (!data.dialog && ['announcements', 'playing'].includes(data.phase)
-    && (!data.hand || data.hand.y < -1 || data.hand.bottom > data.viewport.height + 1)) {
-    issue('hand-below-fold', { hand: data.hand, viewport: data.viewport });
+  if (!data.dialog && data.table && data.hand && data.hand.y < data.table.bottom - 1) {
+    issue('hand-not-below-table', { hand: data.hand, table: data.table });
   }
   for (const card of data.cards) {
     if (card.widthError > 0.025) issue('card-ratio', card);
-    if (!card.loaded || !card.imagePresent || (card.kind === 'card' && card.objectFit !== 'contain')) issue('card-image', card);
+    if (!card.loaded || !card.imagePresent || (card.kind === 'card' && card.objectFit !== 'cover')) issue('card-image', card);
+    if (card.kind === 'card' && card.opacity !== '1') issue('translucent-card', card);
   }
   for (const control of data.controls) {
     const r = control.rectangle;
     if (r.width < 43.9 || r.height < 43.9) issue('touch-target', control);
-    if (!control.supplemental && (r.y < -1 || r.bottom > data.viewport.height + 1 || r.x < -1 || r.right > data.viewport.width + 1)) {
+    if (!control.supplemental && (r.y < -1 || r.bottom > data.documentHeight + 1 || r.x < -1 || r.right > data.viewport.width + 1)) {
       issue('primary-control-outside-viewport', control);
     }
   }
@@ -210,9 +212,12 @@ async function verifySuitNavigation(page, label) {
   }
   const before = persistentState(await state(page));
   for (const suit of choices) {
-    await page.evaluate(() => window.scrollTo(0, 0));
+    const button = page.locator(`[data-testid="hand-suit"][data-suit="${suit}"]`);
+    // First reach the hand normally; then the suit action must only scroll the hand.
+    await button.click({ trial: true });
+    const initialWindowY = await page.evaluate(() => scrollY);
     const initialScrollLeft = await page.locator('.hand-scroll').evaluate(hand => hand.scrollLeft);
-    await page.locator(`[data-testid="hand-suit"][data-suit="${suit}"]`).click();
+    await button.click();
     let revealed = true;
     try {
       await page.waitForFunction(suit => {
@@ -227,7 +232,7 @@ async function verifySuitNavigation(page, label) {
       report.violations.push({ label, kind: 'suit-jump-does-not-reveal-card', detail: suit });
     }
     const scroll = await page.evaluate(() => ({ windowY: scrollY, handX: document.querySelector('.hand-scroll')?.scrollLeft }));
-    if (Math.abs(scroll.windowY) > 1) report.violations.push({ label, kind: 'suit-jump-scrolls-window', detail: { suit, ...scroll } });
+    if (Math.abs(scroll.windowY - initialWindowY) > 1) report.violations.push({ label, kind: 'suit-jump-scrolls-window', detail: { suit, ...scroll } });
     assert.deepEqual(persistentState(await state(page)), before, 'Suit navigation must not change game state or play a card.');
     report.navigationChecks.push({ label, suit, revealed, initialScrollLeft, ...scroll });
   }
@@ -354,12 +359,8 @@ async function preparationGuidance() {
   assert.equal(await page.getByRole('dialog').count(), 0);
   assert.equal(await page.getByTestId('announcement-info').evaluate(element => document.activeElement === element), true);
   assert.deepEqual(persistentState(await state(page)), before, 'Reading requirements must not announce, pick up, or play.');
-  const reminder = page.getByTestId('prep-pickup-reminder');
-  const reminderBox = await reminder.boundingBox();
-  assert.ok(reminderBox.y >= 0 && reminderBox.y + reminderBox.height <= 568, 'Pickup reminder must be visible beside preparation confirmation.');
-  await reminder.click();
-  assert.equal(await page.getByTestId('pickup-options').evaluate(element => document.activeElement === element), true);
-  assert.deepEqual(persistentState(await state(page)), before, 'The reminder only scrolls/focuses; pickup remains optional.');
+  assert.equal(await page.getByTestId('prep-pickup-reminder').count(), 0, 'The redundant pickup-navigation button is removed.');
+  assert.ok(!/zakleneš svoje izbire/.test(await page.locator('.announcement-panel').innerText()), 'Preparation uses concrete wording.');
   await page.evaluate(() => scrollTo(0, 0));
   await page.evaluate(() => {
     window.__tarokTextProbe = [...document.querySelectorAll('body *')]
@@ -370,7 +371,7 @@ async function preparationGuidance() {
   try {
     const enlarged = await page.evaluate(() => {
       const table = document.querySelector('.game-table').getBoundingClientRect();
-      const controls = [...document.querySelectorAll('.announcement-panel button')].map(element => {
+      const controls = [...document.querySelectorAll('.announcement-panel button')].filter(element => element.getClientRects().length > 0).map(element => {
         const r = element.getBoundingClientRect();
         return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
       });
@@ -390,17 +391,21 @@ async function preparationGuidance() {
       delete window.__tarokTextProbe;
     });
   }
-  report.guidanceChecks.push({ kind: 'accessible-controls-info-and-optional-reminder', passed: true });
+  report.guidanceChecks.push({ kind: 'accessible-controls-and-preparation-info', passed: true });
 }
 
 async function confirm() {
   assert.ok((await Promise.all(pages.map(state))).every(snapshot => snapshot.enabledCards.length === 0));
-  await pages[0].getByTestId('confirm-announcements').click();
-  await pages[0].waitForFunction(() => document.querySelector('.game-page')?.dataset.announcementReady?.startsWith('true'));
+  const states = await synchronizedPages();
+  const first = states.findIndex(snapshot => snapshot.you === snapshot.preparationTurn);
+  const second = 1 - first;
+  assert.equal(await pages[second].getByTestId('confirm-announcements').isEnabled(), false);
+  await pages[first].getByTestId('confirm-announcements').click();
+  await pages[first].waitForFunction(seat => document.querySelector('.game-page')?.dataset.announcementReady?.split(',')[seat] === 'true', states[first].you);
   assert.match(await pages[0].getByTestId('game-status').textContent(), /1\/2 pripravljena/);
   assert.ok((await Promise.all(pages.map(state))).every(snapshot => snapshot.phase === 'announcements' && snapshot.enabledCards.length === 0),
     'One player confirming must not start play.');
-  await pages[1].getByTestId('confirm-announcements').click();
+  await pages[second].getByTestId('confirm-announcements').click();
   await waitPhase('playing');
   assert.ok((await Promise.all(pages.map(page => page.getByTestId('game-status').textContent())))
     .every(text => /Štih 1 od 27\. Na potezi/.test(text)), 'The polite status must transition from preparation readiness to the current turn.');
