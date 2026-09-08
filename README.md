@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🃏 TarokZa2
+# 👑 TarokZa2
 
-### 🇸🇮 Two players. One table. All 54 cards.
+### Share a link. Settle in. Play.
 
-**A little Slovenian tradition, ready for your next friendly rivalry.**
+**Slovenian tarok for you and a friend.**
 
 📱 Phone & tablet first · 🤝 Private multiplayer · 🔓 No account required
 
@@ -21,7 +21,7 @@ Create a private table, send its invitation link or six-character code, and play
 | ✨ At the table | 🎁 What you get |
 | :--- | :--- |
 | 🤝 Just the two of you | Private tables with invitation links and room codes. |
-| 🃏 A full Slovenian deck | All 54 scanned card faces, with Slovenian names and an in-game gallery. |
+| 👑 A full Slovenian deck | All 54 scanned card faces, with Slovenian names and an in-game gallery. |
 | 📱 Made for touch | Responsive phone and tablet layouts, swipeable hands and suit shortcuts. |
 | 🔄 Pick up where you left off | Reclaim your seat in the same browser after a refresh or reconnect. |
 | 🏆 Every round counts | Persistent scoreboards, saved score explanations and your won-trick history. |
@@ -67,7 +67,7 @@ Public-hosting safeguards include a reconnect-resistant new-table quota (default
 3. 🤝 **Take your seats.** Your opponent enters their name in the join form and selects **Pridruži se**. Invitation links put joining first and pre-fill the code; missing names or invalid codes get inline feedback. Each browser sees only its own hand and the public table.
 4. 🗣️ **Place your bid.** Bid **Igram** or **Naprej**. The pile tops open for preparation; no cards move into the hand automatically.
 5. 👑 **Prepare your cards.** Optionally take an exposed tarok or king using its **Vzemi v roko** control directly beneath that pile. Each click takes exactly one card. Call **Kralji** or **Trula** only with the full set in hand. **Valat** becomes available when every own pile is empty or has just one face-up card left. Unavailable calls are kept out of the way; the information button explains their requirements and points on touch screens; calls are public and final. The starting player (non-dealer) selects **Pripravljen** first, then the dealer. Both may take optional pickups and make eligible calls until their own confirmation locks preparation. No card may be played before both confirm.
-6. 🃏 **Play your hand.** Tap a highlighted card to play it on your turn. Swipe the hand horizontally or tap a suit shortcut to find its cards; the shortcuts only scroll your hand. Playing from a pile is distinct from the **Vzemi v roko** action: during play you may still take exposed taroks/kings later, even on the opponent's turn, without consuming a turn.
+6. 👑 **Play your hand.** Tap a highlighted card to play it on your turn. Swipe the hand horizontally or tap a suit shortcut to find its cards; the shortcuts only scroll your hand. Playing from a pile is distinct from the **Vzemi v roko** action: during play you may still take exposed taroks/kings later, even on the opponent's turn, without consuming a turn.
 7. 🏆 **Count the spoils.** After 27 tricks, both players see the round result with a game/bonus/penalty breakdown and cumulative scoreboard. Select **Nova runda**; a new deal starts after both players are ready.
 
 ### 🏆 Revisit your tricks and scores
@@ -101,7 +101,7 @@ Uses the Slovenian two-player Napoleon deal and play, with the explicit differen
 
 The agreed two-player additions are silent kings/trula **+10** each, called sets **+20/−20**, silent valat **+250**, called valat **+500/−500**, and **−21 mondfang** for losing Mond to Škis. Valat replaces the base game and set bonuses; mondfang stays separate. Calls require both players to finish preparation before the opening lead. Valat requires all your own cards to be visible, but the final face-up card on each pile may remain there. Saved rounds already underway retain their old scoring until the next fresh deal; earlier score rows are not rewritten.
 
-### 🃏 The deal
+### 👑 The deal
 
 Each player receives **15 hand cards plus three stacks of four**. The server enforces bidding, following suit, mandatory trumping, stack restrictions, and the 27-trick round. Score history persists between rounds. Kings and taroks explicitly taken into the hand are recorded for both players to inspect.
 
@@ -218,7 +218,7 @@ The fixture has its own disposable temporary rooms, binds only to loopback, and 
 | 📂 Path | 🧩 Purpose |
 | :--- | :--- |
 | [`src/`](src/) | 🎨 React interface, responsive styles and the full-deck card reference. |
-| [`shared/cards.mjs`](shared/cards.mjs) | 🃏 Canonical card identities, Slovenian names and scan paths. |
+| [`shared/cards.mjs`](shared/cards.mjs) | 👑 Canonical card identities, Slovenian names and scan paths. |
 | [`shared/game.mjs`](shared/game.mjs) | ⚖️ Authoritative rules engine and private player projections. |
 | [`server/index.mjs`](server/index.mjs) | 🔌 Express and Socket.IO server with atomic disk persistence. |
 | [`tests/`](tests/) | 🧪 Rules and multiplayer integration tests. |
@@ -235,7 +235,7 @@ The entire game uses all 54 scanned faces from one Slovenian tarok deck; see [ca
 
 <div align="center">
 
-**🃏 Shuffle up. Invite a friend. Naj zmaga najboljši! 🏆**
+**👑 Shuffle up. Invite a friend. Naj zmaga najboljši! 🏆**
 
 [🚀 Start a table](#get-started) · [📖 Full rules](docs/rules.md) · [🏡 Deployment guide](docs/deployment.md) · [🧭 Agent handoff](HANDOFF.md)
 
