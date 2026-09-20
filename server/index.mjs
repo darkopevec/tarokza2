@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import proxyaddr from 'proxy-addr';
 import { Server } from 'socket.io';
 import * as defaultEngine from '../shared/game.mjs';
+import { createAbuseControls } from './abuse-controls.mjs';
 import { canonicalClientAddress, createCreationLimiter } from './creation-limiter.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -75,10 +76,19 @@ export async function createTarokServer({
   engine = defaultEngine,
   logger = console,
   creationLimit = {},
+  abuseLimits = {},
   trustedProxies = (process.env.TRUSTED_PROXIES || '').split(',').map(value => value.trim()).filter(Boolean),
   now = Date.now,
 } = {}) {
   const trustProxy = compileTrustedProxies(trustedProxies);
+  const abuse = createAbuseControls(abuseLimits, now);
+  const admitted = Symbol('tarokAdmission');
+  const pendingAdmissions = new Set();
+  function clientKey(request) {
+    let key;
+    try { key = canonicalClientAddress(proxyaddr(request, trustProxy)); } catch { /* Use actual peer. */ }
+    return key || canonicalClientAddress(request.socket.remoteAddress) || 'unknown-peer';
+  }
   const creationLimiter = createCreationLimiter({
     limit: creationLimit.max ?? Number(process.env.ROOM_CREATE_LIMIT ?? 60),
     windowMs: creationLimit.windowMs ?? Number(process.env.ROOM_CREATE_WINDOW_MS ?? 3_600_000),
@@ -173,13 +183,39 @@ export async function createTarokServer({
     // Invitations are public; reconnect tokens must only be sent from this application's origin.
     allowRequest: (request, callback) => {
       const origin = request.headers.origin;
-      if (!origin) return callback(null, true);
-      try {
-        return callback(null, new URL(origin).host === request.headers.host);
-      } catch {
-        return callback(null, false);
+      if (origin) {
+        try {
+          if (new URL(origin).host !== request.headers.host) return callback(null, false);
+        } catch { return callback(null, false); }
       }
+      const key = clientKey(request);
+      if (shuttingDown || !abuse.handshakes.consume(key).allowed) return callback(null, false);
+      const release = abuse.acquire(key);
+      if (!release) return callback(null, false);
+      // Reserve before approval, including handshakes that never finish. Release
+      // failed/aborted handshakes; successful Engine.IO sessions own the slot.
+      const cleanup = () => {
+        clearTimeout(timer);
+        request.socket.removeListener('close', cleanup);
+        pendingAdmissions.delete(cleanup);
+        release();
+      };
+      const timer = setTimeout(cleanup, 10_000);
+      timer.unref();
+      pendingAdmissions.add(cleanup);
+      request.socket.once('close', cleanup);
+      request[admitted] = { key, cleanup, timer };
+      callback(null, true);
     },
+  });
+
+  io.engine.on('connection', (socket) => {
+    const admission = socket.request[admitted];
+    if (!admission) return socket.close(true);
+    clearTimeout(admission.timer);
+    socket.request.socket.removeListener('close', admission.cleanup);
+    pendingAdmissions.delete(admission.cleanup);
+    socket.once('close', admission.cleanup);
   });
 
   function isConnected(roomId, playerId) {
@@ -228,9 +264,21 @@ export async function createTarokServer({
   io.on('connection', (socket) => {
     // Socket.IO handles upgrades outside Express, so resolve its original request explicitly.
     // Only configured proxy hops may contribute X-Forwarded-For addresses.
-    let creationKey;
-    try { creationKey = canonicalClientAddress(proxyaddr(socket.request, trustProxy)); } catch { /* Fall back to the peer. */ }
-    creationKey ||= canonicalClientAddress(socket.request.socket.remoteAddress) || 'unknown-peer';
+    const creationKey = clientKey(socket.request);
+    socket.use(([event, ...args], next) => {
+      const allowance = abuse.messages.consume(creationKey);
+      const authAllowance = allowance.allowed && (event === 'room:join' || event === 'room:resume')
+        ? abuse.authentication.consume(creationKey) : allowance;
+      if (allowance.allowed && authAllowance.allowed) return next();
+      const acknowledge = args.at(-1);
+      if (typeof acknowledge === 'function') acknowledge({
+        ok: false,
+        code: allowance.allowed ? 'AUTH_RATE_LIMIT' : 'REQUEST_RATE_LIMIT',
+        error: 'Preveč zahtev s tega omrežja. Poskusi čez trenutek.',
+        retryAfterMs: (allowance.allowed ? authAllowance : allowance).retryAfterMs,
+      });
+      // Do not dispatch denied packets, including unknown events.
+    });
     // A small per-connection burst limit also bounds pending writes from a misbehaving client.
     let requestTimes = [];
     function handle(event, operation) {
@@ -384,6 +432,7 @@ export async function createTarokServer({
     },
     async close() {
       shuttingDown = true;
+      for (const cleanup of pendingAdmissions) cleanup();
       await Promise.allSettled([...queues.values()]);
       await new Promise((resolve) => io.close(resolve));
       if (httpServer.listening) await new Promise((resolve, reject) => httpServer.close((error) => error ? reject(error) : resolve()));

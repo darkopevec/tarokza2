@@ -1,6 +1,6 @@
 # Running TarokZa2
 
-TarokZa2 runs as one Docker container with a persistent volume for tables and games. The same process serves the built website and its Socket.IO multiplayer connection. No external hosting provider or public domain is configured.
+TarokZa2 runs as one Docker container with a persistent volume for tables and games. The same process serves the built website and its Socket.IO multiplayer connection. The IT13 deployment serves `tarok.moonlitgarden.cc` and `tarok.moonlitgarden.xyz`; its production configuration and runbook are in `ops/it13/`.
 
 From the repository directory, run:
 
@@ -78,3 +78,43 @@ npm start
 ```
 
 Run engine and multiplayer integration checks with `npm test`. After starting the production application, `npm run test:browser` plays two complete rounds through separate mobile and tablet browser sessions and writes screenshots plus a verification report under `artifacts/`.
+
+## Shared abuse controls and container restrictions
+
+In addition to the independent new-table quota, the server limits each verified
+client IP (IPv6 /64) to 600 Socket.IO events per 10 seconds, 60 combined join/resume
+attempts per minute, and 60 new Engine.IO handshakes per minute. Unknown events
+also count toward the event quota. Counters survive reconnects and transport
+changes and reset at server restart. Each limiter retains at most 10,000 active
+identities; new identities fail closed when that capacity is full.
+
+There may be at most 20 Engine.IO connections per client IP and 1,000 overall,
+including connections without a Socket.IO session. Slots are reserved before
+handshake approval, released on disconnect, and abandoned handshakes expire after
+10 seconds. A polling-to-WebSocket upgrade retains its existing slot. The
+existing per-socket burst limit and 16 KiB message limit also remain in place.
+Shared-IP networks share these quotas. Join/resume throttling does not itself
+consume or block the separate gameplay event allowance. Exceeded event quotas
+return `REQUEST_RATE_LIMIT` or `AUTH_RATE_LIMIT` with `retryAfterMs`; handshake
+rejections use Engine.IO's generic forbidden response. The factory's `abuseLimits`
+option can override defaults for tests or custom embeddings; all values must be
+positive safe integers.
+
+Both Compose files use a non-root user, read-only root filesystem, dropped Linux
+capabilities, and `no-new-privileges`. Only the game volume and a 16 MiB temporary
+filesystem are writable. Limits are 512 MiB RAM, one CPU, and 100 processes;
+Docker logs rotate at 10 MiB with three files retained. These limits should be
+reviewed against real usage before growing beyond modest private groups.
+
+IT13 Nginx limits HTTP requests to 20/second/IP with a burst of 100 and 30 active
+connections/IP. The burst accommodates card images and multiple players behind
+one router. WebSocket messages are limited inside the app, since Nginx HTTP rate
+limits do not inspect upgraded traffic. Request bodies are capped at 32 KiB.
+
+The HTTPS sites send a CSP allowing self-hosted scripts/styles/fonts, deck images
+and the bundled data-URL texture, and same-origin multiplayer connections. The
+policy denies framing, plugins, and base-URL changes. HSTS applies for one year
+to each Tarok hostname; it does not enable preload or include unrelated subdomains.
+`X-Frame-Options: DENY`, Permissions-Policy and one consistent Referrer-Policy are
+also set. Use `node scripts/verify-security-browser.mjs` after `npm run build` to
+exercise two-player gameplay with this CSP against disposable local saves.

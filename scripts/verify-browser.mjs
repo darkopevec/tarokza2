@@ -53,6 +53,11 @@ const contexts = await Promise.all(report.players.map(({ viewport }) =>
 const pages = await Promise.all(contexts.map(context => context.newPage()));
 pages.forEach((page, playerIndex) => {
   page.setDefaultTimeout(10_000);
+  page.on('console', message => {
+    if (message.type() === 'error' && /content security policy|violates.*directive|refused to/i.test(message.text())) {
+      report.browserErrors.push({ player: report.players[playerIndex].name, message: message.text() });
+    }
+  });
   page.on('pageerror', error => report.browserErrors.push({
     player: report.players[playerIndex].name,
     message: error.message,

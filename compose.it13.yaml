@@ -1,6 +1,8 @@
+name: tarokza2
 services:
   tarokza2:
-    build: .
+    image: tarokza2:security-20260917
+    container_name: tarokza2
     init: true
     read_only: true
     cap_drop: [ALL]
@@ -17,18 +19,24 @@ services:
         max-size: "10m"
         max-file: "3"
     ports:
-      - "${PORT:-3000}:3000"
+      - "127.0.0.1:3300:3000"
     environment:
       NODE_ENV: production
       PORT: 3000
       DATA_DIR: /app/data
-      ROOM_CREATE_LIMIT: "${ROOM_CREATE_LIMIT:-60}"
-      ROOM_CREATE_WINDOW_MS: "${ROOM_CREATE_WINDOW_MS:-3600000}"
-      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
+      ROOM_CREATE_LIMIT: "60"
+      ROOM_CREATE_WINDOW_MS: "3600000"
+      TRUSTED_PROXIES: "172.20.0.1"
     volumes:
       - tarok-data:/app/data
     restart: unless-stopped
     stop_grace_period: 20s
-
 volumes:
   tarok-data:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1

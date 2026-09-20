@@ -361,3 +361,82 @@ test('clean empty servers expose separate live and ready responses without saved
   assert.deepEqual(ready.body, { ok: true, restoration: { status: 'ok', failedRooms: 0 } });
   assert.match(ready.response.headers.get('cache-control') || '', /no-store/);
 });
+
+test('shared join/resume quota survives reconnects, isolates clients, and expires', async (t) => {
+  let time = 1000;
+  const host = await fixture(t, { abuseLimits: { authentication: 2 }, now: () => time, trustedProxies: trustedLoopback });
+  const headers = { 'X-Forwarded-For': '198.51.100.20' };
+  const first = await host.connect(headers);
+  await first.request('room:join', { roomId: 'AAAAAA', name: 'Ana' });
+  first.socket.disconnect();
+  const second = await host.connect(headers, { transports: ['polling'] });
+  await second.request('room:resume', { roomId: 'AAAAAA', token: 'bad' });
+  const denied = await second.request('room:join', { roomId: 'AAAAAA', name: 'Ana' });
+  assert.equal(denied.code, 'AUTH_RATE_LIMIT');
+  assert.equal(denied.retryAfterMs, 60000);
+  const other = await host.connect({ 'X-Forwarded-For': '198.51.100.21' });
+  assert.notEqual((await other.request('room:join', {})).code, 'AUTH_RATE_LIMIT');
+  time += 60000;
+  assert.notEqual((await second.request('room:join', {})).code, 'AUTH_RATE_LIMIT');
+});
+
+test('shared message quota cannot be reset by sockets or spoofed client headers', async (t) => {
+  const host = await fixture(t, { abuseLimits: { messages: 2 } });
+  const a = await host.connect({ 'X-Forwarded-For': '198.51.100.1' });
+  const b = await host.connect({ 'X-Forwarded-For': '198.51.100.2' });
+  const results = await Promise.all([a.request('room:leave', {}), b.request('game:action', {}), a.request('room:leave', {})]);
+  assert.equal(results.filter(result => result.code === 'REQUEST_RATE_LIMIT').length, 1);
+  a.socket.disconnect();
+  const c = await host.connect();
+  assert.equal((await c.request('room:leave', {})).code, 'REQUEST_RATE_LIMIT');
+});
+
+test('handshake quota survives reconnects and permits connections after expiry', async (t) => {
+  let time = 1000;
+  const host = await fixture(t, { abuseLimits: { handshakes: 1 }, now: () => time });
+  const client = await host.connect();
+  client.socket.disconnect();
+  await assert.rejects(host.connect());
+  time += 60000;
+  await host.connect();
+});
+
+test('concurrent connection slots include idle polling sessions and release on disconnect', async (t) => {
+  const host = await fixture(t, { abuseLimits: { connectionsPerIp: 1 }, trustedProxies: trustedLoopback });
+  const headers = { 'X-Forwarded-For': '198.51.100.30' };
+  const a = await host.connect(headers, { transports: ['polling'] });
+  await assert.rejects(host.connect(headers));
+  const other = await host.connect({ 'X-Forwarded-For': '198.51.100.31' });
+  other.socket.disconnect();
+  a.socket.disconnect();
+  // Wait for the polling close packet to reach Engine.IO.
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const replacement = await host.connect(headers);
+  assert.equal((await replacement.request('room:leave', {})).ok, true);
+});
+
+test('global connection cap covers different verified addresses', async (t) => {
+  const host = await fixture(t, { abuseLimits: { connectionsTotal: 1 }, trustedProxies: trustedLoopback });
+  await host.connect({ 'X-Forwarded-For': '198.51.100.40' });
+  await assert.rejects(host.connect({ 'X-Forwarded-For': '198.51.100.41' }));
+});
+
+test('parallel handshakes cannot oversubscribe the global connection cap', async (t) => {
+  const host = await fixture(t, { abuseLimits: { connectionsTotal: 2 } });
+  const results = await Promise.allSettled(Array.from({ length: 8 }, () => host.connect()));
+  assert.equal(results.filter(result => result.status === 'fulfilled').length, 2);
+});
+
+test('rejected origins do not consume admission quota or connection slots', async (t) => {
+  const host = await fixture(t, { abuseLimits: { handshakes: 1, connectionsTotal: 1 } });
+  await assert.rejects(host.connect({ Origin: 'https://unrelated.example' }));
+  const valid = await host.connect();
+  assert.equal((await valid.request('room:leave', {})).ok, true);
+});
+
+test('unknown socket events consume the shared event allowance', async (t) => {
+  const host = await fixture(t, { abuseLimits: { messages: 1 } });
+  const client = await host.connect();
+  client.socket.emit('unknown:event', {});
+  assert.equal((await client.request('room:leave', {})).code, 'REQUEST_RATE_LIMIT');
+});
