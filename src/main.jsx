@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
@@ -1272,6 +1272,25 @@ function App() {
   const [resuming, setResuming] = useState(!!sessionForPage());
   const socketRef = useRef(null);
   const stateRef = useRef(null);
+  // Measure the natural page size: transforms do not affect ResizeObserver,
+  // so fitting cannot feed back into layout or accumulate rounding errors.
+  useLayoutEffect(() => {
+    const root = document.getElementById("root");
+    const page = root.querySelector(":scope > main");
+    const header = root.querySelector(":scope > .site-header");
+    if (!page || !header) return;
+    const fit = () => {
+      const available = Math.max(1, root.clientHeight - header.offsetHeight);
+      const height = Math.max(page.offsetHeight, page.scrollHeight);
+      const width = Math.max(page.offsetWidth, page.scrollWidth);
+      const scale = Math.min(1, available / Math.max(1, height), root.clientWidth / Math.max(1, width));
+      page.style.setProperty("--page-scale", String(scale));
+    };
+    const observer = new ResizeObserver(fit);
+    [root, header, page].forEach(element => observer.observe(element));
+    fit();
+    return () => observer.disconnect();
+  });
   useEffect(() => {
     const socket = io({ autoConnect: false, reconnection: true });
     socketRef.current = socket;

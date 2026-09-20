@@ -501,3 +501,68 @@
 @media (max-width: 560px) {
   .won-tricks-list { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Fit each page below the header; retain natural layout for size measurement. */
+html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
+#root { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+#root > .site-header { flex-shrink: 0; }
+#root > main {
+  display: flow-root; flex: 0 0 auto; width: 100%; margin: 0 auto;
+  transform: scale(var(--page-scale, 1)); transform-origin: top center;
+}
+#root > .resume-screen { display: flex; }
+
+/* Spend limited height on the forms and cards before fitting the whole page. */
+@media (max-height: 850px) {
+  .landing-top { min-height: 0; padding-block: 16px; }
+  .hero-visual { height: 240px; }
+  .hero-copy h1 { margin-block: 12px; }
+  .how-it-works { margin-block: 16px; }
+  .landing-bottom { padding-block: 8px; }
+  .new-table-panel, .join-panel { padding: 16px 20px; }
+  .waiting-page { padding-block: 12px; }
+  .waiting-layout { margin-block: 12px; gap: 24px; }
+  .waiting-table { height: 360px; }
+  .game-toolbar { min-height: 44px; padding-block: 0; }
+  .game-page .game-table .center-play { padding-block: 4px; }
+  .game-page .hand-cards > .playing-card { --card-height: 94px; }
+  .game-page .game-footer { margin-block: 8px; padding-top: 8px; }
+  .round-end { margin-block: 4px; }
+}
+@media (max-width: 560px) {
+  .landing-top { padding-block: 12px; }
+  .hero-copy h1 { font-size: 32px; margin-block: 8px; }
+  .hero-description { margin-block: 6px; line-height: 1.4; }
+  .hero-visual, .hero-proof, .how-it-works { display: none; }
+  .lobby-layout { gap: 8px; }
+  .new-table-panel, .join-panel { padding: 12px; }
+  .panel-heading { margin-bottom: 8px; }
+  .waiting-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .waiting-table { display: none; }
+  .waiting-copy h1 { margin-block: 10px; }
+  .invite-box { margin-block: 12px; padding: 14px; }
+  .game-page .game-table .stack,
+  .game-page .game-table .stack .playing-card { --card-height: 70px; }
+  .game-page .game-table .opponent-stacks .stack,
+  .game-page .game-table .opponent-stacks .stack .playing-card { --card-height: 56px; }
+}
+@media (min-width: 561px) and (max-height: 600px) {
+  .landing-top { grid-template-columns: 1fr; padding-block: 8px; }
+  .hero-visual, .hero-proof, .how-it-works { display: none; }
+  .hero-copy h1 { font-size: 30px; margin-block: 6px; }
+  .hero-copy h1 br { display: none; }
+  .hero-description { margin-block: 4px; }
+  .lobby-layout { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .join-panel { display: block; }
+  .waiting-table { height: 260px; }
+  .game-page .game-toolbar { position: static; width: auto; }
+  .game-page .play-layout {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start; gap: 12px;
+  }
+  .game-page .game-table .center-play { min-height: 80px; }
+  .game-page .game-table .stack,
+  .game-page .game-table .stack .playing-card { --card-height: 56px; }
+  .game-page .game-table .opponent-stacks .stack,
+  .game-page .game-table .opponent-stacks .stack .playing-card { --card-height: 44px; }
+}
