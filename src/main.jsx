@@ -489,6 +489,7 @@ function Landing({
   onRules,
 }) {
   const invitation = Boolean(new URLSearchParams(window.location.search).get("room"));
+  const [landingMode, setLandingMode] = useState(invitation ? "join" : "create");
   const [joinAttempted, setJoinAttempted] = useState(false);
   const joinNameRef = useRef(null);
   const joinCodeRef = useRef(null);
@@ -515,7 +516,7 @@ function Landing({
         aria-describedby="join-name-help" aria-invalid={joinAttempted && !validName} />
       <p id="join-name-help" data-testid="join-name-error"
         className={`join-validation ${joinAttempted && !validName ? "is-invalid" : ""}`}
-        role={joinAttempted && !validName ? "alert" : undefined}>{!validName ? "Vpiši ime za to mizo." : ""}</p>
+      role={joinAttempted && !validName ? "alert" : undefined}>{joinAttempted && !validName ? "Vpiši ime za to mizo." : ""}</p>
     </div>
     <label htmlFor="join-code">Koda mize</label>
     <div className="join-fields">
@@ -528,10 +529,10 @@ function Landing({
     </div>
     <p id="join-code-help" data-testid="join-code-error"
       className={`join-validation ${joinAttempted && !validCode ? "is-invalid" : ""}`}
-      role={joinAttempted && !validCode ? "alert" : undefined}>{!validCode ? "Vpiši 6 znakov iz povabila: črke brez I in O ter številke 2–9." : ""}</p>
+      role={joinAttempted && !validCode ? "alert" : undefined}>{joinAttempted && !validCode ? "Vpiši 6-mestno kodo iz povabila (brez I in O)." : ""}</p>
   </form>;
   return (
-    <main className={`landing ${invitation ? "invitation-focused" : ""}`}>
+    <main className={`landing ${invitation ? "invitation-focused" : ""}`} data-landing-mode={landingMode}>
       {invitation ? <header className="invitation-heading">
         <span className="eyebrow">POVABILO ZA MIZO</span>
         <h1>Prisedi k prijatelju.</h1>
@@ -543,14 +544,15 @@ function Landing({
           </div>
           <h1>
             Dobra družba.
-            <br />
+            <br />{" "}
             <em>Dobre karte.</em>
           </h1>
           <p className="hero-description">
-            Za dobro partijo sta dovolj dva.
+            <span className="desktop-description">Za dobro partijo sta dovolj dva.
             <br />
             Povabi prijatelja in zaigrajta slovenski tarok,
-            <br className="desktop-break" /> kjerkoli sta.
+            <br className="desktop-break" /> kjerkoli sta.</span>
+            <span className="mobile-description">Slovenski tarok za dva. Brez registracije.</span>
           </p>
           <div className="hero-proof">
             <span>
@@ -583,6 +585,12 @@ function Landing({
           </div>
         </div>
       </section>}
+      <div className="landing-mode" role="group" aria-label="Izberi način igre">
+        <button type="button" data-testid="landing-create" aria-pressed={landingMode === "create"}
+          onClick={() => setLandingMode("create")}><Plus size={17} /> Nova miza</button>
+        <button type="button" data-testid="landing-join" aria-pressed={landingMode === "join"}
+          onClick={() => setLandingMode("join")}><Users size={17} /> Imam kodo</button>
+      </div>
       <section className="lobby-layout">
         {invitation && joinForm}
         <form
@@ -663,7 +671,8 @@ function Landing({
           <Diamond size={14} /> Tradicija, ki gre s tabo.
         </span>
         <button onClick={onRules}>
-          Prvič igraš v dvoje? Spoznaj pravila <ArrowUpRight size={14} />
+          <span className="desktop-description">Prvič igraš v dvoje? Spoznaj pravila</span>
+          <span className="mobile-description">Kako igrati</span><ArrowUpRight size={14} />
         </button>
       </div>
     </main>
