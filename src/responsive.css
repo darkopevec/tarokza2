@@ -593,10 +593,15 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
     border-radius: 7px; background: transparent; color: #526653; font-size: 14px; font-weight: 600;
   }
   .landing-mode button[aria-pressed="true"] { background: #fffefa; color: #234c3d; box-shadow: 0 1px 4px #233a241a; }
-  .landing .lobby-layout { display: block; padding-top: 8px; }
+  /* Both modes share one grid cell so switching never moves the card or footer. */
+  .landing .lobby-layout { display: grid; grid-template-columns: minmax(0, 1fr); padding-top: 8px; }
   .landing[data-landing-mode="create"] .join-panel,
-  .landing[data-landing-mode="join"] .new-table-panel { display: none; }
-  .landing .new-table-panel, .landing .join-panel { padding: 14px; border: 1px solid #dee3d8; border-radius: 10px; background: #fffefa; }
+  .landing[data-landing-mode="join"] .new-table-panel { visibility: hidden; pointer-events: none; }
+  .landing .new-table-panel, .landing .join-panel {
+    grid-area: 1 / 1; align-self: stretch; padding: 14px;
+    border: 1px solid #dee3d8; border-radius: 10px; background: #fffefa;
+    box-shadow: 0 3px 8px #2c3b241f;
+  }
   .landing .panel-heading { margin: 0 0 10px; gap: 8px; }
   .landing .panel-heading h2 { font-size: 18px; line-height: 1.3; }
   .landing .section-icon { display: none; }
@@ -608,10 +613,10 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
   .landing .primary-button, .landing .join-button { min-height: 48px; font-size: 14px; padding: 10px 12px; }
   .landing .private-note { font-size: 12px; line-height: 1.4; color: #526653; margin-top: 10px; align-items: flex-start; }
   .landing .private-note svg { flex-shrink: 0; margin-top: 2px; }
-  .landing .join-panel { gap: 6px; }
-  .landing .join-panel .panel-heading { margin-bottom: 4px; }
-  .landing .join-panel label { margin-bottom: 0; }
-  .landing .join-name-field label { margin-bottom: 5px; }
+  .landing .join-panel { display: flex; gap: 0; }
+  .landing .join-panel .panel-heading { margin-bottom: 10px; }
+  .landing .join-panel label { margin-bottom: 5px; }
+  .landing .join-name-field { margin-bottom: 10px; }
   .landing .join-fields { flex-wrap: nowrap; gap: 6px; }
   .landing .join-fields input { flex: 1; min-width: 0; }
   .landing .join-button { background: #234c3d; color: #fffefa; }
