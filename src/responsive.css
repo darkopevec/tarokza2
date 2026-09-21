@@ -651,3 +651,26 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
   .landing-bottom { grid-column: 1; grid-row: 3; align-self: start; margin-top: 6px; }
   .landing .new-table-panel, .landing .join-panel { padding: 12px; }
 }
+
+/* Use the full phone viewport, giving spare space to the welcome artwork. */
+@media (max-width: 560px) {
+  #root > .landing {
+    display: flex; flex-direction: column;
+    min-height: calc(100dvh - 56px - env(safe-area-inset-top));
+  }
+  .landing .landing-top {
+    flex: 1 0 auto; justify-content: center;
+  }
+  .landing .invitation-heading {
+    flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center;
+  }
+  .landing .landing-mode, .landing .lobby-layout, .landing .landing-bottom { flex-shrink: 0; }
+}
+@media (max-width: 560px) and (min-height: 780px) {
+  .landing .hero-copy h1 { font-size: clamp(30px, 4.2dvh, 40px); }
+  .landing .hero-visual { height: clamp(155px, 22dvh, 210px); }
+  .landing .hero-card .playing-card {
+    --card-height: clamp(126px, 18dvh, 160px);
+    width: calc(var(--card-height) * var(--card-width-ratio)); height: var(--card-height);
+  }
+}
