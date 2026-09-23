@@ -1,5 +1,15 @@
 # IT13 deployment
 
+The 2026-09-24 passwordless release uses image `tarokza2:passwordless-20260924`
+and `compose.it13.yaml`. It adds player identities, device/recovery links, private
+game invitations and migration of existing browser-held seat tokens. Refresh
+existing browser tabs after upgrading. Back up the stopped game volume before
+switching images. After identity migration or new version-2 games, code-only
+rollback is insufficient: use the matching pre-release data backup and review
+any subsequent games before restoring it. See [passwordless protocol](docs/passwordless.md).
+
+The following records the earlier deployment setup and retained image tags.
+
 Source: `https://github.com/darkopevec/tarokza2`. The September 17 deployment was built from baseline revision
 `b252b9214ed99a396c714d3264d24f85bbe7f163`.
 

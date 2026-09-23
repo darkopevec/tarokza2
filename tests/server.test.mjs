@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { identityRequests } from './identity-client.mjs';
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
@@ -40,6 +41,7 @@ async function client(address) {
       });
     },
   };
+  connection.request = identityRequests(socket, () => connection.state);
   socket.on('state', (state) => {
     connection.state = state;
     connection.stateCount += 1;
@@ -55,7 +57,7 @@ async function client(address) {
 function stamp(state) {
   const game = state?.game;
   return JSON.stringify(game && [
-    game.round, game.phase, game.turn, game.trickNumber,
+    state.revision, game.round, game.phase, game.turn, game.trickNumber,
     game.trick?.length, game.bids?.length, game.ready,
     game.players.map(({ handCount, stacks, trickCount, score }) => ({
       handCount, stacks, trickCount, score,
@@ -843,7 +845,7 @@ test('play context rejects malformed and stale requests and prevents distinct-re
     duplicate.request('game:action', { type: 'play', cardId: 'tarok-21', expectedPlay: snapshotContext }),
   ]);
   assert.equal(results.filter((result) => result.ok).length, 1);
-  assert.equal(results.find((result) => !result.ok).code, 'STALE_PLAY');
+  assert.equal(results.find((result) => !result.ok).code, 'STALE_ACTION');
   const allTabs = [...room.clients, duplicate];
   await Promise.all(allTabs.map((current) => current.waitFor((state) =>
     state?.game?.trickNumber === 2 && state.game.trick.length === 0)));

@@ -16,11 +16,11 @@
 
 ---
 
-Create a private table, send its invitation link or six-character code, and play Slovenian tarok together in separate browsers. Bring a friend — the table is yours. 🥂
+Create a private table, send its private invitation link or QR code, and play Slovenian tarok together in separate browsers. Bring a friend — the table is yours. 🥂
 
 | ✨ At the table | 🎁 What you get |
 | :--- | :--- |
-| 🤝 Just the two of you | Private tables with invitation links and room codes. |
+| 🤝 Just the two of you | Private tables with invitation links and QR codes. |
 | 👑 A full Slovenian deck | All 54 scanned card faces, with Slovenian names and an in-game gallery. |
 | 📱 Made for touch | Responsive phone and tablet layouts, swipeable hands and suit shortcuts. |
 | 🔄 Pick up where you left off | Reclaim your seat in the same browser after a refresh or reconnect. |
@@ -63,8 +63,8 @@ Public-hosting safeguards include a reconnect-resistant new-table quota (default
 ## 🎮 Pull up a chair
 
 1. 🪑 **Create a table.** Enter your name and select **Ustvari mizo**.
-2. 💌 **Invite a friend.** Copy the invitation or room code and share it with your opponent.
-3. 🤝 **Take your seats.** Your opponent enters their name in the join form and selects **Pridruži se**. Invitation links put joining first and pre-fill the code; missing names or invalid codes get inline feedback. Each browser sees only its own hand and the public table.
+2. 💌 **Invite a friend.** Copy the private invitation link or scan its QR code and share it with your opponent.
+3. 🤝 **Take your seats.** Your opponent enters their name in the join form and selects **Pridruži se**. Invitation links show a join confirmation and ask newcomers only for a display name. Room codes are labels, not credentials. Each browser sees only its own hand and the public table.
 4. 🗣️ **Place your bid.** Bid **Igram** or **Naprej**. The pile tops open for preparation; no cards move into the hand automatically.
 5. 👑 **Prepare your cards.** Optionally take an exposed tarok or king using its **Vzemi v roko** control directly beneath that pile. Each click takes exactly one card. Call **Kralji** or **Trula** only with the full set in hand. **Valat** becomes available when every own pile is empty or has just one face-up card left. Unavailable calls are kept out of the way; the information button explains their requirements and points on touch screens; calls are public and final. The starting player (non-dealer) selects **Pripravljen** first, then the dealer. Both may take optional pickups and make eligible calls until their own confirmation locks preparation. No card may be played before both confirm.
 6. 👑 **Play your hand.** Tap a highlighted card to play it on your turn. Swipe the hand horizontally or tap a suit shortcut to find its cards; the shortcuts only scroll your hand. Playing from a pile is distinct from the **Vzemi v roko** action: during play you may still take exposed taroks/kings later, even on the opponent's turn, without consuming a turn.
@@ -78,7 +78,7 @@ Each historical round identifies who announced the game. Open **Izračun runde**
 
 ### 🔄 Come back to your seat
 
-Refresh or reconnect in the same browser to resume your seat. Leaving a table retains its credential; enter its code or reopen its link to return. Private credentials are stored locally in that browser, so clearing browser storage loses your ability to reclaim a full table. Two tabs in the same browser profile resume the same player. To play both seats on one device, use separate browser profiles or a private window; a second device can join normally.
+Your player owns all your tables, accessible from **Moje mize** on every linked browser. Refresh restores your current table; leaving returns home without losing your seat. No username, password, or email is required. In **Naprave in obnovitev**, generate a single-use, 15-minute link or QR code to add another browser, name devices, or remove a lost device. Each browser gets its own private credential; both can play the same seat. Save a separate private recovery link to restore access if all devices are lost. Generating a new recovery link invalidates the old one. Without that link or a connected browser, access cannot be restored. A browser belonging to another player cannot switch or merge identities; use a separate browser profile. Existing browser-held seat tokens migrate without resetting games. Old short invitations must be replaced by a new private invitation.
 
 <details>
 <summary>🛡️ How the game handles plays from multiple tabs</summary>
@@ -157,7 +157,7 @@ To watch the verification and leave both player windows open, ready for round th
 HEADLESS=0 KEEP_BROWSER_OPEN=1 npm run test:browser
 ```
 
-The suite exercises two isolated touch browser sessions, invitation link prefill, a mid-round refresh, two complete 54-card rounds, scoreboards and readiness for round three. It checks 320px and 390px phone layouts and a 1024×768 tablet. Screenshots and a report are written to `artifacts/`. Engine tests independently exercise 250 randomized full rounds, private state projections, legal moves, scoring and readiness. Server integration tests verify reconnects, reserved seats, rejection of a third player, and persistence across restarts.
+The suite exercises two isolated touch browser sessions, private invitation joining, a mid-round refresh, two complete 54-card rounds, scoreboards and readiness for round three. It checks 320px and 390px phone layouts and a 1024×768 tablet. Screenshots and a report are written to `artifacts/`. Engine tests independently exercise 250 randomized full rounds, private state projections, legal moves, scoring and readiness. Server integration tests verify reconnects, reserved seats, rejection of a third player, and persistence across restarts.
 
 </details>
 
@@ -240,3 +240,5 @@ The entire game uses all 54 scanned faces from one Slovenian tarok deck; see [ca
 [🚀 Start a table](#get-started) · [📖 Full rules](docs/rules.md) · [🏡 Deployment guide](docs/deployment.md) · [🧭 Agent handoff](HANDOFF.md)
 
 </div>
+
+Run `npm run test:identity` for isolated browser checks of invitations, QR codes, linked devices, recovery, conflicts, and revocation. It creates and removes its own temporary data directory.

@@ -9,7 +9,7 @@ import { createTarokServer } from '../server/index.mjs';
 
 const artifacts = path.resolve(process.env.ARTIFACTS_DIR || 'artifacts/score-history');
 const report = { startedAt: new Date().toISOString(), screenshots: [], layouts: [], cases: [], browserErrors: [] };
-const viewports = [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1024, height: 768 }];
+const viewports = [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 768, height: 1024 }, { width: 1024, height: 768 }];
 const gameEntry = (player, points) => ({ player, kind: 'game', points });
 const normal = { kind: 'normal', player: null };
 const announced = player => ({ kind: 'announced', player });
@@ -71,11 +71,11 @@ async function screenshot(page, name) {
 }
 async function createRoom(url) {
   await Promise.all(pages.map(page => page.goto(url, { waitUntil: 'networkidle' })));
-  await pages[0].getByTestId('player-name').fill('Ana'); await pages[0].getByTestId('create-room').click();
+  if (await pages[0].getByTestId('player-name').count()) await pages[0].getByTestId('player-name').fill('Ana'); await pages[0].getByTestId('create-room').click();
   await pages[0].getByTestId('room-code').waitFor();
   const room = (await pages[0].getByTestId('room-code').textContent()).trim();
-  await pages[1].goto(`${url}/?room=${room}`, { waitUntil: 'networkidle' });
-  await pages[1].getByTestId('join-name').fill('Luka'); await pages[1].getByTestId('join-room').click();
+  await pages[1].goto(await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue(), { waitUntil: 'networkidle' });
+  if (await pages[1].getByTestId('player-name').count()) await pages[1].getByTestId('player-name').fill('Luka'); await pages[1].getByTestId('join-room').click();
   await Promise.all(pages.map(page => page.locator('.game-page').waitFor()));
   return room;
 }
@@ -88,6 +88,40 @@ async function inspectLayout(page, label) {
   assert.ok(measurements.documentWidth <= measurements.width + 1, `${label}: no document horizontal overflow.`);
   assert.ok(measurements.tableWidths.every(table => table.scroll <= table.client + 1), `${label}: the score table must not require horizontal scrolling.`);
   assert.ok(measurements.summaries.every(summary => summary.width >= 43.9 && summary.height >= 43.9), `${label}: calculation summaries must be 44px touch targets.`);
+  report.layouts.push({ label, ...measurements });
+}
+async function inspectRoundEndScroll(page, label) {
+  await page.locator('.round-end-body').waitFor();
+  await page.locator('.round-end').evaluate(element => Promise.all(element.getAnimations().map(animation => animation.finished)));
+  const measurements = await page.evaluate(() => {
+    const game = document.querySelector('.game-page');
+    const body = document.querySelector('.round-end-body');
+    const bounds = body.getBoundingClientRect();
+    const inside = element => {
+      const rect = element.getBoundingClientRect();
+      return rect.top >= bounds.top - 1 && rect.bottom <= bounds.bottom + 1;
+    };
+    return { width: innerWidth, height: innerHeight, transform: getComputedStyle(game).transform,
+      bodyHeight: body.clientHeight, contentHeight: body.scrollHeight,
+      bottomGap: body.scrollHeight - body.clientHeight - body.scrollTop,
+      horizontalOverflow: body.scrollWidth - body.clientWidth,
+      pageOverflow: game.scrollHeight - game.clientHeight,
+      latestScoreVisible: inside([...body.querySelectorAll('[data-testid="scoreboard-row"]')].at(-1).querySelector('td:nth-child(2) strong')),
+      totalsVisible: inside(body.querySelector('tfoot')),
+      fixedElements: ['.site-header', '.game-footer'].map(selector => {
+        const rect = document.querySelector(selector).getBoundingClientRect();
+        return { selector, top: rect.top, bottom: rect.bottom, height: rect.height };
+      }) };
+  });
+  assert.equal(measurements.transform, 'none', `${label}: result text must remain at its native size.`);
+  assert.ok(measurements.bodyHeight > 0 && measurements.contentHeight > measurements.bodyHeight, `${label}: score history must scroll within the results panel.`);
+  assert.ok(Math.abs(measurements.bottomGap) <= 2, `${label}: results must initially scroll to the bottom.`);
+  assert.ok(measurements.horizontalOverflow <= 1 && measurements.pageOverflow <= 1, `${label}: only the results body should scroll vertically.`);
+  assert.ok(measurements.fixedElements.every(element => element.height > 0 && element.top >= -1 && element.bottom <= measurements.height + 1),
+    `${label}: the header and footer must remain in the viewport.`);
+  if (measurements.width === 390) assert.ok(measurements.latestScoreVisible, `${label}: the latest score must be visible on phone portrait.`);
+  if (measurements.width === 320) assert.ok(measurements.totalsVisible, `${label}: totals must be visible on the smallest phone.`);
+  await inspectLayout(page, label);
   report.layouts.push({ label, ...measurements });
 }
 async function inspectRows(page, mode) {
@@ -153,6 +187,7 @@ try {
     const room = await createRoom(url); const original = await persistedGame(room);
     if (mode === 'modal') await pages[0].locator('.score-button').click();
     await detail(pages[0], 1).waitFor();
+    if (mode === 'round-end') await inspectRoundEndScroll(pages[0], 'round-end-initial');
     if (mode === 'modal') {
       const close = pages[0].getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true });
       await close.focus(); await pages[0].keyboard.press('Tab');
@@ -163,7 +198,13 @@ try {
     assert.equal(await detail(pages[0], 1).evaluate(element => element.open), true);
     await pages[0].keyboard.press('Enter'); assert.equal(await detail(pages[0], 1).evaluate(element => element.open), false);
     for (const viewport of viewports) {
-      await pages[0].setViewportSize(viewport); await inspectRows(pages[0], mode);
+      await pages[0].setViewportSize(viewport);
+      if (mode === 'round-end') {
+        await pages[0].reload({ waitUntil: 'networkidle' });
+        await inspectRoundEndScroll(pages[0], `round-end-bottom-${viewport.width}x${viewport.height}`);
+        await screenshot(pages[0], `round-end-bottom-${viewport.width}x${viewport.height}.png`);
+      }
+      await inspectRows(pages[0], mode);
       await detail(pages[0], 1).locator('summary').click();
       await detail(pages[0], 1).locator('.score-formula').first().scrollIntoViewIfNeeded();
       await inspectLayout(pages[0], `${mode}-${viewport.width}x${viewport.height}`);
@@ -174,12 +215,27 @@ try {
     assert.deepEqual(await persistedGame(room), original, 'Expanding or closing history must never mutate saved game state.');
     await pages[0].reload({ waitUntil: 'networkidle' }); await pages[0].locator('.game-page').waitFor();
     if (mode === 'modal') await pages[0].locator('.score-button').click();
+    else await inspectRoundEndScroll(pages[0], 'round-end-refresh');
     await inspectRows(pages[0], mode); assert.deepEqual(await persistedGame(room), original, 'Refresh must preserve every saved row and the current game.');
     if (mode === 'modal') await pages[0].getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
+    else {
+      await pages[0].setViewportSize(viewports[1]);
+      await pages[0].reload({ waitUntil: 'networkidle' });
+      await inspectRoundEndScroll(pages[0], 'round-end-before-ready');
+      await detail(pages[0], 2).locator('summary').scrollIntoViewIfNeeded();
+      const before = await pages[0].locator('.round-end-body').evaluate(element => ({ top: element.scrollTop, max: element.scrollHeight - element.clientHeight }));
+      assert.ok(before.top < before.max - 100, 'Earlier score rows must remain reachable by scrolling.');
+      await pages[1].getByTestId('new-round').click();
+      await pages[0].waitForFunction(() => document.querySelector('[data-testid="ready-count"]').textContent.trim().startsWith('1/2'));
+      const after = await pages[0].locator('.round-end-body').evaluate(element => element.scrollTop);
+      assert.ok(Math.abs(after - before.top) <= 2, 'An opponent readiness update must preserve the position while reading older rounds.');
+      const expected = structuredClone(original); expected.players[1].ready = true;
+      assert.deepEqual(await persistedGame(room), expected, 'A readiness update must only change the opponent readiness flag.');
+    }
     report.cases.push({ mode, room, historicalRows: 8, passed: true });
   }
   assert.equal(report.browserErrors.length, 0); report.passed = true;
-  console.log('PASS: saved bidders/formulas, eight scoring cases, four sizes, keyboard expansion, modal focus, refresh, and immutable game state.');
+  console.log('PASS: saved bidders/formulas, eight scoring cases, five sizes, keyboard expansion, modal focus, refresh, readable scrolling, preserved scroll position, and immutable score history.');
 } catch (error) {
   report.passed = false; report.error = { message: error.message, stack: error.stack }; process.exitCode = 1; console.error(error.stack);
   if (pages[0]) await screenshot(pages[0], 'failure.png').catch(() => {});

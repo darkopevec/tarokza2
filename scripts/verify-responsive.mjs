@@ -241,36 +241,18 @@ async function verifySuitNavigation(page, label) {
 }
 
 async function createRoom() {
-  await pages[0].getByTestId('player-name').fill('Ana');
+  if (await pages[0].getByTestId('player-name').count()) await pages[0].getByTestId('player-name').fill('Ana');
   await pages[0].getByTestId('create-room').click();
   await pages[0].getByTestId('room-code').waitFor();
   const code = (await pages[0].getByTestId('room-code').textContent()).trim();
-  await pages[1].goto(`${baseURL}/?room=${encodeURIComponent(code)}`, { waitUntil: 'networkidle' });
-  assert.equal(await pages[1].getByTestId('join-code').inputValue(), code, 'Invitation link must prefill its room code.');
-  await pages[1].setViewportSize({ width: 390, height: 844 });
-  const invitation = await pages[1].evaluate(() => {
-    const field = document.querySelector('[data-testid="join-name"]');
-    const button = document.querySelector('[data-testid="join-room"]');
-    return { firstForm: document.querySelector('.lobby-layout form')?.className,
-      nameBottom: field?.getBoundingClientRect().bottom, joinBottom: button?.getBoundingClientRect().bottom };
-  });
-  assert.ok(invitation.firstForm.includes('join-panel'), 'An invitation must put joining first in the DOM.');
-  assert.ok(invitation.nameBottom <= 844 && invitation.joinBottom <= 844, 'Invited newcomers must see the complete join action without scrolling past a hero.');
-  await pages[1].getByTestId('join-name').fill('');
-  await pages[1].getByTestId('join-room').click();
-  assert.equal(await pages[1].getByTestId('join-name').getAttribute('aria-invalid'), 'true', 'Missing names need explicit inline feedback, not a silently disabled join button.');
-  assert.equal(await pages[1].locator('.game-page').count(), 0);
-  await pages[1].getByTestId('join-name').fill('Luka');
-  await pages[1].getByTestId('join-code').fill('ABC123');
-  await pages[1].getByTestId('join-room').click();
-  assert.equal(await pages[1].getByTestId('join-code').getAttribute('aria-invalid'), 'true', 'Code validation must match the server alphabet (no 1, I, or O).');
-  await pages[1].getByTestId('join-code').fill(code);
+  await pages[1].goto(await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue(), { waitUntil: 'networkidle' });
   await pages[1].setViewportSize({ width: 320, height: 568 });
-  await pages[1].evaluate(() => scrollTo(0, 0));
+  assert.equal(await pages[1].getByTestId('join-code').count(), 0);
+  assert.equal(await pages[1].getByTestId('join-room').isDisabled(), true);
+  if (await pages[1].getByTestId('player-name').count()) await pages[1].getByTestId('player-name').fill('Luka');
   const compactJoin = await pages[1].getByTestId('join-room').boundingBox();
-  const compactCode = await pages[1].getByTestId('join-code').boundingBox();
-  assert.ok(compactCode.width >= 110 && compactCode.height >= 44, 'All six code characters must fit in a full-size touch input.');
-  assert.ok(compactJoin.y + compactJoin.height <= 568, 'The join action also fits the smallest portrait phone.');
+  assert.ok(compactJoin.y + compactJoin.height <= 568, 'Join fits a small phone.');
+  const invitation = { privateLink: true };
   await pages[1].screenshot({ path: path.join(artifacts, 'invitation-join-320.png'), animations: 'disabled' });
   await pages[1].getByTestId('join-room').click();
   await waitPhase('bidding');

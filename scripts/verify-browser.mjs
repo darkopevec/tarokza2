@@ -481,12 +481,13 @@ async function verifyAnnouncementFixtures(fixtureURL) {
   assert.notEqual(new URL(fixtureURL).origin, new URL(baseURL).origin,
     'Deterministic fixture checks must use a separate server origin.');
   await Promise.all(pages.map(page => page.goto(fixtureURL, { waitUntil: 'networkidle' })));
-  await pages[0].getByTestId('player-name').fill('Ana');
+  if (await pages[0].getByTestId('player-name').count()) await pages[0].getByTestId('player-name').fill('Ana');
   await pages[0].getByTestId('create-room').click();
   await pages[0].getByTestId('room-code').waitFor();
   const roomCode = (await pages[0].getByTestId('room-code').textContent()).trim();
-  await pages[1].getByTestId('join-name').fill('Luka');
-  await pages[1].getByTestId('join-code').fill(roomCode);
+  await pages[1].goto(await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue(), { waitUntil: 'networkidle' });
+  if (await pages[1].getByTestId('player-name').count()) await pages[1].getByTestId('player-name').fill('Luka');
+
   await pages[1].getByTestId('join-room').click();
   await waitForBothPhase('bidding', 1);
   await finishBidding(1, true);
@@ -808,7 +809,7 @@ try {
   await assertNoOverflow(pages[0], 'Mobile landing page');
   await screenshot(pages[0], 'landing-mobile.png');
   await checkNarrowPhone(pages[0], 'landing-small-mobile.png');
-  await pages[0].getByTestId('player-name').fill('Ana');
+  if (await pages[0].getByTestId('player-name').count()) await pages[0].getByTestId('player-name').fill('Ana');
   await pages[0].getByTestId('create-room').click();
   await pages[0].getByTestId('room-code').waitFor();
   const roomCode = (await pages[0].getByTestId('room-code').textContent()).trim();
@@ -816,10 +817,9 @@ try {
   report.roomCode = roomCode;
   await inspectCardImages(pages[0].locator('.waiting-page'), 'Invitation card backs');
   await screenshot(pages[0], 'invitation-mobile.png');
-  await pages[1].goto(`${baseURL}/?room=${encodeURIComponent(roomCode)}`, { waitUntil: 'networkidle' });
-  assert.equal(await pages[1].getByTestId('join-code').inputValue(), roomCode,
-    'Opening an invitation link must prefill the room code.');
-  await pages[1].getByTestId('join-name').fill('Luka');
+  await pages[1].goto(await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue(), { waitUntil: 'networkidle' });
+  assert.equal(await pages[1].getByTestId('join-code').count(), 0, 'Joining uses the private invitation, not code entry.');
+  if (await pages[1].getByTestId('player-name').count()) await pages[1].getByTestId('player-name').fill('Luka');
   await pages[1].getByTestId('join-room').click();
   log(`Ana invited Luka into room ${roomCode}; browsers have isolated session storage.`);
 

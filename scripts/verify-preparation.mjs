@@ -165,12 +165,12 @@ try {
       page.on('pageerror', error => report.browserErrors.push({ label, message: error.message }));
     });
     await pages[0].goto(url, { waitUntil: 'networkidle' });
-    await pages[0].getByTestId('player-name').fill('Ana');
+    if (await pages[0].getByTestId('player-name').count()) await pages[0].getByTestId('player-name').fill('Ana');
     await input(pages[0].getByTestId('create-room'), viewport.touch);
     await pages[0].getByTestId('room-code').waitFor();
     const room = (await pages[0].getByTestId('room-code').textContent()).trim();
-    await pages[1].goto(`${url}/?room=${room}`, { waitUntil: 'networkidle' });
-    await pages[1].getByTestId('join-name').fill('Luka');
+    await pages[1].goto(await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue(), { waitUntil: 'networkidle' });
+    if (await pages[1].getByTestId('player-name').count()) await pages[1].getByTestId('player-name').fill('Luka');
     await input(pages[1].getByTestId('join-room'), viewport.touch);
     await phase(pages, 'bidding');
     assert.deepEqual((await Promise.all(pages.map(snapshot))).map(state => state.you), [0, 1], 'Players use different seats.');

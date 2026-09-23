@@ -38,11 +38,11 @@ try {
   const pages = await Promise.all(contexts.map(context => context.newPage()));
   pages.forEach(page => { page.setDefaultTimeout(10_000); page.on('pageerror', error => report.browserErrors.push(error.message)); });
   await pages[0].goto(baseURL);
-  await pages[0].getByTestId('player-name').fill('Ana');
+  if (await pages[0].getByTestId('player-name').count()) await pages[0].getByTestId('player-name').fill('Ana');
   await pages[0].getByTestId('create-room').click();
   const code = (await pages[0].getByTestId('room-code').textContent()).trim();
-  await pages[1].goto(`${baseURL}/?room=${code}`);
-  await pages[1].getByTestId('join-name').fill('Luka');
+  await pages[1].goto(await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue(), { waitUntil: 'networkidle' });
+  if (await pages[1].getByTestId('player-name').count()) await pages[1].getByTestId('player-name').fill('Luka');
   await pages[1].getByTestId('join-room').click();
   await Promise.all(pages.map(page => expect(page.locator('.game-page')).toHaveAttribute('data-phase', 'roundEnd')));
   const savePath = path.join(dataDir, `${code}.json`);

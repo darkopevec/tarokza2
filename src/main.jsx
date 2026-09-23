@@ -28,9 +28,12 @@ import {
   WifiOff,
   X,
 } from "lucide-react";
+import { DEVICE, PENDING_DEVICE, newSecret, captureLink, sharedLink, LinkCard, IdentityHome, DeviceSettings } from './identity-ui.jsx';
+import './identity.css';
 import "./styles.css";
 import "./responsive.css";
 
+const incomingLink = captureLink();
 const STORAGE = "tarokza2.session";
 const SESSIONS = "tarokza2.sessions";
 const NAME = "tarokza2.name";
@@ -52,17 +55,9 @@ const readSaved = (key) => {
     return null;
   }
 };
-function sessionForPage() {
-  const invitation = new URLSearchParams(location.search)
-    .get("room")
-    ?.toUpperCase();
-  const active = readSaved(STORAGE);
-  if (invitation)
-    return (
-      (readSaved(SESSIONS) || {})[invitation] ||
-      (active?.roomId === invitation ? active : null)
-    );
-  return active;
+function legacySeats() {
+  const saved = [...Object.values(readSaved(SESSIONS) || {}), readSaved(STORAGE)].filter(s => s?.roomId && s?.token);
+  return saved.filter((s, i) => saved.findIndex(x => x.roomId === s.roomId && x.token === s.token) === i);
 }
 
 function Card({
@@ -477,210 +472,8 @@ function ScoreTable({ game }) {
   );
 }
 
-function Landing({
-  name,
-  setName,
-  code,
-  setCode,
-  create,
-  join,
-  busy,
-  online,
-  onRules,
-}) {
-  const invitation = Boolean(new URLSearchParams(window.location.search).get("room"));
-  const [landingMode, setLandingMode] = useState(invitation ? "join" : "create");
-  const [joinAttempted, setJoinAttempted] = useState(false);
-  const joinNameRef = useRef(null);
-  const joinCodeRef = useRef(null);
-  const validName = Boolean(name.trim());
-  const validCode = /^[A-HJ-NP-Z2-9]{6}$/.test(code);
-  const joinForm = <form className={`join-panel ${invitation ? "join-panel-first" : ""}`}
-    onSubmit={event => {
-      event.preventDefault();
-      if (busy || !online) return;
-      setJoinAttempted(true);
-      if (!validName) { joinNameRef.current?.focus(); return; }
-      if (!validCode) { joinCodeRef.current?.focus(); return; }
-      join();
-    }}>
-    <div className="panel-heading">
-      <span className="section-icon light"><Users size={20} /></span>
-      <div><h2>{invitation ? "Pridruži se mizi" : "Že imaš povabilo?"}</h2><p>Vpiši svoje ime in kodo povabila.</p></div>
-    </div>
-    <div className="join-name-field">
-      <label htmlFor="join-name">Tvoje ime pri tej mizi</label>
-      <input id="join-name" data-testid="join-name" ref={joinNameRef}
-        placeholder="Tvoje ime" maxLength={24} autoComplete="nickname"
-        value={name} onChange={event => setName(event.target.value)}
-        aria-describedby="join-name-help" aria-invalid={joinAttempted && !validName} />
-      <p id="join-name-help" data-testid="join-name-error"
-        className={`join-validation ${joinAttempted && !validName ? "is-invalid" : ""}`}
-      role={joinAttempted && !validName ? "alert" : undefined}>{joinAttempted && !validName ? "Vpiši ime za to mizo." : ""}</p>
-    </div>
-    <label htmlFor="join-code">Koda mize</label>
-    <div className="join-fields">
-      <input id="join-code" data-testid="join-code" ref={joinCodeRef}
-        placeholder="NPR. ABC234" maxLength={6} autoComplete="off" autoCapitalize="characters"
-        value={code} onChange={event => setCode(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
-        aria-describedby="join-code-help" aria-invalid={joinAttempted && !validCode} />
-      <button className="join-button" data-testid="join-room" disabled={busy || !online}
-        aria-label="Pridruži se mizi"><span>Pridruži se</span><ArrowRight size={19} /></button>
-    </div>
-    <p id="join-code-help" data-testid="join-code-error"
-      className={`join-validation ${joinAttempted && !validCode ? "is-invalid" : ""}`}
-      role={joinAttempted && !validCode ? "alert" : undefined}>{joinAttempted && !validCode ? "Vpiši 6-mestno kodo iz povabila (brez I in O)." : ""}</p>
-  </form>;
-  return (
-    <main className={`landing ${invitation ? "invitation-focused" : ""}`} data-landing-mode={landingMode}>
-      {invitation ? <header className="invitation-heading">
-        <span className="eyebrow">POVABILO ZA MIZO</span>
-        <h1>Prisedi k prijatelju.</h1>
-        <p>Za pridružitev potrebuješ le svoje ime in kodo povabila.</p>
-      </header> : <section className="landing-top">
-        <div className="hero-copy">
-          <div className="eyebrow">
-            <span className="tiny-diamond" /> MALA MIZA. VELIKA IGRA.
-          </div>
-          <h1>
-            Dobra družba.
-            <br />{" "}
-            <em>Dobre karte.</em>
-          </h1>
-          <p className="hero-description">
-            <span className="desktop-description">Za dobro partijo sta dovolj dva.
-            <br />
-            Povabi prijatelja in zaigrajta slovenski tarok,
-            <br className="desktop-break" /> kjerkoli sta.</span>
-            <span className="mobile-description">Slovenski tarok za dva. Brez registracije.</span>
-          </p>
-          <div className="hero-proof">
-            <span>
-              <Users size={16} /> Samo vidva
-            </span>
-            <span>
-              <ShieldCheck size={16} /> Brez registracije
-            </span>
-          </div>
-        </div>
-        <div className="hero-visual" role="img" aria-label="Trula: pagat, mond in škis iz slovenskega kompleta tarok kart">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <span className="visual-star one">✧</span>
-          <span className="visual-star two">✦</span>
-          <div className="hero-card card-left">
-            <Card card={cardFor("tarok-1")} decorative />
-          </div>
-          <div className="hero-card card-right">
-            <Card card={cardFor("tarok-22")} decorative />
-          </div>
-          <div className="hero-card card-center">
-            <Card card={cardFor("tarok-21")} decorative />
-          </div>
-          <span className="visual-caption">PAGAT · MOND · ŠKIS</span>
-          <div className="round-stamp">
-            <span>PO SLOVENSKO</span>
-            <Diamond size={19} />
-            <span>ŽE OD NEKDAJ</span>
-          </div>
-        </div>
-      </section>}
-      <div className="landing-mode" role="group" aria-label="Izberi način igre">
-        <button type="button" data-testid="landing-create" aria-pressed={landingMode === "create"}
-          onClick={() => setLandingMode("create")}><Plus size={17} /> Nova miza</button>
-        <button type="button" data-testid="landing-join" aria-pressed={landingMode === "join"}
-          onClick={() => setLandingMode("join")}><Users size={17} /> Imam kodo</button>
-      </div>
-      <section className="lobby-layout">
-        {invitation && joinForm}
-        <form
-          className={`new-table-panel ${invitation ? "invitation-secondary" : ""}`}
-          onSubmit={(e) => {
-            e.preventDefault();
-            create();
-          }}
-        >
-          <div className="panel-heading">
-            <span className="section-icon">
-              <Plus size={21} />
-            </span>
-            <div>
-              <h2>{invitation ? "Raje ustvariš svojo mizo?" : "Tvoja miza čaka."}</h2>
-              <p>Vpiši ime in povabi prijatelja.</p>
-            </div>
-            <span className="step-number">01</span>
-          </div>
-          <label htmlFor="player-name">Kako ti je ime?</label>
-          <div className="create-fields">
-            <input
-              id="player-name"
-              data-testid="player-name"
-              placeholder="Tvoje ime"
-              maxLength={24}
-              autoComplete="nickname"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <button
-              data-testid="create-room"
-              className="primary-button"
-              disabled={busy || !online || !name.trim()}
-            >
-              {busy ? (
-                <LoaderCircle className="spin" size={19} />
-              ) : (
-                <>
-                  Ustvari mizo <ArrowRight size={19} />
-                </>
-              )}
-            </button>
-          </div>
-          <p className="private-note">
-            <Link size={13} /> Zasebna miza. Prijatelj se pridruži s povezavo.
-          </p>
-        </form>
-        {!invitation && joinForm}
-      </section>
-      {!invitation && <section className="how-it-works">
-        <div>
-          <span className="mini-number">1</span>
-          <p>
-            <strong>Ustvari mizo</strong>
-            <span>Le ime in en klik.</span>
-          </p>
-        </div>
-        <span className="step-line" />
-        <div>
-          <span className="mini-number">2</span>
-          <p>
-            <strong>Povabi prijatelja</strong>
-            <span>Pošlji mu svojo povezavo.</span>
-          </p>
-        </div>
-        <span className="step-line" />
-        <div>
-          <span className="mini-number">3</span>
-          <p>
-            <strong>Karte na mizo</strong>
-            <span>Naj zmaga boljši list.</span>
-          </p>
-        </div>
-      </section>}
-      <div className="landing-bottom">
-        <span>
-          <Diamond size={14} /> Tradicija, ki gre s tabo.
-        </span>
-        <button onClick={onRules}>
-          <span className="desktop-description">Prvič igraš v dvoje? Spoznaj pravila</span>
-          <span className="mobile-description">Kako igrati</span><ArrowUpRight size={14} />
-        </button>
-      </div>
-    </main>
-  );
-}
-
-function Waiting({ state, onCopy, copied, onLeave }) {
-  const url = `${window.location.origin}/?room=${state.roomId}`;
+function Waiting({ state, onCopy, onLeave, invitation, onInvite, onDevices }) {
+  const url = invitation ? sharedLink("invite", invitation, state.roomId) : "";
   return (
     <main className="waiting-page">
       <button className="text-button" onClick={onLeave}>
@@ -700,39 +493,16 @@ function Waiting({ state, onCopy, copied, onLeave }) {
             Pošlji povabilo in počakaj, da prisedeta oba.
           </p>
           <div className="invite-box">
-            <span className="field-label">KODA TVOJE MIZE</span>
-            <div className="room-code-row">
-              <strong data-testid="room-code">{state.roomId}</strong>
-              <button
-                className="icon-button"
-                aria-label="Kopiraj kodo"
-                onClick={() => onCopy(state.roomId)}
-              >
-                <Copy size={21} />
-              </button>
-            </div>
-            <button className="primary-button" onClick={() => onCopy(url)}>
-              {copied ? (
-                <>
-                  <Check size={18} /> Kopirano
-                </>
-              ) : (
-                <>
-                  <Share2 size={18} /> Kopiraj povabilo
-                </>
-              )}
-            </button>
-            <input
-              className="invite-url"
-              aria-label="Povezava za povabilo"
-              readOnly
-              value={url}
-              onFocus={(e) => e.target.select()}
-            />
+            <span className="field-label">TVOJA MIZA</span>
+            <strong data-testid="room-code">{state.roomId}</strong>
+            <LinkCard url={url} title="Povabilo za prijatelja" onCopy={onCopy} />
+            <button className="secondary-button" onClick={onInvite}>{url ? 'Zamenjaj povabilo' : 'Ustvari povabilo'}</button>
+            <p>Novo povabilo razveljavi prejšnje.</p>
           </div>
           <p className="private-note">
             <ShieldCheck size={15} /> Samo oseba s povabilom se lahko pridruži.
           </p>
+          <button className="text-button" onClick={onDevices}>Shrani obnovitveno povezavo za svoje mize</button>
         </div>
         <div className="waiting-table felt">
           <div className="felt-border" />
@@ -820,7 +590,36 @@ function Game({ state, busy, action, onScore, onRules }) {
   const other = g.players[opponent];
   const myTurn = g.turn === you;
   const conn = state.players.find((p) => p.id === other.id)?.connected;
+  const opponentIsPlaying = g.contract.kind === "announced" && g.contract.player === opponent;
+  const [bidReveal, setBidReveal] = useState(false);
+  useEffect(() => {
+    setBidReveal(opponentIsPlaying);
+    if (!opponentIsPlaying) return;
+    const timer = setTimeout(() => setBidReveal(false), 4500);
+    return () => clearTimeout(timer);
+  }, [g.round, opponentIsPlaying]);
   const [settling, setSettling] = useState(false);
+  const [collectingTrick, setCollectingTrick] = useState(null);
+  const trickRef = useRef(null);
+  const [pickupReveals, setPickupReveals] = useState([]);
+  const seenPickups = useRef({ round: g.round, count: g.pickups?.length || 0 });
+  const pickupReveal = pickupReveals[0];
+  useEffect(() => {
+    const pickups = g.pickups || [];
+    const previous = seenPickups.current;
+    if (previous.round !== g.round || pickups.length < previous.count) {
+      setPickupReveals([]);
+    } else {
+      const incoming = pickups.slice(previous.count).filter(pickup => pickup.player !== you);
+      if (incoming.length) setPickupReveals(queue => [...queue, ...incoming]);
+    }
+    seenPickups.current = { round: g.round, count: pickups.length };
+  }, [g.round, g.pickups, you]);
+  useEffect(() => {
+    if (!pickupReveal || bidReveal) return;
+    const timer = setTimeout(() => setPickupReveals(queue => queue.slice(1)), 3200);
+    return () => clearTimeout(timer);
+  }, [pickupReveal, bidReveal]);
   const handRef = useRef(null);
   const [handOverflows, setHandOverflows] = useState(false);
   const handSignature = g.hand.map(card => card.id).join(",");
@@ -833,16 +632,42 @@ function Game({ state, busy, action, onScore, onRules }) {
     update();
     return () => observer.disconnect();
   }, [handSignature, g.phase]);
-  useEffect(() => {
-    if (!g.lastTrick || g.phase !== "playing") {
+  useLayoutEffect(() => {
+    setCollectingTrick(null);
+    if (!g.lastTrick || !["playing", "roundEnd"].includes(g.phase)) {
       setSettling(false);
       return;
     }
     setSettling(true);
-    const timer = setTimeout(() => setSettling(false), 850);
-    return () => clearTimeout(timer);
+    const collectTimer = setTimeout(() => {
+      const trick = trickRef.current;
+      const target = trick?.closest(".game-table")?.querySelector(
+        g.lastTrick.winner === you ? ".trick-stat" : ".player-seat",
+      );
+      if (!trick || !target) return;
+      const from = trick.getBoundingClientRect();
+      const to = target.getBoundingClientRect();
+      setCollectingTrick({
+        left: from.left, top: from.top, width: from.width, height: from.height,
+        "--collect-x": `${to.left + to.width / 2 - from.left - from.width / 2}px`,
+        "--collect-y": `${to.top + to.height / 2 - from.top - from.height / 2}px`,
+        "--card-height": `${trick.querySelector(".playing-card").getBoundingClientRect().height}px`,
+      });
+    }, 2500);
+    const timer = setTimeout(() => {
+      setCollectingTrick(null);
+      setSettling(false);
+    }, 3150);
+    return () => { clearTimeout(collectTimer); clearTimeout(timer); };
   }, [g.lastTrick?.number, g.round]);
   const cardsOnTable = settling && g.lastTrick ? g.lastTrick.cards : g.trick;
+  const showRoundEnd = g.phase === "roundEnd" && !settling;
+  const resultsRef = useRef(null);
+  useLayoutEffect(() => {
+    if (showRoundEnd && resultsRef.current) {
+      resultsRef.current.scrollTop = resultsRef.current.scrollHeight;
+    }
+  }, [showRoundEnd, g.scoreboard.at(-1)?.round]);
   busy = busy || settling;
   // Bind the intent to the table the player actually saw, not a newer socket
   // snapshot: a reply from another tab must never become the next trick's lead.
@@ -895,7 +720,7 @@ function Game({ state, busy, action, onScore, onRules }) {
         ? `Štih ${g.trickNumber} od 27. ${myTurn ? "Na potezi si." : `Na potezi je ${other.name}.`}`
         : `Runda ${g.round} je končana. Za novo rundo morata potrditi oba.`;
   return (
-    <main className="game-page" data-phase={g.phase} data-round={g.round}
+    <main className="game-page" data-phase={g.phase === "roundEnd" && settling ? "playing" : g.phase} data-round={g.round}
       data-turn={g.turn ?? ""} data-you={you} data-trick-number={g.trickNumber}
       data-trick-card-ids={g.trick.map(({ card }) => card.id).join(",")}
       data-pickup-count={g.pickups?.length || 0}
@@ -903,6 +728,26 @@ function Game({ state, busy, action, onScore, onRules }) {
       data-announcement-ready={(g.announcementReady || [false, false]).join(",")}
       data-announcements={JSON.stringify(g.announcements || [])}>
       <span className="sr-only" data-testid="game-status" role="status" aria-live="polite" aria-atomic="true">{liveStatus}</span>
+      {collectingTrick && createPortal(
+        <div className="trick-collection" style={collectingTrick} aria-hidden="true"
+          data-testid="trick-collection" data-winner={g.lastTrick.winner}>
+          {g.lastTrick.cards.map(t => <div className={`played-card ${t.player === you ? "my-played" : ""}`} key={t.card.id}>
+            <Card card={t.card} /><span>{g.players[t.player].name}</span>
+          </div>)}
+        </div>, document.body)}
+      {bidReveal && createPortal(
+        <div className="bid-reveal" role="status" aria-live="polite" data-testid="bid-reveal">
+          <Flag size={32} aria-hidden="true" />
+          <strong>{other.name} igra!</strong>
+          <span>Nasprotnik je izbral »Igram«.</span>
+        </div>, document.body)}
+      {pickupReveal && !bidReveal && createPortal(
+        <div className="pickup-reveal" key={`${g.round}-${pickupReveal.card.id}`}
+          role="status" aria-live="polite" data-testid="pickup-reveal">
+          <Card card={pickupReveal.card} />
+          <div><strong>{g.players[pickupReveal.player].name} vzame v roko</strong>
+            <span>{pickupReveal.card.name}</span></div>
+        </div>, document.body)}
       <div className="game-toolbar">
         <div className="table-title">
           <span className="eyebrow">VAJINA MIZA</span>
@@ -926,7 +771,7 @@ function Game({ state, busy, action, onScore, onRules }) {
           shranjeno; igra se nadaljuje ob vrnitvi.
         </div>
       )}
-      {g.phase === "roundEnd" ? (
+      {showRoundEnd ? (
         <section className="round-end">
           <div className="round-end-top">
             <span className="trophy-circle">
@@ -938,7 +783,7 @@ function Game({ state, busy, action, onScore, onRules }) {
               <p data-testid="round-result-description">{resultDescription}</p>
             </div>
           </div>
-          <div className="round-end-body">
+          <div className="round-end-body" ref={resultsRef} role="region" aria-label="Rezultati rund" tabIndex={0}>
             <div className="score-heading">
               <h2>Vajina zgodba v točkah</h2>
               <span>
@@ -1010,10 +855,18 @@ function Game({ state, busy, action, onScore, onRules }) {
             >
               <Avatar name={other.name} connected={conn} />
               <div>
-                <strong>{other.name}</strong>
+                <div className="opponent-name">
+                  <strong>{other.name}</strong>
+                  {opponentIsPlaying && <span className="bidder-badge" data-testid="opponent-bidder"><Flag size={11} /> IGRA</span>}
+                </div>
                 <span>
                   {other.handCount} kart v roki <i>·</i> {trickCountLabel(other.trickCount)}
                 </span>
+                <button className="opponent-pickups" type="button" data-testid="opponent-pickups"
+                  aria-label={`Prevzete karte: ${other.name} (${(g.pickups || []).filter(pickup => pickup.player === opponent).length})`}
+                  aria-haspopup="dialog" onClick={() => action({ type: "showPickups" })}>
+                  <Layers3 size={14} /> Prevzemi ({(g.pickups || []).filter(pickup => pickup.player === opponent).length})
+                </button>
               </div>
               {g.dealer === opponent && (
                 <span className="dealer-badge" title="Delilec">
@@ -1082,7 +935,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                 <AnnouncementPanel game={g} busy={busy} action={action} />
               ) : (
                 <>
-                  <div className="trick-cards">
+                  <div className="trick-cards" ref={trickRef} style={collectingTrick ? { visibility: "hidden" } : undefined}>
                     {cardsOnTable.length ? (
                       cardsOnTable.map((t) => (
                         <div
@@ -1096,7 +949,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                     ) : (
                       <div className="empty-trick">
                         <Diamond size={29} strokeWidth={1} />
-                        <span>
+                        <span className={myTurn ? "turn-prompt" : undefined}>
                           {myTurn
                             ? "Tvoja poteza"
                             : "Na vrsti je " + other.name}
@@ -1269,16 +1122,21 @@ function Game({ state, busy, action, onScore, onRules }) {
 
 function App() {
   const [name, setName] = useState(() => readSaved(NAME) || "");
-  const [code, setCode] = useState(
-    () => new URLSearchParams(location.search).get("room")?.toUpperCase() || "",
-  );
+  const [user, setUser] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [link, setLink] = useState(incomingLink);
+  const [invitation, setInvitation] = useState('');
+  const [devices, setDevices] = useState([]);
+  const [deviceLink, setDeviceLink] = useState(null);
+  const [legacy, setLegacy] = useState(legacySeats);
+  const userRef = useRef(null);
+  const credentialRef = useRef(localStorage.getItem(DEVICE));
   const [state, setState] = useState(null);
   const [online, setOnline] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [modal, setModal] = useState(null);
-  const [copied, setCopied] = useState(false);
-  const [resuming, setResuming] = useState(!!sessionForPage());
+  const [resuming, setResuming] = useState(!!localStorage.getItem(DEVICE));
   const socketRef = useRef(null);
   const stateRef = useRef(null);
   // Measure the natural page size: transforms do not affect ResizeObserver,
@@ -1303,27 +1161,41 @@ function App() {
   useEffect(() => {
     const socket = io({ autoConnect: false, reconnection: true });
     socketRef.current = socket;
-    socket.on("connect", () => {
+    socket.on("connect", async () => {
       setOnline(true);
-      const saved = sessionForPage();
-      if (saved) {
-        setResuming(true);
-        socket.timeout(8000).emit("room:resume", saved, (err, res) => {
-          setResuming(false);
-          if (err || !res?.ok) {
-            // A temporary shutdown or rate limit must never erase a reserved seat.
-            setError(
-              err
-                ? "Obnova povezave ni uspela. Poskusi osvežiti stran."
-                : res?.error || "Miza ni več na voljo.",
-            );
-          } else rememberSession(res);
-        });
-      } else setResuming(false);
+      setResuming(true);
+      const hasPendingLink = !!sessionStorage.getItem('tarokza2.link');
+      try {
+        const credential = credentialRef.current || localStorage.getItem(PENDING_DEVICE);
+        if (credential) {
+          try {
+            const result = await request('identity:resume', { credential });
+            acceptIdentity(result, credential);
+          } catch (error) {
+            if (error.code !== 'AUTH_REQUIRED') throw error;
+            if (credentialRef.current) { localStorage.removeItem(DEVICE); localStorage.removeItem(PENDING_DEVICE); credentialRef.current = null; userRef.current = null; setUser(null); setTables([]); setState(null); stateRef.current = null; setError(error.message); }
+          }
+        }
+        if (!userRef.current && legacySeats().length && !hasPendingLink) await ensureIdentity();
+        if (!userRef.current && new URLSearchParams(location.search).has('room') && !hasPendingLink) setError('Za pridružitev prosi prijatelja za novo povezavo s povabilom. Koda mize ne omogoča več vstopa.');
+        if (userRef.current) {
+          await migrate();
+          const roomId = new URLSearchParams(location.search).get('room');
+          if (roomId && !hasPendingLink) await request('room:resume', { roomId });
+        }
+      } catch (error) { setError(error.message); }
+      finally { setResuming(false); }
     });
-    socket.on("disconnect", () => {
+    socket.on('tables', setTables);
+    socket.on('identity:revoked', () => {
+      localStorage.removeItem(DEVICE); localStorage.removeItem(PENDING_DEVICE); credentialRef.current = null; userRef.current = null;
+      setUser(null); setTables([]); setState(null); stateRef.current = null;
+      setError('Dostop te naprave je bil odstranjen. Odpri novo povezavo za napravo ali obnovitev.');
+    });
+    socket.on("disconnect", (reason) => {
       setOnline(false);
       setBusy(false);
+      if (reason === "io server disconnect") socket.connect();
     });
     socket.on("connect_error", () => {
       setOnline(false);
@@ -1338,6 +1210,16 @@ function App() {
     return () => {
       socket.disconnect();
     };
+  }, []);
+  useEffect(() => {
+    const changed = () => {
+      const incoming = captureLink();
+      if (!incoming) return;
+      setLink(incoming); setState(null); stateRef.current = null;
+      socketRef.current?.emit('room:leave', {});
+    };
+    window.addEventListener('hashchange', changed);
+    return () => window.removeEventListener('hashchange', changed);
   }, []);
   useEffect(() => {
     if (!error) return;
@@ -1364,19 +1246,80 @@ function App() {
       onSuccess?.(result);
     });
   }
-  function rememberSession(result) {
-    const session = { roomId: result.roomId, token: result.token };
-    localStorage.setItem(STORAGE, JSON.stringify(session));
-    localStorage.setItem(
-      SESSIONS,
-      JSON.stringify({ ...readSaved(SESSIONS), [result.roomId]: session }),
-    );
+  async function request(event, payload = {}) {
+    const result = await socketRef.current.timeout(8000).emitWithAck(event, payload);
+    if (!result?.ok) throw Object.assign(new Error(result?.error || 'Zahteva ni uspela.'), { code: result?.code });
+    return result;
   }
+  function acceptIdentity(result, credential) {
+    localStorage.setItem(DEVICE, credential);
+    localStorage.removeItem(PENDING_DEVICE);
+    credentialRef.current = credential; userRef.current = result.user;
+    setUser(result.user); setName(result.user.name); setTables(result.tables);
+  }
+  async function ensureIdentity() {
+    const ensure = async () => {
+      if (userRef.current) return;
+      const saved = localStorage.getItem(DEVICE);
+      if (saved) { acceptIdentity(await request('identity:resume', { credential: saved }), saved); return; }
+      if (credentialRef.current) throw new Error('Obnovi povezavo z igralcem pred nadaljevanjem.');
+      const credential = localStorage.getItem(PENDING_DEVICE) || newSecret();
+      localStorage.setItem(PENDING_DEVICE, credential);
+      const result = await request('identity:create', { name: name.trim() || readSaved(NAME) || 'Igralec', credential });
+      acceptIdentity(result, credential);
+      localStorage.setItem(NAME, JSON.stringify(result.user.name));
+    };
+    if (navigator.locks) await navigator.locks.request('tarokza2.identity', ensure);
+    else await ensure();
+  }
+  function removeLegacy(seat) {
+    const saved = readSaved(SESSIONS) || {};
+    if (saved[seat.roomId]?.token === seat.token) delete saved[seat.roomId];
+    localStorage.setItem(SESSIONS, JSON.stringify(saved));
+    if (readSaved(STORAGE)?.token === seat.token) localStorage.removeItem(STORAGE);
+    setLegacy(legacySeats());
+  }
+  async function migrate() {
+    const seats = legacySeats();
+    for (const seat of seats) {
+      if (seats.filter(s => s.roomId === seat.roomId).length > 1) {
+        try {
+          const result = await request('identity:legacy', seat);
+          setLegacy(current => current.map(s => s.roomId === seat.roomId && s.token === seat.token ? { ...s, name: result.name } : s));
+        } catch (error) { setError(error.message); }
+        continue;
+      }
+      try { await request('identity:claim', seat); removeLegacy(seat); }
+      catch (error) { setError(error.message); }
+    }
+  }
+  async function run(operation) {
+    setBusy(true); setError('');
+    try { await operation(); } catch (error) { setError(error.message || 'Povezava ni uspela. Poskusi znova.'); }
+    finally { setBusy(false); }
+  }
+  function dismissLink() { sessionStorage.removeItem('tarokza2.link'); setLink(null); }
   function joined(result) {
-    rememberSession(result);
-    localStorage.setItem(NAME, JSON.stringify(name.trim()));
-    history.replaceState({}, "", `/?room=${result.roomId}`);
+    dismissLink();
+    setInvitation(result.invitation || '');
+    history.replaceState({}, '', `/?room=${result.roomId}`);
   }
+  function createTable() { run(async () => { await ensureIdentity(); await migrate(); joined(await request('room:create')); }); }
+  function joinTable() { run(async () => { await ensureIdentity(); await migrate(); joined(await request('room:join', { roomId: link.roomId, invitation: link.token })); }); }
+  function resumeTable(roomId) { run(async () => { joined(await request('room:resume', { roomId })); }); }
+  function redeemLink() { run(async () => {
+    const credential = credentialRef.current || localStorage.getItem(PENDING_DEVICE) || newSecret();
+    if (!credentialRef.current) localStorage.setItem(PENDING_DEVICE, credential);
+    const result = await request('identity:redeem', { kind: link.kind, token: link.token, credential, existingCredential: credentialRef.current });
+    acceptIdentity(result, credential); dismissLink(); await migrate();
+    if (result.alreadyConnected) setError('Ta brskalnik je že povezan s tem igralcem.');
+  }); }
+  function openDevices() { run(async () => { setDevices((await request('devices:list')).devices); setDeviceLink(null); setModal('devices'); }); }
+  function changeDevice(event, payload) { run(async () => { await request(event, payload); setDevices((await request('devices:list')).devices); }); }
+  function makeDeviceLink(kind) { run(async () => {
+    const result = await request(kind === 'device' ? 'devices:link' : 'recovery:create');
+    setDeviceLink({ kind, url: sharedLink(kind, result.token), expiresAt: result.expiresAt });
+  }); }
   function action(action) {
     if (action.type === "showPickups") {
       setModal("pickups");
@@ -1390,25 +1333,25 @@ function App() {
       setModal("last");
       return;
     }
-    emit("game:action", action);
+    emit("game:action", { ...action, expectedRevision: state?.revision });
   }
   async function copy(text) {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      return true;
     } catch {
       setError("Povezavo lahko kopiraš iz polja pod gumbom.");
+      return false;
     }
   }
   function leave() {
     emit("room:leave", {}, () => {
-      localStorage.removeItem(STORAGE);
       setState(null);
       stateRef.current = null;
       setModal(null);
       history.replaceState({}, "", "/");
-      setCode("");
+      dismissLink();
+      setInvitation("");
     });
   }
   return (
@@ -1466,25 +1409,16 @@ function App() {
         <Waiting
           state={state}
           onCopy={copy}
-          copied={copied}
+          invitation={invitation}
+          onDevices={openDevices}
+          onInvite={() => run(async () => { const result = await request("room:invite", { roomId: state.roomId }); setInvitation(result.invitation); })}
           onLeave={() => setModal("leave")}
         />
       ) : (
-        <Landing
-          name={name}
-          setName={setName}
-          code={code}
-          setCode={setCode}
-          create={() => emit("room:create", { name: name.trim() }, joined)}
-          join={() => {
-            const saved = (readSaved(SESSIONS) || {})[code];
-            if (saved) emit("room:resume", saved, joined);
-            else emit("room:join", { name: name.trim(), roomId: code }, joined);
-          }}
-          busy={busy}
-          online={online}
-          onRules={() => setModal("rules")}
-        />
+        <IdentityHome user={user} name={name} setName={setName} tables={tables} link={link}
+          busy={busy} online={online} onCreate={createTable} onJoin={joinTable} onRedeem={redeemLink}
+          onDismiss={dismissLink} onResume={resumeTable} onDevices={openDevices} legacy={legacy}
+          onClaim={seat => run(async () => { await ensureIdentity(); await request('identity:claim', seat); removeLegacy(seat); })} />
       )}
       {error && (
         <div className="toast" role="alert">
@@ -1495,6 +1429,11 @@ function App() {
           </button>
         </div>
       )}
+      {modal === 'devices' && <Modal title="Naprave in obnovitev" onClose={() => { setModal(null); setDeviceLink(null); }}>
+        <DeviceSettings devices={devices} busy={busy} onRename={(id, name) => changeDevice('devices:rename', { id, name })}
+          onRevoke={id => changeDevice('devices:revoke', { id })} onLink={() => makeDeviceLink('device')}
+          onRecovery={() => makeDeviceLink('recovery')} onCopy={copy} {...(deviceLink || {})} />
+      </Modal>}
       {modal === "rules" && <Rules onClose={() => setModal(null)} />}
       {modal === "deck" && <DeckGallery onClose={() => setModal(null)} />}
       {modal === "score" && state?.game && (
@@ -1505,8 +1444,7 @@ function App() {
       {modal === "leave" && (
         <Modal title="Zapustiš mizo?" onClose={() => setModal(null)}>
           <p className="leave-copy">
-            Tvoje mesto in rezultati ostanejo shranjeni. Z isto kodo ali
-            povezavo se lahko vrneš v tem brskalniku. Koda mize:{" "}
+            Tvoje mesto in rezultati ostanejo shranjeni v Mojih mizah na vseh povezanih napravah. Miza:{" "}
             <strong>{state?.roomId}</strong>.
           </p>
           <div className="modal-actions">
@@ -1529,6 +1467,9 @@ function App() {
             {state.game.players.map((player, index) => (
               <section key={player.id}>
                 <h3>{player.name}</h3>
+                {!(state.game.pickups || []).some(pickup => pickup.player === index) && (
+                  <p>Še ni prevzetih kart.</p>
+                )}
                 <div>
                   {(state.game.pickups || [])
                     .filter((pickup) => pickup.player === index)

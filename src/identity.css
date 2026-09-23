@@ -1,0 +1,21 @@
+.identity-home { width: min(900px, 100%); margin: 0 auto; padding: 30px 20px 60px; overflow: auto; }
+.identity-home h1 { font-size: clamp(30px, 6vw, 54px); margin: 12px 0 24px; }
+.identity-panel { background: #fffdf7; color: #253d35; border: 1px solid #ddd9cb; border-radius: 18px; padding: 22px; margin: 20px 0; }
+.identity-panel h2 { margin-bottom: 16px; }
+.identity-panel p, .identity-settings p { line-height: 1.6; margin: 14px 0; }
+.identity-home input, .identity-settings input { display: block; box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #c3c7bb; border-radius: 8px; margin: 8px 0 16px; background: white; color: #253d35; font: inherit; }
+.identity-panel .text-button { margin: 12px; }
+.identity-toolbar, .identity-table { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.identity-table { padding: 14px 0; border-bottom: 1px solid #ddd9cb; }
+.identity-table small { display: block; margin-top: 6px; }
+.identity-link { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; margin: 20px 0; }
+.identity-link img { max-width: 100%; height: auto; background: white; border-radius: 8px; }
+.identity-link input { width: 100%; min-width: 0; }
+.identity-settings > button { margin-top: 16px; }
+.identity-settings { overflow-wrap: anywhere; }
+@media(max-width: 480px) { .identity-home { padding: 20px 14px 40px; } .identity-panel { padding: 16px; } .identity-toolbar > button { width: 100%; } }
+/* Lists and QR instructions must scroll at readable size as their content grows. */
+#root > main.identity-home, #root > main.waiting-page {
+  flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; transform: none;
+}
+#root > main.identity-home { width: min(900px, 100%); }

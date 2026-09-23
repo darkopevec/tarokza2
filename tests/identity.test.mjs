@@ -1,0 +1,153 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, rm, readFile, writeFile, mkdir, rename } from 'node:fs/promises';
+import { randomBytes } from 'node:crypto';
+import os from 'node:os';
+import path from 'node:path';
+import { io } from 'socket.io-client';
+import { createTarokServer } from '../server/index.mjs';
+import { openIdentities, hash } from '../server/identity.mjs';
+const secret = () => randomBytes(32).toString('base64url');
+async function fixture(t) {
+  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'tarok-identity-'));
+  let time = 1000;
+  let server;
+  let address;
+  const clients = [];
+  const start = async () => { server = await createTarokServer({ dataDir, now: () => time, logger: { warn() {}, error() {} } }); address = await server.listen(0, '127.0.0.1'); };
+  const stop = async () => { clients.forEach(c => c.socket.disconnect()); await server.close(); };
+  await start();
+  t.after(async () => { await stop(); await rm(dataDir, { recursive: true, force: true }); });
+  const connect = async (name, credential = secret()) => {
+    const socket = io(`http://127.0.0.1:${address.port}`, { transports: ['websocket'], reconnection: false });
+    const c = { socket, credential, state: null, call: (event, payload = {}) => socket.timeout(3000).emitWithAck(event, payload) };
+    socket.on('state', state => { c.state = state; });
+    await new Promise(resolve => socket.once('connect', resolve)); clients.push(c);
+    if (name) { const r = await c.call('identity:create', { name, credential }); assert.equal(r.ok, true); c.user = r.user; }
+    return c;
+  };
+  return { dataDir, connect, start, stop, advance: ms => { time += ms; }, ready: async () => { const r = await fetch(`http://127.0.0.1:${address.port}/ready`); return { status: r.status, body: await r.json() }; } };
+}
+test('identities own all tables; invites do not authenticate or admit by code; devices synchronize and revoke', async t => {
+  const f = await fixture(t), a = await f.connect('Ana'), b = await f.connect('Luka'), unknown = await f.connect();
+  assert.equal((await unknown.call('room:create')).code, 'AUTH_REQUIRED');
+  const first = await a.call('room:create'), second = await a.call('room:create');
+  assert.equal((await b.call('room:join', { roomId: first.roomId })).code, 'INVALID_INVITE');
+  assert.equal((await b.call('room:resume', { roomId: first.roomId, token: first.invitation })).ok, false);
+  assert.equal((await a.call('room:join', { roomId: first.roomId, invitation: first.invitation })).ok, true);
+  assert.equal(a.state.players.length, 1);
+  assert.equal((await b.call('room:join', { roomId: first.roomId, invitation: first.invitation })).ok, true);
+  const deviceLink = await a.call('devices:link');
+  const d = await f.connect();
+  const linked = await d.call('identity:redeem', { kind: 'device', token: deviceLink.token, credential: d.credential });
+  assert.deepEqual(new Set(linked.tables.map(t => t.roomId)), new Set([first.roomId, second.roomId]));
+  assert.equal(linked.user.id, a.user.id);
+  assert.equal((await d.call('room:resume', { roomId: first.roomId })).ok, true);
+  assert.deepEqual(d.state.game.hand, a.state.game.hand);
+  const replay = await unknown.call('identity:redeem', { kind: 'device', token: deviceLink.token, credential: unknown.credential });
+  assert.equal(replay.code, 'INVALID_LINK');
+  // Lost acknowledgement is retried using exactly the same device credential.
+  assert.equal((await d.call('identity:redeem', { kind: 'device', token: deviceLink.token, credential: d.credential })).ok, true);
+  const listing = await a.call('devices:list');
+  assert.ok(!JSON.stringify(listing).includes('Hash'));
+  const other = listing.devices.find(d => !d.current);
+  assert.equal((await a.call('devices:rename', { id: other.id, name: 'Telefon' })).ok, true);
+  await a.call('devices:revoke', { id: other.id });
+  const revoked = await f.connect();
+  assert.equal((await revoked.call('identity:resume', { credential: d.credential })).code, 'AUTH_REQUIRED');
+  assert.equal((await a.call('tables:list')).tables.length, 2);
+  const disk = await readFile(path.join(f.dataDir, 'identities.json'), 'utf8');
+  for (const token of [a.credential, b.credential, d.credential, deviceLink.token]) assert.ok(!disk.includes(token));
+});
+test('device expiry, identity conflicts, recovery replacement, link replacement and persistence', async t => {
+  const f = await fixture(t), a = await f.connect('Ana'), b = await f.connect('B');
+  const link = await a.call('devices:link');
+  assert.equal((await b.call('identity:redeem', { kind: 'device', token: link.token, credential: b.credential })).code, 'IDENTITY_CONFLICT');
+  assert.equal((await a.call('identity:redeem', { kind: 'device', token: link.token, credential: a.credential })).alreadyConnected, true);
+  f.advance(900_000);
+  const d = await f.connect();
+  assert.equal((await d.call('identity:redeem', { kind: 'device', token: link.token, credential: d.credential })).code, 'INVALID_LINK');
+  const recovery = await a.call('recovery:create');
+  const replacement = await a.call('recovery:create');
+  assert.equal((await d.call('identity:redeem', { kind: 'recovery', token: recovery.token, credential: d.credential })).code, 'INVALID_LINK');
+  await f.stop(); await f.start();
+  const restored = await f.connect();
+  assert.equal((await restored.call('identity:redeem', { kind: 'recovery', token: replacement.token, credential: restored.credential })).user.id, a.user.id);
+  const again = await f.connect();
+  assert.equal((await again.call('identity:redeem', { kind: 'recovery', token: replacement.token, credential: again.credential })).ok, true);
+  const old = await restored.call('room:create');
+  const next = await restored.call('room:invite', { roomId: old.roomId });
+  const stranger = await f.connect('Stranger');
+  assert.equal((await stranger.call('room:join', { roomId: old.roomId, invitation: old.invitation })).code, 'INVALID_INVITE');
+  assert.equal((await stranger.call('room:join', { roomId: old.roomId, invitation: next.invitation })).ok, true);
+});
+test('concurrent redemption and invitation races admit one device and one opponent', async t => {
+  const f = await fixture(t), a = await f.connect('Ana'), b = await f.connect('B'), c = await f.connect('C');
+  const room = await a.call('room:create');
+  const joins = await Promise.all([b, c].map(p => p.call('room:join', { roomId: room.roomId, invitation: room.invitation })));
+  assert.equal(joins.filter(r => r.ok).length, 1);
+  const link = await a.call('devices:link');
+  const d = await f.connect(), e = await f.connect();
+  const results = await Promise.all([d, e].map(p => p.call('identity:redeem', { kind: 'device', token: link.token, credential: p.credential })));
+  assert.equal(results.filter(r => r.ok).length, 1);
+});
+test('legacy claims preserve seats, reject duplicate ownership and survive restart', async t => {
+  const f = await fixture(t);
+  await f.stop();
+  const token = secret(), other = secret();
+  await writeFile(path.join(f.dataDir, 'ABC234.json'), JSON.stringify({ version: 1, id: 'ABC234', createdAt: '2026-01-01', updatedAt: '2026-01-01', players: [{ id: 'seat-a', name: 'Ana', tokenHash: hash(token) }, { id: 'seat-b', name: 'Luka', tokenHash: hash(other) }], game: null }));
+  await f.start();
+  const a = await f.connect('Ana'), b = await f.connect('Ana');
+  assert.equal((await a.call('identity:claim', { roomId: 'ABC234', token: 'wrong' })).code, 'INVALID_CLAIM');
+  for (let i = 0; i < 2; i++) assert.equal((await a.call('identity:claim', { roomId: 'ABC234', token })).ok, true);
+  assert.equal((await b.call('identity:claim', { roomId: 'ABC234', token })).code, 'CLAIM_CONFLICT');
+  assert.equal((await a.call('identity:claim', { roomId: 'ABC234', token: other })).code, 'SEAT_CONFLICT');
+  assert.equal((await b.call('identity:claim', { roomId: 'ABC234', token: other })).ok, true);
+  await f.stop(); await f.start();
+  const fresh = await f.connect();
+  assert.equal((await fresh.call('identity:resume', { credential: a.credential })).tables.length, 1);
+  assert.equal((await fresh.call('room:resume', { roomId: 'ABC234' })).playerId, 'seat-a');
+});
+test('registry corruption fails closed and degrades readiness without overwriting data', async t => {
+  const f = await fixture(t); await f.stop();
+  await writeFile(path.join(f.dataDir, 'identities.json'), '{broken'); await f.start();
+  assert.equal((await f.ready()).status, 503);
+  const c = await f.connect();
+  assert.equal((await c.call('identity:create', { name: 'A', credential: c.credential })).code, 'IDENTITY_UNAVAILABLE');
+  assert.equal(await readFile(path.join(f.dataDir, 'identities.json'), 'utf8'), '{broken');
+});
+test('failed registry replacement does not consume link; retry works after storage recovers', async t => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'tarok-atomic-')); t.after(() => rm(dir, { recursive: true, force: true }));
+  const registry = await openIdentities(dir), credential = secret(), token = secret(), next = secret();
+  await registry.create('Ana', credential); await registry.link(credential, token);
+  const file = path.join(dir, 'identities.json');
+  await rename(file, `${file}.saved`); await mkdir(file);
+  await assert.rejects(registry.redeem('device', token, next));
+  assert.throws(() => registry.device(next));
+  await rm(file, { recursive: true }); await rename(`${file}.saved`, file);
+  await registry.redeem('device', token, next);
+  assert.equal(registry.user(next).id, registry.user(credential).id);
+});
+test('all game actions require the displayed revision across linked devices', async t => {
+  const f = await fixture(t), a = await f.connect('Ana'), b = await f.connect('Luka');
+  const room = await a.call('room:create'); await b.call('room:join', { roomId: room.roomId, invitation: room.invitation });
+  // Ask for the current projection after joining so either bidding order is valid.
+  await a.call('room:resume', { roomId: room.roomId });
+  const active = a.state.game.legalBids.length ? a : b;
+  const link = await active.call('devices:link'); const d = await f.connect();
+  await d.call('identity:redeem', { kind: 'device', token: link.token, credential: d.credential });
+  await d.call('room:resume', { roomId: room.roomId });
+  const action = { type: 'bid', bid: 'pass', expectedRevision: d.state.revision };
+  const responses = await Promise.all([active, d].map(c => c.call('game:action', action)));
+  assert.equal(responses.filter(r => r.ok).length, 1);
+  assert.equal(responses.find(r => !r.ok).code, 'STALE_ACTION');
+  assert.equal((await d.call('game:action', { type: 'bid', bid: 'pass' })).code, 'STALE_ACTION');
+});
+test('rooms with missing global owners are retained and reported as unrestored', async t => {
+  const f = await fixture(t), a = await f.connect('Ana');
+  const room = await a.call('room:create');
+  await f.stop(); await rm(path.join(f.dataDir, 'identities.json')); await f.start();
+  assert.equal((await f.ready()).status, 503);
+  assert.equal((await f.ready()).body.restoration.failedRooms, 1);
+  assert.equal(JSON.parse(await readFile(path.join(f.dataDir, `${room.roomId}.json`), 'utf8')).id, room.roomId);
+});

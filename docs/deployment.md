@@ -9,7 +9,7 @@ docker compose up --build -d
 docker compose ps
 ```
 
-Open <http://localhost:3000>. For two devices on the same network, open `http://YOUR_COMPUTER_LAN_IP:3000` on both devices. Create a table and share its invitation link or six-character code. Generate the invitation from the LAN address so the other device receives a reachable link.
+Open <http://localhost:3000>. For two devices on the same network, open `http://YOUR_COMPUTER_LAN_IP:3000` on both devices. Create a table and share its private invitation link or QR code. Generate the invitation from the LAN address so the other device receives a reachable link.
 
 The container runs as the unprivileged `node` user, restarts unless explicitly stopped, and checks `/health` every 30 seconds. Check its status with:
 
@@ -31,7 +31,7 @@ For public hosting, put this service behind an HTTPS reverse proxy. Preserve the
 
 ## New-table limits and trusted proxies
 
-By default, one client IP can attempt to create **60 new tables per hour**. Attempts, including invalid names or failed saves, consume the quota before any disk work. It is shared across tabs and socket reconnects; changing the browser session does not reset it. IPv4 and IPv4-mapped IPv6 share an identity, and native IPv6 addresses in one `/64` share a quota. Joining, resuming, leaving, and game actions do not consume this quota; the existing per-connection burst guard still applies to all requests. A rejected creation receives a Slovenian wait message, `code:"ROOM_CREATE_LIMIT"`, and `retryAfterMs`.
+By default, one client IP can attempt to create **60 new tables per hour**. Room-creation attempts, including unauthenticated requests or failed saves, consume the quota before room disk work. Identity creation has its own authentication request limit. It is shared across tabs and socket reconnects; changing the browser session does not reset it. IPv4 and IPv4-mapped IPv6 share an identity, and native IPv6 addresses in one `/64` share a quota. Joining, resuming, leaving, and game actions do not consume this quota; the existing per-connection burst guard still applies to all requests. A rejected creation receives a Slovenian wait message, `code:"ROOM_CREATE_LIMIT"`, and `retryAfterMs`.
 
 Set `ROOM_CREATE_LIMIT` and `ROOM_CREATE_WINDOW_MS` in the Compose `.env` to tune this for shared networks. Both must be positive safe integers; invalid configuration stops startup rather than silently disabling protection. Direct Node runs require these variables to be exported in the environment; Node does not load `.env` automatically. The quota is an in-memory fixed window starting with the first attempt, resets on process restart, and is not shared across application instances. At most 10,000 active client buckets are retained; when full, unseen clients cannot create a table until a bucket expires. Tracked clients keep their existing quota. No client IPs are written to saved games or application logs by this feature.
 
@@ -43,9 +43,13 @@ These are application-level safeguards, not DDoS protection. Add connection/requ
 
 ## Saved games and reconnecting
 
-The Compose volume `tarok-data` is mounted at `/app/data`. Each accepted action is written to a replacement room file and then atomically renamed. Private cards, round results, readiness, and both reserved player seats survive application restarts. Raw reconnect tokens are never written to disk; the server stores their SHA-256 hashes.
+The Compose volume `tarok-data` is mounted at `/app/data`. Each accepted action is written to a replacement room file and then atomically renamed. Private cards, round results, readiness, and both reserved player seats survive application restarts. Private credentials are never written to disk; the server stores their SHA-256 hashes. The versioned `identities.json` registry stores players, independent browser credentials, pending device links, recovery hashes, and migrated seat ownership; include it in every backup alongside room files.
 
-The browser retains a private reconnect token for each table. Refreshing the page or reconnecting restores that player's seat. Leaving a table detaches the tab while retaining the seat and game; returning from the same browser can resume it. The invitation code admits the second player but does not grant access to an already occupied seat.
+The browser retains one private device credential for a global player. The server derives “My tables” from room ownership and migrated legacy seats. Returning home detaches the tab but preserves membership. A long invitation secret admits one opponent; the six-character room ID cannot grant access. Device links expire after 15 minutes and are consumed once; recovery links remain valid until replaced. Secrets appear in URL fragments, are captured and removed from the address bar, and are never included in public game state. The QR code is generated locally.
+
+Existing version-1 room files stay readable. The browser proves ownership with its saved per-room tokens and removes each only after an acknowledged claim. Conflicting seats require selection; names never determine ownership. New room files use version 2 and reference global user IDs while retaining game-local seat IDs. Back up the data volume before deployment; rolling back requires restoring the matching pre-migration backup, because older servers cannot read version-2 rooms or identity ownership.
+
+A corrupt identity registry fails closed, remains untouched, and makes `/ready` return 503 with `identityRegistry: "degraded"`; `/health` remains available. Restore the registry and rooms from a consistent backup, then restart. Registry writes are serialized and atomically replaced; a failed write does not publish an identity change. These file-backed stores support one application process only.
 
 Stop the application while retaining saved tables with:
 
@@ -82,8 +86,8 @@ Run engine and multiplayer integration checks with `npm test`. After starting th
 ## Shared abuse controls and container restrictions
 
 In addition to the independent new-table quota, the server limits each verified
-client IP (IPv6 /64) to 600 Socket.IO events per 10 seconds, 60 combined join/resume
-attempts per minute, and 60 new Engine.IO handshakes per minute. Unknown events
+client IP (IPv6 /64) to 600 Socket.IO events per 10 seconds, 60 authentication/account/room-management
+requests per minute, and 60 new Engine.IO handshakes per minute. Unknown events
 also count toward the event quota. Counters survive reconnects and transport
 changes and reset at server restart. Each limiter retains at most 10,000 active
 identities; new identities fail closed when that capacity is full.

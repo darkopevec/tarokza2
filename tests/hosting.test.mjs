@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { identityRequests } from './identity-client.mjs';
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -68,6 +69,7 @@ async function fixture(t, options = {}) {
           });
         },
       };
+      client.request = identityRequests(socket, () => client.state);
       socket.on('state', (state) => {
         client.state = state;
         for (const listener of listeners) listener(state);
@@ -155,8 +157,8 @@ test('exhausting creation quota does not block joining, resuming, or legal game 
 
   ana.socket.disconnect();
   const resumed = await host.connect();
-  assertCreationLimited(await create(resumed));
   assert.equal((await resumed.request('room:resume', anaSession)).ok, true);
+  assertCreationLimited(await create(resumed));
   assert.equal(resumed.state.you, anaSession.playerId);
 
   const players = [resumed, luka];
@@ -170,6 +172,8 @@ test('exhausting creation quota does not block joining, resuming, or legal game 
   const starter = resumed.state.game.preparationTurn;
   for (const player of [players[starter], players[1 - starter]]) {
     assert.equal((await player.request('game:action', { type: 'confirmAnnouncements' })).ok, true);
+    const revision = player.state.revision;
+    await Promise.all(players.map(p => p.waitFor(state => state?.revision === revision)));
   }
   await Promise.all(players.map((player) => player.waitFor((state) => state?.game?.phase === 'playing')));
   const leader = players.find((player) => player.state.game.legalMoves.length);
