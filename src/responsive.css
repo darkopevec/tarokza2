@@ -933,7 +933,6 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
 .game-events-overlay > span { background: #f6ead7; box-shadow: 0 3px 12px #122b3533; }
 .game-page .game-table .stack-count {
   top: min(4px, calc(var(--game-card-height) - 68px)); right: 4px; bottom: auto; z-index: 3;
-  width: 20px; height: 20px; font-size: 11px;
 }
 .score-table thead th {
   position: sticky; top: 0; z-index: 2; background: #fffefa;
