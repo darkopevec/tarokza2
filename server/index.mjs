@@ -109,6 +109,8 @@ export async function createTarokServer({
             typeof player.name !== 'string' || (player.userId && !identities.hasUser(player.userId)) || !(typeof player.userId === 'string' || /^[a-f0-9]{64}$/.test(player.tokenHash)))) {
         throw new Error('Invalid room record');
       }
+      // Resume old preparation screens directly into play, retaining cards and scores.
+      if (room.game) defaultEngine.resumeGame(room.game);
       // Exercise sanitization before accepting a saved game, without logging its contents.
       if (room.game) room.players.forEach((player) => engine.viewFor(room.game, player.id));
       rooms.set(room.id, room);
@@ -161,6 +163,13 @@ export async function createTarokServer({
       restoration: { status: unrestoredRoomIds.size || identities.degraded ? 'degraded' : 'ok', failedRooms: unrestoredRoomIds.size, ...(identities.degraded ? { identityRegistry: 'degraded' } : {}) },
     });
   });
+  // Public artwork can be reused across moves, reconnects and page reloads.
+  // Keep HTML and private game endpoints on their existing cache policies.
+  app.get('/card-cache-sw.js', (_request, response) => {
+    response.setHeader('Cache-Control', 'no-cache');
+    response.sendFile(path.join(distDir, 'card-cache-sw.js'));
+  });
+  app.use('/cards', express.static(path.join(distDir, 'cards'), { maxAge: '1y', immutable: true, index: false }));
   app.use(express.static(distDir, { index: false }));
   app.get(/.*/, (request, response, next) => {
     if (!request.accepts('html')) return response.sendStatus(404);

@@ -382,8 +382,8 @@ async function finishBidding(round, announce) {
   const deadline = Date.now() + 20_000;
   while (Date.now() < deadline) {
     const states = await Promise.all(pages.map(snapshot));
-    if (states.every(state => state.phase === 'announcements')) return actions;
-    assert.ok(states.every(state => ['bidding', 'announcements'].includes(state.phase)),
+    if (states.every(state => state.phase === 'playing')) return actions;
+    assert.ok(states.every(state => ['bidding', 'playing'].includes(state.phase)),
       `Unexpected bidding state for round ${round}: ${JSON.stringify(states)}`);
     let acted = false;
     for (const [index, page] of pages.entries()) {
@@ -405,7 +405,7 @@ async function finishBidding(round, announce) {
 }
 
 async function verifyUntouchedPreparation(round) {
-  await waitForBothPhase('announcements', round);
+  await waitForBothPhase('playing', round);
   const initialStates = await synchronizedBoards();
   for (const state of initialStates) {
     assert.equal(state.handIds.length, 15, 'Bidding must end with the original 15-card hand; exposed honors stay on their stacks.');
@@ -414,7 +414,7 @@ async function verifyUntouchedPreparation(round) {
       'Every stack must begin with four cards and exactly one publicly exposed top.');
     assert.equal(state.pickupCount, 0, 'No honor may be taken automatically after bidding.');
     assert.deepEqual(state.announcementReady, [false, false], 'Both players must initially remain unconfirmed.');
-    assert.equal(state.enabled.length, 0, 'No card can be played during preparation.');
+    assert.equal(state.enabled.length > 0, state.you === state.turn, 'The first player can play immediately.');
     assert.deepEqual(state.eligiblePickupIds, state.ownStacks.filter(stack => isHonor(stack.topId)).map(stack => stack.topId).sort(),
       'Every exposed own tarok or king must be offered as an optional pickup.');
   }
@@ -427,37 +427,13 @@ async function verifyUntouchedPreparation(round) {
   return initialStates;
 }
 
-async function confirmPreparation(round, { fixture = false } = {}) {
-  const before = await synchronizedBoards();
-  assert.ok(before.every(state => state.phase === 'announcements' && state.enabled.length === 0),
-    'Neither player can play before both confirm preparation.');
-  const first = before.findIndex(state => state.you === state.preparationTurn);
-  const second = 1 - first;
-  assert.equal(await pages[second].getByTestId('confirm-announcements').isEnabled(), false, 'The starter must confirm first.');
-  await pages[first].getByTestId('confirm-announcements').click();
-  await pages[first].waitForFunction(you => {
-    const ready = document.querySelector('.game-page')?.dataset.announcementReady?.split(',');
-    return ready?.[you] === 'true';
-  }, before[first].you);
-  const firstReady = await synchronizedBoards();
-  assert.ok(firstReady.every(state => state.phase === 'announcements' && state.enabled.length === 0),
-    'One confirmation must not enable play or end preparation.');
-  assert.equal(firstReady[0].announcementReady[before[first].you], true);
-  assert.equal(firstReady[0].announcementReady[before[second].you], false);
-  assert.equal(await pages[first].getByTestId('confirm-announcements').isEnabled(), false,
-    'An individual confirmation must be irrevocable.');
-  assert.ok(firstReady[first].pickupOptions.every(option => !option.enabled),
-    'Confirming must lock the player\'s own pickup choices.');
-  for (const bonus of ['kings', 'trula', 'valat']) {
-    assert.equal(await pages[first].getByTestId(`announce-${bonus}`).isEnabled(), false,
-      'Confirming must lock the player\'s own announcements.');
-  }
-  await pages[second].getByTestId('confirm-announcements').click();
+async function confirmPreparation(round) {
   await waitForBothPhase('playing', round);
-  const final = await synchronizedBoards();
-  assert.deepEqual(final[0].announcements, before[0].announcements, 'All public bonus calls must survive the start of play.');
-  log(`${fixture ? 'Fixture' : `Round ${round}`}: both confirmations required; first confirmation locked only that player\'s choices.`);
-  return { firstReady, bothReady: final, passed: true };
+  for (const page of pages) {
+    assert.equal(await page.getByTestId('confirm-announcements').count(), 0);
+    assert.equal(await page.getByTestId('announcement-panel').count(), 0);
+  }
+  return { immediatePlay: true, passed: true };
 }
 
 async function prepareAnnouncements(round) {
@@ -495,130 +471,18 @@ async function verifyAnnouncementFixtures(fixtureURL) {
   const actor = pages[0];
   assert.ok(['clubs-8', 'spades-8', 'hearts-8', 'diamonds-8', 'tarok-1', 'tarok-21', 'tarok-22']
     .every(id => initial[0].handIds.includes(id)), 'The isolated fixture must give Ana complete kings and trula in hand.');
-  for (const bonus of ['kings', 'trula']) {
-    assert.equal(await actor.getByTestId(`announce-${bonus}`).isEnabled(), true,
-      `The complete ${bonus} set in hand must enable its announcement.`);
-    assert.equal(await pages[1].getByTestId(`announce-${bonus}`).isEnabled(), false,
-      `An incomplete ${bonus} set must not be announceable.`);
+  for (const page of pages) for (const bonus of ['kings', 'trula', 'valat']) {
+    assert.equal(await page.getByTestId(`announce-${bonus}`).count(), 0);
   }
-  assert.equal(await actor.getByTestId('announce-valat').isEnabled(), false,
-    'Valat must remain unavailable while hidden cards remain in the player\'s stacks.');
-
-  async function announce(bonus) {
-    await actor.getByTestId(`announce-${bonus}`).click();
-    await Promise.all(pages.map(page => page.waitForFunction(({ player, bonus }) =>
-      JSON.parse(document.querySelector('.game-page')?.dataset.announcements || '[]')
-        .some(call => call.player === player && call.bonus === bonus),
-    { player: initial[0].you, bonus })));
-    assert.equal(await actor.getByTestId(`announce-${bonus}`).getAttribute('aria-pressed'), 'true',
-      'A completed announcement must remain visibly selected.');
-    assert.equal(await actor.getByTestId(`announce-${bonus}`).isEnabled(), false,
-      'A completed announcement must not be retractable or repeatable.');
-    for (const page of pages) {
-      assert.equal(await page.locator(`[data-testid="public-announcement"][data-player="${initial[0].you}"][data-bonus="${bonus}"]`).count(), 1,
-        'Both players must see each public announcement exactly once.');
-    }
-  }
-  await announce('kings');
-  await announce('trula');
   for (let index = 0; index < 9; index++) {
     const states = await synchronizedBoards();
     const option = states[0].pickupOptions.find(candidate =>
       states[0].ownStacks.find(stack => stack.index === candidate.stackIndex)?.count > 1);
-    assert.ok(option, 'The fixture must expose one of its nine separately pickable taroks.');
+    assert.ok(option);
     await takeOptionalPickup(0, option, 1, 0, 0, { fixture: true });
-    if (index < 8) assert.equal(await actor.getByTestId('announce-valat').isEnabled(), false,
-      'Valat must stay unavailable until the final hidden stack card is exposed.');
   }
-  const uncovered = await synchronizedBoards();
-  assert.ok(uncovered[0].ownStacks.every(stack => stack.count === 1 && stack.topId),
-    'Exactly one public card per stack must remain after nine fixture pickups.');
-  assert.equal(uncovered[0].handIds.length, 24, 'The last three public stack cards need not be picked up for valat.');
-  assert.equal(await actor.getByTestId('announce-valat').isEnabled(), true,
-    'Seeing the complete hand and the last three public stack cards must enable valat.');
-  await announce('valat');
-  await screenshot(pages[0], 'announcement-bonuses-mobile.png');
-  await screenshot(pages[1], 'announcement-bonuses-tablet.png');
-  const confirmation = await confirmPreparation(1, { fixture: true });
-  const result = await playAnnouncementFixtureResult();
-  report.announcementFixtures = {
-    baseURL: fixtureURL, roomCode, initialHands: initial.map(state => state.handIds),
-    announced: ['kings', 'trula', 'valat'], explicitPickups: 9,
-    lastThreeCardsStayedPublic: true, confirmation, result, passed: true,
-  };
-  log('Isolated browser fixture passed: eligible public calls, nine explicit pickups, both confirmations, and failed valat correctly shown as −500 despite winning most card points.');
-}
-
-async function playAnnouncementFixtureResult() {
-  const actions = [];
-  const deadline = Date.now() + 180_000;
-  while (Date.now() < deadline) {
-    const states = await Promise.all(pages.map(snapshot));
-    if (states.every(state => state.phase === 'roundEnd')) break;
-    assert.ok(states.every(state => ['playing', 'roundEnd'].includes(state.phase)),
-      `Unexpected announcement-fixture state: ${JSON.stringify(states)}`);
-    let acted = false;
-    for (const [index, page] of pages.entries()) {
-      if (states[index].phase !== 'playing' || !states[index].enabled.length) continue;
-      // Preserve the exact first-enabled UI policy. For this fixed valid deal,
-      // Ana wins 24 tricks and 62 card points but does not fulfill her valat.
-      const card = states[index].enabled[0];
-      const candidate = page.locator(`${cardSelector}[data-card-id="${card.id}"]`);
-      const face = candidate.locator('.card-face-image');
-      assert.equal(await face.count(), 1, 'Every fixture play must use its matching scanned card face.');
-      const faceSource = await face.evaluate(async element => {
-        await element.decode();
-        if (!element.complete || !element.naturalWidth) throw new Error('Fixture card image failed to load.');
-        return new URL(element.currentSrc || element.src).pathname;
-      });
-      assert.equal(faceSource.split('/').at(-1), `${card.id}.jpg`);
-      // The stable ID locator waits through the completed-trick animation;
-      // filtering by :not(:disabled) here could race its settling effect.
-      await candidate.click();
-      await page.waitForFunction(({ cardSelector, cardId }) =>
-        ![...document.querySelectorAll(cardSelector)].some(button => button.dataset.cardId === cardId),
-      { cardSelector, cardId: card.id }, { timeout: 10_000 });
-      actions.push({ player: report.players[index].name, cardId: card.id, label: card.label });
-      acted = true;
-      if (actions.length % 18 === 0) log(`Announcement fixture: ${actions.length} cards played through the browser.`);
-      break;
-    }
-    if (!acted) await pages[0].waitForTimeout(75);
-    assert.ok(actions.length <= 54, 'The announcement fixture must never play a card twice.');
-  }
-  await waitForBothPhase('roundEnd', 1);
-  assert.equal(actions.length, 54, 'The announcement fixture must play all 54 cards through the UI.');
-  assert.deepEqual(actions.map(action => action.cardId).sort(), [...cardsById.keys()].sort(),
-    'The announcement fixture must play every distinct scanned card exactly once.');
-  const finalStates = await synchronizedBoards();
-  assert.ok(finalStates.every(state => state.cards === 0 && state.scoreboardRows === 1 && state.trickNumber === 27),
-    'Both fixture players must finish all 27 tricks and see the completed scoreboard.');
-  const scoreBreakdown = await verifyScoreBreakdowns(1);
-  assert.equal(scoreBreakdown.length, 1);
-  const row = scoreBreakdown[0];
-  assert.deepEqual(row.deltas, [-500, 0], 'Ana must lose 500 for her failed announced valat.');
-  assert.ok(row.points[0] > 35 && row.points[0] > row.points[1],
-    'This regression fixture must fail valat despite Ana winning the majority of card points.');
-  assert.equal(row.contractLabel, 'Napovedan valat', 'The score row must identify the valat override.');
-  assert.equal(row.entries.filter(entry => entry.player === 0 && entry.kind === 'valat'
-    && entry.points === -500 && entry.label.startsWith('Nap.')).length, 1,
-  'The breakdown must explicitly show the failed announced valat once.');
-  assert.ok(!row.entries.some(entry => ['game', 'kings', 'trula'].includes(entry.kind)),
-    'An announced valat must suppress the base game, kings, and trula scores.');
-  const resultViews = await Promise.all(pages.map(async (page, index) => {
-    const heading = (await page.getByTestId('round-result-heading').textContent()).trim();
-    const description = (await page.getByTestId('round-result-description').textContent()).trim();
-    assert.equal(heading, 'Valat ni uspel.', 'The result heading must report the failed valat, not a card-point win.');
-    assert.ok(description.includes('Ana') && description.includes('neuspešno napovedan valat')
-      && description.replaceAll('−', '-').includes('-500'),
-    'The result description must name Ana and explain her failed valat and −500 score.');
-    await assertNoOverflow(page, `Failed-valat scoreboard, ${report.players[index].name}`);
-    return { player: report.players[index].name, heading, description };
-  }));
-  await screenshot(pages[0], 'valat-result-mobile.png');
-  await screenshot(pages[1], 'valat-result-tablet.png');
-  return { cardsPlayed: actions.length, tricksPlayed: actions.length / 2,
-    actions, finalStates, scoreBreakdown, resultViews, passed: true };
+  await confirmPreparation(1);
+  report.announcementFixtures = { removed: true, explicitPickups: 9, passed: true };
 }
 
 async function verifyScoreBreakdowns(round) {

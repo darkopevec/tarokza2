@@ -420,10 +420,12 @@
   .score-calculation-player { padding: 10px; }
 }
 
-/* Keep each optional pickup beside its source card and distinct from a play. */
-.stack-slot { display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 44px; }
-.stack-pickup-space { min-height: 44px; width: 100%; }
+/* Overlay optional pickups on their source card without changing pile height. */
+.stack-slot { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+.stack-pickup-space { position: absolute; bottom: 0; left: 0; width: 100%; min-height: 44px; z-index: 2; pointer-events: none; }
+.stack-pickup-space:empty { display: none; }
 .stack-pickup {
+  pointer-events: auto;
   width: 100%; min-width: 44px; min-height: 44px; padding: 4px 2px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background: #e3bf8e; color: #243e2b; border: 1px solid #edcca0; border-radius: 5px;

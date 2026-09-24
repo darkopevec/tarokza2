@@ -97,18 +97,25 @@ function playerIndex(game, playerId) {
 
 function startPlay(game) {
   // Pile tops become public, but taking an exposed honor is always optional.
-  game.phase = game.scoringVersion === 2 ? 'announcements' : 'playing';
+  game.phase = 'playing';
   game.turn = 1 - game.dealer;
 }
 
-export function preparationTurn(game) {
-  if (game.phase !== 'announcements') return null;
-  return [1 - game.dealer, game.dealer].find(seat => !game.announcementReady?.[seat]) ?? null;
+// Upgrade saved rounds that were waiting at the removed preparation step.
+// Keep existing declarations for accurate scoring of games already in progress.
+export function resumeGame(game) {
+  if (game.phase === 'announcements') {
+    game.phase = 'playing';
+    game.turn = 1 - game.dealer;
+  }
+  return game;
 }
+
+export function preparationTurn() { return null; }
 
 export function legalPickups(game, playerId) {
   const seat = playerIndex(game, playerId);
-  if (game.phase !== 'playing' && !(game.phase === 'announcements' && !game.announcementReady?.[seat])) return [];
+  if (game.phase !== 'playing') return [];
   return game.players[seat].stacks
     .map(stack => stack[0])
     .filter(card => card && (card.suit === 'tarok' || card.rank === 8))
@@ -116,15 +123,8 @@ export function legalPickups(game, playerId) {
 }
 
 export function legalAnnouncements(game, playerId) {
-  const seat = playerIndex(game, playerId);
-  if (game.phase !== 'announcements' || game.announcementReady?.[seat]) return [];
-  const announcements = game.announcements ?? [];
-  const hand = new Set(game.players[seat].hand.map(card => card.id));
-  const choices = Object.entries(bonusSets)
-    .filter(([bonus, ids]) => ids.every(id => hand.has(id)) && !announcements.some(call => call.player === seat && call.bonus === bonus))
-    .map(([bonus]) => bonus);
-  if (game.players[seat].stacks.every(stack => stack.length <= 1) && !announcements.some(call => call.player === seat && call.bonus === 'valat')) choices.push('valat');
-  return choices;
+  playerIndex(game, playerId);
+  return [];
 }
 
 export function legalMoves(game, playerId) {
@@ -209,7 +209,7 @@ export function act(game, playerId, action) {
   const seat = playerIndex(game, playerId);
   if (!action || typeof action !== 'object') throw new Error('Neveljavna poteza.');
   if (action.type === 'pickup') {
-    if (!['announcements', 'playing'].includes(game.phase)) throw new Error('Karto s kupčka lahko vzameš v roko po licitaciji ali med igro.');
+    if (game.phase !== 'playing') throw new Error('Karto s kupčka lahko vzameš v roko po licitaciji ali med igro.');
     if (!legalPickups(game, playerId).includes(action.cardId)) throw new Error('V roko lahko vzameš le odprtega taroka ali kralja s svojega kupčka.');
     const player = game.players[seat];
     const stackIndex = player.stacks.findIndex(stack => stack[0]?.id === action.cardId);
@@ -220,19 +220,8 @@ export function act(game, playerId, action) {
     game.pickups.push({ player: seat, card, stack: stackIndex, trickNumber: game.trickNumber });
     return game;
   }
-  if (action.type === 'announce') {
-    if (!legalAnnouncements(game, playerId).includes(action.bonus)) throw new Error('Te napovedi zdaj ne moreš oddati. Kralje ali trulo moraš imeti v roki; za valat morajo biti vse tvoje karte odkrite.');
-    game.announcements.push({ player: seat, bonus: action.bonus });
-    return game;
-  }
-  if (action.type === 'confirmAnnouncements') {
-    if (game.phase !== 'announcements') throw new Error('Potrjevanje napovedi ni na vrsti.');
-    if (game.announcementReady[seat]) return game;
-    const next = preparationTurn(game);
-    if (next !== seat) throw new Error(`Najprej mora pripravljenost potrditi ${game.players[next].name}, ki začne prvi štih. Medtem lahko prevzemaš in napoveduješ.`);
-    game.announcementReady[seat] = true;
-    if (game.announcementReady.every(Boolean)) game.phase = 'playing';
-    return game;
+  if (action.type === 'announce' || action.type === 'confirmAnnouncements') {
+    throw new Error('Napovedi in potrjevanje priprave niso več del igre.');
   }
   if (action.type === 'ready') {
     if (game.phase !== 'roundEnd') throw new Error('Runda še ni končana.');

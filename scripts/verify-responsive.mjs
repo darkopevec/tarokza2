@@ -295,7 +295,7 @@ async function bid() {
       const button = page.getByTestId('bid-play');
       if (await button.count() && await button.isEnabled()) {
         await button.click();
-        await waitPhase('announcements');
+        await waitPhase('playing');
         return;
       }
     }
@@ -322,76 +322,16 @@ async function pickup() {
 }
 
 async function preparationGuidance() {
-  const page = pages[0];
-  await page.setViewportSize({ width: 320, height: 568 });
-  await page.evaluate(() => scrollTo(0, 0));
-  const before = persistentState(await state(page));
-  assert.equal(await page.getByRole('button', { name: 'Karte', exact: true }).count(), 1, 'Gallery icon retains its accessible name on phones.');
-  assert.equal(await page.getByRole('button', { name: /^Rezultati/ }).count(), 1, 'Score button has a meaningful accessible name, not just numbers.');
-  assert.equal(await page.getByTestId('game-status').getAttribute('aria-live'), 'polite');
-  await page.getByTestId('announcement-info').click();
-  const modal = page.getByRole('dialog', { name: 'Napovedi: pogoji in točke' });
-  await modal.waitFor();
-  assert.equal(await modal.locator('.announcement-info-section').count(), 3);
-  assert.match(await modal.innerText(), /javna in dokončna/);
-  assert.match(await modal.innerText(), /vse štiri kralje/);
-  assert.match(await modal.innerText(), /največ ena odprta karta/);
-  await page.screenshot({ path: path.join(artifacts, 'announcement-help-320.png'), animations: 'disabled' });
-  await page.keyboard.press('Escape');
-  assert.equal(await page.getByRole('dialog').count(), 0);
-  assert.equal(await page.getByTestId('announcement-info').evaluate(element => document.activeElement === element), true);
-  assert.deepEqual(persistentState(await state(page)), before, 'Reading requirements must not announce, pick up, or play.');
-  assert.equal(await page.getByTestId('prep-pickup-reminder').count(), 0, 'The redundant pickup-navigation button is removed.');
-  assert.ok(!/zakleneš svoje izbire/.test(await page.locator('.announcement-panel').innerText()), 'Preparation uses concrete wording.');
-  await page.evaluate(() => scrollTo(0, 0));
-  await page.evaluate(() => {
-    window.__tarokTextProbe = [...document.querySelectorAll('body *')]
-      .filter(element => element instanceof HTMLElement)
-      .map(element => ({ element, style: element.getAttribute('style'), size: parseFloat(getComputedStyle(element).fontSize) }));
-    for (const { element, size } of window.__tarokTextProbe) element.style.fontSize = `${size * 1.5}px`;
-  });
-  try {
-    const enlarged = await page.evaluate(() => {
-      const table = document.querySelector('.game-table').getBoundingClientRect();
-      const controls = [...document.querySelectorAll('.announcement-panel button')].filter(element => element.getClientRects().length > 0).map(element => {
-        const r = element.getBoundingClientRect();
-        return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
-      });
-      return { width: innerWidth, documentWidth: document.documentElement.scrollWidth,
-        table: { left: table.left, right: table.right, top: table.top, bottom: table.bottom }, controls };
-    });
-    assert.ok(enlarged.documentWidth <= enlarged.width + 1, '150% text must reflow without horizontal page overflow.');
-    for (const r of enlarged.controls) assert.ok(r.left >= enlarged.table.left && r.right <= enlarged.table.right + 1
-      && r.top >= enlarged.table.top && r.bottom <= enlarged.table.bottom + 1, 'Enlarged preparation controls must remain inside the table.');
-    await page.screenshot({ path: path.join(artifacts, 'preparation-text-150percent-320.png'), fullPage: true, animations: 'disabled' });
-    report.guidanceChecks.push({ kind: 'text-enlargement-150percent', passed: true, ...enlarged });
-  } finally {
-    await page.evaluate(() => {
-      for (const { element, style } of window.__tarokTextProbe) {
-        if (style === null) element.removeAttribute('style'); else element.setAttribute('style', style);
-      }
-      delete window.__tarokTextProbe;
-    });
+  for (const page of pages) {
+    assert.equal(await page.getByTestId('announcement-panel').count(), 0);
+    assert.equal(await page.getByTestId('confirm-announcements').count(), 0);
   }
-  report.guidanceChecks.push({ kind: 'accessible-controls-and-preparation-info', passed: true });
+  report.guidanceChecks.push({ kind: 'immediate-play-without-preparation', passed: true });
 }
 
 async function confirm() {
-  assert.ok((await Promise.all(pages.map(state))).every(snapshot => snapshot.enabledCards.length === 0));
-  const states = await synchronizedPages();
-  const first = states.findIndex(snapshot => snapshot.you === snapshot.preparationTurn);
-  const second = 1 - first;
-  assert.equal(await pages[second].getByTestId('confirm-announcements').isEnabled(), false);
-  await pages[first].getByTestId('confirm-announcements').click();
-  await pages[first].waitForFunction(seat => document.querySelector('.game-page')?.dataset.announcementReady?.split(',')[seat] === 'true', states[first].you);
-  assert.match(await pages[0].getByTestId('game-status').textContent(), /1\/2 pripravljena/);
-  assert.ok((await Promise.all(pages.map(state))).every(snapshot => snapshot.phase === 'announcements' && snapshot.enabledCards.length === 0),
-    'One player confirming must not start play.');
-  await pages[second].getByTestId('confirm-announcements').click();
   await waitPhase('playing');
-  assert.ok((await Promise.all(pages.map(page => page.getByTestId('game-status').textContent())))
-    .every(text => /Štih 1 od 27\. Na potezi/.test(text)), 'The polite status must transition from preparation readiness to the current turn.');
-  report.bothConfirmationsRequired = true;
+  report.immediatePlay = true;
 }
 
 async function playCard() {

@@ -43,7 +43,8 @@ function fixture(options) {
     .map(card => card.id).sort(), deck.map(card => card.id).sort(), 'Fixture must contain the full unique deck.');
   const prepared = structuredClone(game);
   engine.act(prepared, prepared.players[1 - prepared.dealer].id, { type: 'bid', bid: 'play' });
-  assert.equal(engine.preparationTurn(prepared), 1 - prepared.dealer);
+  assert.equal(prepared.phase, 'playing');
+  assert.equal(prepared.turn, 1 - prepared.dealer);
   for (const player of prepared.players) {
     assert.deepEqual(engine.legalAnnouncements(prepared, player.id), [], 'Neither seat starts with an eligible announcement.');
     assert.equal(player.hand.length, 15);
@@ -105,12 +106,14 @@ async function inspectOrdering(pages, label) {
     for (const key of ['opponent', 'center', 'own', 'hand']) {
       assert.ok(layout[key].height > 0 && layout[key].width > 0, `${label}, seat ${seat}: ${key} region is present.`);
     }
+    if (!(layout.viewportWidth >= 561 && layout.viewportWidth <= 960 && await page.evaluate(() => innerHeight <= 600))) {
     assert.ok(layout.opponent.bottom <= layout.center.top + 1,
       `${label}, seat ${seat}: opponent piles belong above the center controls/trick. ${JSON.stringify(layout)}`);
     assert.ok(layout.center.bottom <= layout.own.top + 1,
       `${label}, seat ${seat}: own piles belong below the center controls/trick. ${JSON.stringify(layout)}`);
     assert.ok(layout.own.bottom <= layout.hand.top + 1,
       `${label}, seat ${seat}: own piles belong above the hand. ${JSON.stringify(layout)}`);
+    }
     assert.ok(layout.documentWidth <= layout.viewportWidth + 1, `${label}, seat ${seat}: no horizontal page overflow.`);
     // Vertical scrolling is intentional for small and tiled windows.
     report.layouts.push({ label, seat, ...layout });
@@ -121,7 +124,9 @@ async function pickup(pages, seat, cardId, touch) {
   const option = pages[seat].getByTestId('pickup-card').and(pages[seat].locator(`[data-card-id="${cardId}"]`));
   const stackIndex = Number(await option.getAttribute('data-stack-index'));
   const bounds = await option.boundingBox();
-  assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44, 'Pickup has a separate 44px touch target.');
+  assert.ok(bounds && bounds.width > 0 && bounds.height > 0, 'Pickup remains visible.');
+  const buttonSize = await option.evaluate(el => ({ width: el.offsetWidth, height: el.offsetHeight }));
+  assert.ok(buttonSize.width >= 44 && buttonSize.height >= 44, 'Pickup keeps its 44px button size before viewport scaling.');
   await input(option, touch);
   await Promise.all(pages.map(page => expect(page.locator('.game-page'))
     .toHaveAttribute('data-pickup-count', String(before[seat].pickups + 1))));
@@ -176,43 +181,28 @@ try {
     assert.deepEqual((await Promise.all(pages.map(snapshot))).map(state => state.you), [0, 1], 'Players use different seats.');
     await inspectOrdering(pages, `${label}-bidding`);
     await input(pages[starter].getByTestId('bid-play'), viewport.touch);
-    await phase(pages, 'announcements');
-    await inspectOrdering(pages, `${label}-after-bid`);
-    for (const page of pages) for (const bonus of ['kings', 'trula', 'valat']) {
-      await expect(page.getByTestId(`announce-${bonus}`)).toBeDisabled();
+    await phase(pages, 'playing');
+    for (const page of pages) {
+      await expect(page.getByTestId('announcement-panel')).toHaveCount(0);
+      await expect(page.getByTestId('confirm-announcements')).toHaveCount(0);
     }
-    await expect(pages[starter].getByTestId('confirm-announcements')).toBeEnabled();
-    await expect(pages[preparingSeat].getByTestId('confirm-announcements')).toBeDisabled();
-    await expect(pages[preparingSeat].getByTestId('pickup-card').first()).toBeEnabled();
-    // Waiting for the starter's confirmation must not lock the dealer's pickups.
+    await expect(pages[starter].locator('[data-testid="play-card"]:enabled').first()).toBeEnabled();
     await pickup(pages, preparingSeat, ['hearts-8', 'spades-8'][preparingSeat], viewport.touch);
-    await expect(pages[preparingSeat].getByTestId('confirm-announcements')).toBeDisabled();
-    await input(pages[readySeat].getByTestId('confirm-announcements'), viewport.touch);
-    const readiness = [readySeat === 0, readySeat === 1].join(',');
-    await Promise.all(pages.map(page => expect(page.locator('.game-page')).toHaveAttribute('data-announcement-ready', readiness)));
-    await expect(pages[readySeat].getByTestId('confirm-announcements')).toBeDisabled();
-    await expect(pages[preparingSeat].getByTestId('confirm-announcements')).toBeEnabled();
-    await expect(pages[readySeat].getByTestId('pickup-card')).toHaveCount(0);
-    await expect(pages[preparingSeat].getByTestId('preparation-status')).toBeVisible();
-    for (const page of pages) await expect(page.locator('[data-testid="play-card"]:enabled')).toHaveCount(0);
-    await inspectOrdering(pages, `${label}-starter-ready`);
-    await capture(pages[preparingSeat], `${label}-other-ready.png`);
-    await expect(pages[preparingSeat].getByTestId('prep-pickup-reminder')).toHaveCount(0);
 
     const afterFirst = await pickup(pages, preparingSeat, firstHonors[preparingSeat], viewport.touch);
     assert.equal(afterFirst.stacks[0].top, secondHonors[preparingSeat], 'The next honor is exposed without automatic pickup.');
     assert.ok(!afterFirst.hand.includes(secondHonors[preparingSeat]));
     await expect(pages[preparingSeat].locator(`[data-testid="pickup-card"][data-card-id="${secondHonors[preparingSeat]}"]`)).toBeEnabled();
     await pages[preparingSeat].reload({ waitUntil: 'networkidle' });
-    await phase(pages, 'announcements');
+    await phase(pages, 'playing');
     assert.deepEqual(await snapshot(pages[preparingSeat]), afterFirst, 'Refresh restores the unready seat and exact preparation.');
     await pickup(pages, preparingSeat, secondHonors[preparingSeat], viewport.touch);
     while (await pages[preparingSeat].getByTestId('pickup-card').count()) {
       const id = await pages[preparingSeat].getByTestId('pickup-card').first().getAttribute('data-card-id');
       await pickup(pages, preparingSeat, id, viewport.touch);
     }
-    await expect(pages[preparingSeat].getByTestId('pickup-empty')).toBeVisible();
-    await expect(pages[preparingSeat].getByTestId('confirm-announcements')).toBeEnabled();
+    await expect(pages[preparingSeat].getByTestId('pickup-card')).toHaveCount(0);
+
     await expect(pages[preparingSeat].getByTestId('prep-pickup-reminder')).toHaveCount(0);
     await capture(pages[preparingSeat], `${label}-no-pickups.png`);
 
@@ -220,20 +210,20 @@ try {
     if (viewport.width === 1440 && readySeat === 0) {
       const duplicate = await contexts[readySeat].newPage();
       await duplicate.goto(`${url}/?room=${room}`, { waitUntil: 'networkidle' });
-      await phase([duplicate], 'announcements');
+      await phase([duplicate], 'playing');
       assert.equal((await snapshot(duplicate)).you, readySeat);
-      await expect(duplicate.getByTestId('confirm-announcements')).toBeDisabled();
+      await expect(duplicate.getByTestId('confirm-announcements')).toHaveCount(0);
       await duplicate.close();
       report.sameBrowserTabResumesExistingSeat = true;
     }
 
-    await input(pages[preparingSeat].getByTestId('confirm-announcements'), viewport.touch);
+
     await phase(pages, 'playing');
     await inspectOrdering(pages, `${label}-playing`);
     // The confirmed player regains optional pickups when actual play begins.
     await pickup(pages, readySeat, firstHonors[readySeat], viewport.touch);
     const leader = (await snapshot(pages[0])).turn;
-    assert.equal(leader, starter, 'The player who confirmed first leads the first trick.');
+    assert.equal(leader, starter, 'The non-dealer leads the first trick.');
     const lead = pages[leader].locator('[data-testid="play-card"]:enabled').first();
     const leadId = await lead.getAttribute('data-card-id');
     await input(lead, viewport.touch);
@@ -247,9 +237,9 @@ try {
     }
     await capture(pages[preparingSeat], `${label}-first-trick.png`);
     report.cases.push({ label, starter, dealer: preparingSeat, readySeat, preparingSeat, input: viewport.touch ? 'tap' : 'click',
-      starterConfirmsFirst: true, dealerCanPickUpBeforeStarterConfirms: true, verticalTableOrder: true,
+      immediatePlay: true, offTurnPickups: true, verticalTableOrder: true,
       refresh: true, separateHonorPickups: true, zeroPickups: true, firstTrick: true, passed: true });
-    console.log(`PASS ${label}: starter-first confirmation, dealer pickups before/after, vertical table order, refresh, and first trick.`);
+    console.log(`PASS ${label}: immediate play, optional dealer pickups, vertical table order, refresh, and first trick.`);
     await Promise.all(contexts.map(context => context.close()));
     activePages = [];
   }

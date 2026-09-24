@@ -7,7 +7,7 @@ Igra sledi slovenskemu taroku v dveh (Napoleon). [Slovenski tarok, »Tarok za dv
 - Šele po licitaciji se odprejo vrhovi kupčkov. Igralec sme vzeti svojega odprtega taroka ali kralja v roko, ni pa dolžan. Karte se nikoli ne prestavijo samodejno.
 - Na začetku lahko prevzemata oba igralca; med igro lahko vsak vzame svojega odprtega taroka ali kralja kadarkoli, tudi med nasprotnikovo potezo. Karto sme najprej pustiti na kupčku in jo prevzeti pozneje.
 - Vsak prevzem prestavi samo izbrano karto in razkrije naslednjo. Če je tudi ta tarok ali kralj, je zanjo potrebna nova odločitev. Prevzem ni odigrana karta, ne porabi poteze in ne spremeni vodje štiha.
-- Po licitaciji sledi priprava z odprtimi vrhovi kupčkov. Vsak lahko prevzema in napoveduje, dokler ne izbere »Pripravljen«. Potrjena priprava je za tega igralca zaklenjena do začetka igranja. Najprej potrdi igralec, ki začne prvi štih (nedelilec), nato delilec. Oba lahko do lastne potrditve po želji prevzemata in napovedujeta. Prvo karto je dovoljeno odigrati šele, ko sta potrjena oba; med igranjem lahko spet oba poljubno prevzemata svoje odprte taroke in kralje.
+- Po licitaciji se takoj začne igranje. Napovedi kraljev, trule in valata ter potrjevanja »Pripravljen« ni.
 - Nedelilec začne prvi štih; naslednjega začne zmagovalec prejšnjega.
 - Obvezno slediš barvi, tudi s kupčka; brez barve moraš igrati tarok. Prevzem ni obvezen.
 - Karta s kupčka lahko začne štih šele s prazno roko. Po njeni uporabi se odpre naslednja.
@@ -24,19 +24,16 @@ To je izbrani način beleženja, saj vira ne opredelita obeh stolpcev rezultata 
 
 ### Kralji, trula, valat in mondfang
 
-Ti dodatki in omejitve napovedi so izrecno dogovorjena razširitev igre v dveh. Vrednosti kraljev, trule in valata sledijo sistemu 10/20 ter 250/500 iz [pojasnil Tarok zveze Slovenije, B1.14–B1.21](https://tarokzveza.si/zveza/akti-in-pravilniki-tarok-zveze-slovenije/pojasnila-v-zvezi-s-pravili-tekmovalnega-taroka-1-0/). Tega ne kombiniramo z drugačnim dodatnim tihim valatom +50 v starem sistemu Tarok.net. Mondfang −21 opisujejo tudi [navodila MZT](https://www.mzt.org/wp-content/uploads/tarok_karte_navodila.pdf).
+Dodatki se obračunajo samodejno iz osvojenih štihov, brez napovedovanja.
 
-| Dodatek | Uspeh ob koncu runde | Brez napovedi | Uspešna napoved | Neuspešna napoved |
-| --- | --- | ---: | ---: | ---: |
-| Kralji | Vsi štirje kralji v lastnih štihih | +10 | +20 | −20 |
-| Trula | Pagat, mond in škis v lastnih štihih | +10 | +20 | −20 |
-| Valat | Vseh 27 lastnih štihov | +250 | +500 | −500 |
+| Dodatek | Uspeh ob koncu runde | Točke |
+| --- | --- | ---: |
+| Kralji | Vsi štirje kralji v lastnih štihih | +10 |
+| Trula | Pagat, mond in škis v lastnih štihih | +10 |
+| Valat | Vseh 27 lastnih štihov | +250 |
 
-- Kralje smeš napovedati le, če imaš vse štiri **v roki**. Trulo smeš napovedati le, če imaš **v roki** pagata, monda in škisa. Štejejo tudi karte, ki jih prej po želji vzameš s kupčkov.
-- Valat smeš napovedati le pred začetkom igranja, ko so **vse tvoje karte vidne tebi**. Vsak tvoj kupček mora biti prazen ali vsebovati le eno odprto karto. Do tri odprte karte torej lahko ostanejo na kupčkih. Za napoved ni treba vseh vzeti v roko in ni dejanja, ki bi predčasno razkrilo skrite karte.
-- Vsaka napoved je dokončna in javna. Po lastni potrditvi je ni več mogoče dodati. Napoved je obljuba, da boš karte zbral v **štihih**, ne nagrada za to, da jih držiš v roki.
-- Kralji in trula se obračunajo ločeno za vsakega igralca. Če napovedovalec izgubi kralje, piše −20; če nasprotnik sam zbere vse štiri brez napovedi, ta hkrati piše +10. Enako velja za trulo.
-- Napovedan valat za oba nadomesti osnovno igro in dodatke za kralje/trulo. Če sta oba upravičena in ga napovesta, vsak zase dobi +500 ali −500 glede na lastni uspeh; ne dodajamo še tihega valata. Če valata nihče ne napove, zmagovalec vseh štihov dobi +250 namesto igre, kraljev in trule.
+- Kralji in trula se obračunajo ločeno za vsakega igralca. Karte morajo biti v osvojenih štihih, ne le v roki.
+- Valat nadomesti osnovno igro in dodatke za kralje ter trulo.
 - **Mondfang** nastane, ko škis v istem štihu pobere nasprotnikovega monda. Igralec, ki izgubi monda, ob obračunu runde dobi −21. Lovec nima ločenega dodatka +21. Ta osebna kazen se upošteva tudi ob valatu. Dogodek je med igro viden ob roki in ostane shranjen.
 - Semafor pri vsaki rundi izpiše osnovno igro, vsak upoštevani dodatek in kazen posebej; njihova vsota za igralca je rezultat runde.
 
@@ -44,16 +41,16 @@ Ti dodatki in omejitve napovedi so izrecno dogovorjena razširitev igre v dveh. 
 
 `shared/game.mjs` izvaža `createGame({ playerIds, names, dealer?, rng? })`, `act(game, playerId, action)`, `legalPickups(game, playerId)`, `legalAnnouncements(game, playerId)` in `viewFor(game, playerId)`. `act` spremeni stanje ter ga vrne; prepovedana poteza vrže napako pred spremembo stanja.
 
-Dovoljena dejanja so `{ type: 'bid', bid: 'play' | 'pass' }`, `{ type: 'play', cardId }`, `{ type: 'pickup', cardId }`, `{ type: 'announce', bonus: 'kings' | 'trula' | 'valat' }`, `{ type: 'confirmAnnouncements' }` in `{ type: 'ready' }`. Nova runda teče po fazah `bidding` → `announcements` → `playing` → `roundEnd`.
+Dovoljena dejanja so `{ type: 'bid', bid: 'play' | 'pass' }`, `{ type: 'play', cardId }`, `{ type: 'pickup', cardId }` in `{ type: 'ready' }`. Nova runda teče po fazah `bidding` → `playing` → `roundEnd`.
 
 Pri pošiljanju `play` prek Socket.IO odjemalec doda `expectedPlay: { round, trickNumber, trickSize }` iz prikazanega stanja; `trickSize` je število že odigranih kart v trenutnem štihu (0 ali 1). Strežnik položaj preveri znotraj čakalne vrste mize. Zastarel ali manjkajoč položaj zavrne s kodo `STALE_PLAY` in pošlje trenutno zasebno projekcijo, zato poteza iz drugega zavihka ne more nenamerno začeti naslednjega štiha. Prevzemi položaja ne spremenijo, dovoljenost karte pa se vseeno preveri na aktualnem stanju. Neposredni vmesnik pogona `act` ostaja nespremenjen; shranjenih iger ni treba spreminjati.
 
-`legalPickups` vsebuje samo trenutno odprte lastne taroke in kralje med `playing` ali v lastni še nepotrjeni pripravi `announcements`, ne glede na potezo. Projekcija vsebuje tudi `scoringVersion`, `legalAnnouncements`, javne `announcements`, `announcementReady`, `preparationTurn` (sedež naslednjega za potrditev ali `null` izven priprave) in `mondfangs`. Vsaka nova vrstica semaforja vsebuje `breakdown` s postavkami `{ player, kind, points, announced?, success?, trickNumber? }`; vsota postavk za igralca ustreza njegovemu `deltas`.
+`legalPickups` vsebuje samo trenutno odprte lastne taroke in kralje med `playing`, ne glede na potezo. Projekcija vsebuje tudi `scoringVersion`, `legalAnnouncements`, javne `announcements`, `announcementReady`, `preparationTurn` (vedno `null`) in `mondfangs`. Vsaka nova vrstica semaforja vsebuje `breakdown` s postavkami `{ player, kind, points, announced?, success?, trickNumber? }`; vsota postavk za igralca ustreza njegovemu `deltas`.
 
 Stanje je mogoče shraniti kot JSON. Odjemalec prejme samo projekcijo `viewFor`: svojo roko, javne vrhove kupčkov, število skritih kart, potezo, dovoljene izbire, zadnji štih in celoten semafor. Naključno mešanje privzeto uporablja kriptografski generator Node.js. Generator, podan za teste, ni del shranjenega stanja.
 
 Že shranjenih iger ne preurejamo za nazaj: karte, ki jih je prejšnja različica že prestavila v roko, tam ostanejo. Nadaljnji prevzemi zahtevajo izrecno izbiro; nove runde se začnejo s 15 kartami v vsaki roki in nespremenjenimi kupčki. Runde brez oznake `scoringVersion: 2` dokončamo po dosedanjem osnovnem točkovanju, brez naknadnih bonusov in brez vstavljanja faze napovedi sredi igre. Naslednja delitev vključi nova pravila. Že zapisani rezultati in skupne točke se nikoli ne preračunavajo za nazaj.
 
-Že potrjena priprava v shranjeni rundi ostane potrjena tudi, če je delilec potrdil prvi v starejši različici. Preostali igralec lahko pripravo dokonča; kart in potrjenih odločitev ne ponastavljamo.
+Ob nalaganju se stara faza `announcements` premakne neposredno v `playing`; začne nedelilec. Karte, prevzemi, rezultati in že oddane napovedi ostanejo ohranjeni. Stare napovedi se še vedno obračunajo po prvotnih vrednostih, novih ni mogoče oddati. `legalAnnouncements` je vedno prazen; dejanji `announce` in `confirmAnnouncements` sta zavrnjeni.
 
 `wonTricks` v zasebni projekciji vsebuje samo pare kart, ki jih je ta igralec osvojil v trenutni rundi, po vrstnem redu osvojitve. Izhaja iz že shranjenih pobranih kart, zato deluje tudi za obstoječe runde brez migracije. Vmesnik »Tvoji štihi« je na voljo med igro in ob rezultatu runde; ogled ne spreminja igre. Seznam se izprazni ob novi delitvi. Oznake »1. osvojeni štih«, »2. osvojeni štih« štejejo igralčeve osvojene štihe, ne vseh štihov runde.

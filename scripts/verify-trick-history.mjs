@@ -15,7 +15,6 @@ function fixture(options) {
   const rng = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
   const game = engine.createGame({ ...options, dealer: 0, rng });
   engine.act(game, game.players[game.turn].id, { type: 'bid', bid: 'play' });
-  while (game.phase === 'announcements') engine.act(game, game.players[engine.preparationTurn(game)].id, { type: 'confirmAnnouncements' });
   while (game.phase === 'playing') {
     const playerId = game.players[game.turn].id;
     engine.act(game, playerId, { type: 'play', cardId: engine.legalMoves(game, playerId)[0] });
@@ -91,8 +90,6 @@ try {
     await page.keyboard.press('Escape');
   }
   await pages[0].getByTestId('bid-play').click();
-  await pages[0].getByTestId('confirm-announcements').click();
-  await pages[1].getByTestId('confirm-announcements').click();
   const lead = pages[0].locator('[data-testid="play-card"]:enabled').first();
   const leadId = await lead.getAttribute('data-card-id');
   await lead.click();

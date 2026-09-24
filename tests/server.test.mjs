@@ -1,7 +1,7 @@
 import test from 'node:test';
 import { identityRequests } from './identity-client.mjs';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { io as connectSocket } from 'socket.io-client';
@@ -84,16 +84,9 @@ async function move(clients, index, action) {
   await Promise.all(clients.map((current) => current.waitFor((state) => stamp(state) === expected)));
 }
 
-async function confirmAnnouncements(clients) {
-  assert.equal(clients[0].state.game.phase, 'announcements');
-  const starter = clients[0].state.game.preparationTurn;
-  await move(clients, starter, { type: 'confirmAnnouncements' });
-  assert.equal(clients[0].state.game.phase, 'announcements',
-    'One confirmation must not start card play');
-  assert.deepEqual(clients[0].state.game.announcementReady, [starter === 0, starter === 1]);
-  assert.deepEqual(clients[0].state.game.legalMoves, []);
-  await move(clients, 1 - starter, { type: 'confirmAnnouncements' });
+async function assertPlaying(clients) {
   assert.equal(clients[0].state.game.phase, 'playing');
+  assert.equal(clients[1].state.game.phase, 'playing');
 }
 
 test('private multiplayer games complete two rounds, preserve seats, and survive restart', { timeout: 30_000 }, async (t) => {
@@ -152,7 +145,7 @@ test('private multiplayer games complete two rounds, preserve seats, and survive
       assert.notEqual(index, -1, 'A player can always bid during bidding');
       await move(clients, index, { type: 'bid', bid: round === 1 ? 'pass' : 'play' });
     }
-    await confirmAnnouncements(clients);
+    await assertPlaying(clients);
     let played = 0;
     while (ana.state.game.phase === 'playing') {
       const index = clients.findIndex((current) => current.state.game.legalMoves?.length);
@@ -322,223 +315,22 @@ async function setupRoom(t, engine) {
   };
 }
 
-test('starter confirms first with either dealer while the other seat can pick up and resume after restart', { timeout: 30_000 }, async (t) => {
-  for (const readySeat of [0, 1]) {
-    await t.test(`seat ${readySeat} confirms first`, async (scenario) => {
-      const engine = { ...pickupFixtureEngine, createGame(options) {
-        const game = pickupFixtureEngine.createGame(options);
-        game.dealer = 1 - readySeat;
-        game.turn = readySeat;
-        return game;
-      } };
-      const room = await setupRoom(scenario, engine);
-      const preparingSeat = 1 - readySeat;
-      const firstCards = ['tarok-22', 'tarok-19'];
-      const nextCards = ['tarok-21', 'tarok-18'];
-      await move(room.clients, readySeat, { type: 'bid', bid: 'play' });
-      assert.equal(room.clients[0].state.game.preparationTurn, readySeat);
-      const rejection = await room.reject(preparingSeat, { type: 'confirmAnnouncements' },
-        'The dealer cannot confirm before the player who starts the first trick');
-      assert.match(rejection.error, /Najprej mora pripravljenost potrditi/);
-      await move(room.clients, readySeat, { type: 'confirmAnnouncements' });
-
-      const before = cloneForComparison(room.clients[preparingSeat].state.game);
-      assert.equal(before.phase, 'announcements');
-      assert.equal(before.preparationTurn, preparingSeat);
-      assert.deepEqual(before.announcementReady, [readySeat === 0, readySeat === 1]);
-      assert.ok(before.legalPickups.includes(firstCards[preparingSeat]));
-      assert.deepEqual(room.clients[readySeat].state.game.legalPickups, []);
-      await room.reject(readySeat, { type: 'pickup', cardId: firstCards[readySeat] },
-        'Only the confirmed player is frozen');
-
-      await move(room.clients, preparingSeat, { type: 'pickup', cardId: firstCards[preparingSeat] });
-      const after = room.clients[preparingSeat].state.game;
-      assert.deepEqual(unchangedByPickup(after), unchangedByPickup(before));
-      assert.deepEqual(after.announcementReady, before.announcementReady);
-      assert.equal(after.hand.length, before.hand.length + 1);
-      assert.ok(after.hand.some(card => card.id === firstCards[preparingSeat]));
-      assert.equal(after.players[preparingSeat].stacks[0].count, 3);
-      assert.equal(after.players[preparingSeat].stacks[0].top.id, nextCards[preparingSeat]);
-      assert.equal(after.pickups.length, 1);
-      assert.deepEqual(room.clients[readySeat].state.game.pickups, after.pickups);
-      assert.ok(after.legalPickups.includes(nextCards[preparingSeat]),
-        'The next exposed honor remains available as a separate choice');
-      assert.ok(room.clients.every(current => current.state.game.legalMoves.length === 0));
-
-      await room.restart();
-      await move(room.clients, preparingSeat, { type: 'pickup', cardId: nextCards[preparingSeat] });
-      assert.equal(room.clients[preparingSeat].state.game.pickups.length, 2);
-      await move(room.clients, preparingSeat, { type: 'confirmAnnouncements' });
-      assert.ok(room.clients.every(current => current.state.game.phase === 'playing'));
-      assert.deepEqual(room.clients[0].state.game.announcementReady, [true, true]);
-      assert.ok(room.clients[readySeat].state.game.legalPickups.includes(firstCards[readySeat]),
-        'The initially confirmed player can pick up again once both are ready');
-      const leader = room.clients[0].state.game.turn;
-      await move(room.clients, leader, { type: 'play', cardId: room.clients[leader].state.game.legalMoves[0] });
-      assert.ok(room.clients.every(current => current.state.game.trick.length === 1),
-        'Both players see the first actual play after preparation');
-    });
-  }
-});
-
-test('saved preparation keeps an already-ready dealer and lets the starter confirm after restart', { timeout: 30_000 }, async (t) => {
-  for (const dealer of [0, 1]) {
-    await t.test(`saved dealer ${dealer} is already ready`, async scenario => {
-      const engine = { ...pickupFixtureEngine, createGame(options) {
-        const game = pickupFixtureEngine.createGame(options);
-        game.dealer = dealer;
-        game.turn = 1 - dealer;
-        game.phase = 'announcements';
-        game.announcementReady[dealer] = true;
-        return game;
-      } };
-      const room = await setupRoom(scenario, engine);
-      await room.restart();
-      const before = cloneForComparison(room.clients[dealer].state.game);
-      assert.equal(before.preparationTurn, 1 - dealer);
-      await move(room.clients, dealer, { type: 'confirmAnnouncements' });
-      assert.deepEqual(room.clients[dealer].state.game, before,
-        'Existing confirmations remain idempotent without reopening preparation');
-      const starter = 1 - dealer;
-      const pickup = room.clients[starter].state.game.legalPickups[0];
-      await move(room.clients, starter, { type: 'pickup', cardId: pickup });
-      await move(room.clients, starter, { type: 'confirmAnnouncements' });
-      assert.equal(room.clients[0].state.game.phase, 'playing');
-      assert.equal(room.clients[0].state.game.turn, starter);
-      assert.equal(room.clients[0].state.game.preparationTurn, null);
-    });
-  }
-});
-
-const announcementFixtureEngine = {
-  ...gameEngine,
-  createGame(options) {
-    const game = gameEngine.createGame({ ...options, dealer: 1 });
-    const handIds = [
-      'clubs-8', 'spades-8', 'hearts-8', 'diamonds-8',
-      ...Array.from({ length: 10 }, (_, index) => `tarok-${index + 1}`),
-      'clubs-1',
-    ];
-    const stackIds = [
-      ['tarok-22', 'tarok-21', 'tarok-20', 'tarok-11'],
-      ['tarok-19', 'tarok-18', 'tarok-17', 'tarok-12'],
-      ['tarok-16', 'tarok-15', 'tarok-14', 'tarok-13'],
-    ];
-    const deck = gameEngine.createDeck();
-    const byId = new Map(deck.map((card) => [card.id, card]));
-    const ownIds = new Set([...handIds, ...stackIds.flat()]);
-    const other = deck.filter((card) => !ownIds.has(card.id));
-    game.players[0].hand = handIds.map((id) => byId.get(id));
-    game.players[0].stacks = stackIds.map((stack) => stack.map((id) => byId.get(id)));
-    game.players[1].hand = other.slice(0, 15);
-    game.players[1].stacks = [other.slice(15, 19), other.slice(19, 23), other.slice(23, 27)];
-    return game;
-  },
-};
-
-test('private announcement eligibility, frozen preparation, restart, and bonus scores synchronize', { timeout: 30_000 }, async (t) => {
-  const room = await setupRoom(t, announcementFixtureEngine);
-  await room.reject(0, { type: 'announce', bonus: 'kings' }, 'Bonuses cannot be announced during bidding');
-  await room.reject(0, { type: 'confirmAnnouncements' }, 'Preparation cannot be confirmed before bidding ends');
-  await move(room.clients, 0, { type: 'bid', bid: 'play' });
-  const initial = room.clients[0].state.game;
-  assert.equal(initial.phase, 'announcements');
-  assert.equal(initial.scoringVersion, 2);
-  assert.deepEqual(initial.announcementReady, [false, false]);
-  assert.deepEqual(initial.announcements, []);
-  assert.ok(initial.legalAnnouncements.includes('kings'), 'Four kings in the owner’s hand qualify privately');
-  assert.ok(!initial.legalAnnouncements.includes('trula'), 'An exposed stack honor does not count as a card in hand');
-  assert.ok(!initial.legalAnnouncements.includes('valat'), 'Covered stack cards prevent valat');
-  assert.deepEqual(room.clients[1].state.game.legalAnnouncements, [], 'The opponent cannot inspect private eligibility');
-  assert.ok(initial.players.every((player) => !('hand' in player) && !('legalAnnouncements' in player)));
-  assert.ok(initial.players.every((player) => player.stacks.every((stack) => stack.top !== null)),
-    'Pile tops are public during preparation');
-  assert.ok(room.clients.every((current) => current.state.game.legalMoves.length === 0));
-  const earlyPlay = await room.reject(1, {
-    type: 'play', cardId: room.clients[1].state.game.hand[0].id,
-    expectedPlay: playContext(room.clients[1].state.game),
-  }, 'Card play is blocked during preparation');
-  assert.equal(earlyPlay.code, 'STALE_PLAY');
-  await room.reject(1, { type: 'announce', bonus: 'kings', playerId: room.sessions[0].playerId },
-    'Supplying another player ID cannot announce their private kings');
-  await room.reject(0, { type: 'announce', bonus: 'trula' }, 'Trula requires all three cards in hand');
-  await room.reject(0, { type: 'announce', bonus: 'valat' }, 'Valat is rejected while cards remain hidden');
-  await room.reject(0, { type: 'announce', bonus: 'unknown' }, 'Unknown bonus names are rejected');
-
-  await move(room.clients, 0, { type: 'announce', bonus: 'kings' });
-  assert.deepEqual(room.clients[1].state.game.announcements, [{ player: 0, bonus: 'kings' }]);
-  await room.reject(0, { type: 'announce', bonus: 'kings' }, 'The same bonus cannot be announced twice');
-  await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-22' });
-  assert.ok(!room.clients[0].state.game.legalAnnouncements.includes('trula'));
-  await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-21' });
-  assert.ok(room.clients[0].state.game.legalAnnouncements.includes('trula'));
-  assert.ok(!room.clients[1].state.game.legalAnnouncements.includes('trula'));
-  await move(room.clients, 0, { type: 'announce', bonus: 'trula' });
-
-  for (const cardId of ['tarok-20', 'tarok-19', 'tarok-18', 'tarok-17', 'tarok-16', 'tarok-15', 'tarok-14']) {
-    await move(room.clients, 0, { type: 'pickup', cardId });
-  }
-  const prepared = room.clients[0].state.game;
-  assert.equal(prepared.hand.length, 24);
-  assert.deepEqual(prepared.players[0].stacks.map(({ count }) => count), [1, 1, 1]);
-  assert.ok(prepared.legalAnnouncements.includes('valat'),
-    'Valat is legal with three face-up pile cards still outside the hand');
-  assert.deepEqual(new Set(prepared.legalPickups), new Set(['tarok-11', 'tarok-12', 'tarok-13']));
-  await move(room.clients, 0, { type: 'announce', bonus: 'valat' });
-  assert.deepEqual(room.clients[1].state.game.announcements, [
-    { player: 0, bonus: 'kings' }, { player: 0, bonus: 'trula' }, { player: 0, bonus: 'valat' },
-  ]);
-  await move(room.clients, 0, { type: 'confirmAnnouncements' });
-  assert.equal(room.clients[0].state.game.phase, 'announcements');
-  assert.deepEqual(room.clients[1].state.game.announcementReady, [true, false]);
-  assert.deepEqual(room.clients[0].state.game.legalPickups, []);
-  assert.deepEqual(room.clients[0].state.game.legalAnnouncements, []);
-  await room.reject(0, { type: 'pickup', cardId: 'tarok-11' }, 'Own confirmation freezes an otherwise legal pickup');
-  await room.reject(0, { type: 'announce', bonus: 'kings' }, 'Own confirmation freezes bonus announcements');
-  await room.reject(1, { type: 'play', cardId: room.clients[1].state.game.hand[0].id,
-    expectedPlay: playContext(room.clients[1].state.game) },
-    'One confirmation is insufficient to begin play');
-
+test('bidding immediately enables play, rejects removed preparation actions, and survives restart', async (t) => {
+  const room = await setupRoom(t, pickupFixtureEngine);
+  const starter = room.clients[0].state.game.turn;
+  await move(room.clients, starter, { type: 'bid', bid: 'play' });
+  await assertPlaying(room.clients);
+  assert.ok(room.clients[starter].state.game.legalMoves.length);
+  await room.reject(starter, { type: 'announce', bonus: 'kings' }, 'Announcements are removed');
+  await room.reject(starter, { type: 'confirmAnnouncements' }, 'No preparation confirmation');
+  // Simulate an existing saved game waiting at the old preparation screen.
+  const saved = JSON.parse(await readFile(room.roomFile, 'utf8'));
+  saved.game.phase = 'announcements';
+  await writeFile(room.roomFile, JSON.stringify(saved));
   await room.restart();
-  assert.equal(room.clients[0].state.game.phase, 'announcements');
-  assert.deepEqual(room.clients[0].state.game.announcementReady, [true, false]);
-  await room.reject(0, { type: 'pickup', cardId: 'tarok-11' }, 'The preparation freeze survives reconnect and restart');
-  await move(room.clients, 1, { type: 'confirmAnnouncements' });
-  assert.equal(room.clients[0].state.game.phase, 'playing');
-  assert.ok(room.clients[0].state.game.legalPickups.includes('tarok-11'),
-    'Optional pickups are available again once card play starts');
-  await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-11' });
-
-  let played = 0;
-  while (room.clients[0].state.game.phase === 'playing') {
-    const index = room.clients.findIndex((current) => current.state.game.legalMoves.length > 0);
-    assert.notEqual(index, -1);
-    await move(room.clients, index, { type: 'play', cardId: room.clients[index].state.game.legalMoves[0] });
-    played += 1;
-    assert.ok(played <= 54);
-  }
-  assert.equal(played, 54);
-  const result = room.clients[0].state.game.scoreboard[0];
-  assert.deepEqual(result, room.clients[1].state.game.scoreboard[0]);
-  assert.equal(result.scoringVersion, 2);
-  assert.deepEqual(result.announcements, prepared.announcements.concat({ player: 0, bonus: 'valat' }));
-  const valat = result.breakdown.find((entry) => entry.kind === 'valat');
-  assert.ok(valat);
-  assert.equal(valat.player, 0);
-  assert.equal(valat.announced, true);
-  assert.equal(valat.success, room.clients[0].state.game.players[0].trickCount === 27);
-  assert.equal(valat.points, valat.success ? 500 : -500);
-  assert.ok(result.breakdown.every((entry) => !['game', 'kings', 'trula'].includes(entry.kind)),
-    'Called valat replaces game and set-bonus scoring');
-  for (const player of [0, 1]) {
-    const total = result.breakdown.filter((entry) => entry.player === player)
-      .reduce((sum, entry) => sum + entry.points, 0);
-    assert.equal(result.deltas[player], total);
-    assert.equal(result.totals[player], total);
-  }
-  await room.restart();
-  assert.deepEqual(room.clients[0].state.game.scoreboard[0], result,
-    'The synchronized bonus breakdown survives server restart');
+  const cardId = room.clients[starter].state.game.legalMoves[0];
+  await move(room.clients, starter, { type: 'play', cardId });
+  assert.equal(room.clients[0].state.game.trick.length, 1);
 });
 
 const legacyFixtureEngine = {
@@ -584,7 +376,7 @@ test('an underway legacy round retains its scoring until the next deal', { timeo
     const index = room.clients.findIndex((current) => current.state.game.legalBids.length > 0);
     await move(room.clients, index, { type: 'bid', bid: 'pass' });
   }
-  await confirmAnnouncements(room.clients);
+  await assertPlaying(room.clients);
   assert.deepEqual(room.clients[0].state.game.scoreboard[0].deltas, [35, 0]);
   const firstPlayer = room.clients.findIndex((current) => current.state.game.legalMoves.length > 0);
   const previousRoundPlay = await room.reject(firstPlayer, {
@@ -756,7 +548,7 @@ test('optional honor pickups synchronize privately, reject illegal requests, and
   assert.deepEqual(clients[0].state.game.pickups, []);
   assert.deepEqual(new Set(clients[0].state.game.legalPickups), new Set(['tarok-22', 'hearts-8']));
   assert.deepEqual(new Set(clients[1].state.game.legalPickups), new Set(['tarok-19', 'spades-8']));
-  await confirmAnnouncements(clients);
+  await assertPlaying(clients);
 
   await rejectPickup(0, 'tarok-19', 'A player cannot take an opponent’s exposed honor');
   await rejectPickup(0, 'spades-1', 'An ordinary exposed suit card cannot be taken');
@@ -872,7 +664,7 @@ test('play context rejects malformed and stale requests and prevents distinct-re
 test('still-current play contexts survive optional off-turn pickups and server restart', { timeout: 30_000 }, async (t) => {
   const room = await setupRoom(t, pickupFixtureEngine);
   await move(room.clients, 1, { type: 'bid', bid: 'play' });
-  await confirmAnnouncements(room.clients);
+  await assertPlaying(room.clients);
   const leadContext = playContext(room.clients[1].state.game);
   assert.ok(room.clients[1].state.game.legalMoves.includes('tarok-16'));
   await move(room.clients, 0, { type: 'pickup', cardId: 'tarok-22' });
@@ -892,7 +684,7 @@ test('still-current play contexts survive optional off-turn pickups and server r
 test('unchanged play context still recalculates follow-suit legality after pickups', { timeout: 30_000 }, async (t) => {
   const room = await setupRoom(t, pickupFixtureEngine);
   await move(room.clients, 1, { type: 'bid', bid: 'play' });
-  await confirmAnnouncements(room.clients);
+  await assertPlaying(room.clients);
   const clubLead = room.clients[1].state.game.hand.find((card) => card.suit === 'clubs').id;
   await move(room.clients, 1, { type: 'play', cardId: clubLead });
   const context = playContext(room.clients[0].state.game);

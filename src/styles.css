@@ -1351,7 +1351,7 @@ h1 em {
   flex-direction: column;
   gap: 9px;
   transform: rotate(-7deg);
-  animation: card-in 0.24s ease;
+  /* Card faces stay fully visible when a play or collected trick mounts. */
 }
 .played-card.my-played {
   transform: rotate(7deg) translateY(8px);
@@ -1949,16 +1949,6 @@ h1 em {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-@keyframes card-in {
-  from {
-    opacity: 0;
-    translate: 0 15px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
   }
 }
 

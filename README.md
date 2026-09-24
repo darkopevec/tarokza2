@@ -65,8 +65,8 @@ Public-hosting safeguards include a reconnect-resistant new-table quota (default
 1. 🪑 **Create a table.** Enter your name and select **Ustvari mizo**.
 2. 💌 **Invite a friend.** Copy the private invitation link or scan its QR code and share it with your opponent.
 3. 🤝 **Take your seats.** Your opponent enters their name in the join form and selects **Pridruži se**. Invitation links show a join confirmation and ask newcomers only for a display name. Room codes are labels, not credentials. Each browser sees only its own hand and the public table.
-4. 🗣️ **Place your bid.** Bid **Igram** or **Naprej**. The pile tops open for preparation; no cards move into the hand automatically.
-5. 👑 **Prepare your cards.** Optionally take an exposed tarok or king using its **Vzemi v roko** control directly beneath that pile. Each click takes exactly one card. Call **Kralji** or **Trula** only with the full set in hand. **Valat** becomes available when every own pile is empty or has just one face-up card left. Unavailable calls are kept out of the way; the information button explains their requirements and points on touch screens; calls are public and final. The starting player (non-dealer) selects **Pripravljen** first, then the dealer. Both may take optional pickups and make eligible calls until their own confirmation locks preparation. No card may be played before both confirm.
+4. 🗣️ **Place your bid.** Bid **Igram** or **Naprej**. The pile tops open and play begins; no cards move into the hand automatically.
+5. 👑 **Play immediately.** The non-dealer leads as soon as bidding ends. Optionally take an exposed tarok or king using **Vzemi v roko** at the bottom of its pile card, even off turn. Each click takes one card. There are no bonus declarations or preparation confirmations.
 6. 👑 **Play your hand.** Tap a highlighted card to play it on your turn. Swipe the hand horizontally or tap a suit shortcut to find its cards; the shortcuts only scroll your hand. Playing from a pile is distinct from the **Vzemi v roko** action: during play you may still take exposed taroks/kings later, even on the opponent's turn, without consuming a turn.
 7. 🏆 **Count the spoils.** After 27 tricks, both players see the round result with a game/bonus/penalty breakdown and cumulative scoreboard. Select **Nova runda**; a new deal starts after both players are ready.
 
@@ -99,7 +99,7 @@ Uses the Slovenian two-player Napoleon deal and play, with the explicit differen
 
 ### ✨ Bonuses, calls and the mighty valat
 
-The agreed two-player additions are silent kings/trula **+10** each, called sets **+20/−20**, silent valat **+250**, called valat **+500/−500**, and **−21 mondfang** for losing Mond to Škis. Valat replaces the base game and set bonuses; mondfang stays separate. Calls require both players to finish preparation before the opening lead. Valat requires all your own cards to be visible, but the final face-up card on each pile may remain there. Saved rounds already underway retain their old scoring until the next fresh deal; earlier score rows are not rewritten.
+The two-player additions are kings/trula **+10** each, valat **+250**, and **−21 mondfang** for losing Mond to Škis. Valat replaces the base game and set bonuses; mondfang stays separate. Bonuses are scored from captured cards without declarations. Existing saved declarations retain their original scoring, and earlier score rows are not rewritten. Saved preparation screens resume directly into play.
 
 ### 👑 The deal
 
@@ -142,6 +142,7 @@ npm test
 npm run test:browser
 npm run test:responsive
 npm run test:preparation
+npm run test:card-loading
 npm run test:score-history
 npm run test:trick-history
 ```
@@ -164,14 +165,14 @@ The suite exercises two isolated touch browser sessions, private invitation join
 <details>
 <summary>📱 Responsive layouts & accessibility checks</summary>
 
-The responsive smoke suite rotates the same live game through ten phone/tablet viewport sizes, from 320×568 portrait and 568×320 landscape to 1180×820. It checks bidding, preparation, manual pickup, actual card play, suit shortcuts and dialogs: no horizontal page overflow, the hand below the table, 44px utility controls, unchanged card proportions, and no overlapping/out-of-table phase controls. It also checks invitation-first joining, inline name validation, accessible icon names, touch-accessible announcement help, polite turn status, contextualized play requests, and reflow under a simulated 150% text increase. The table always puts opponent piles at the top, preparation/tricks in the middle, and your piles immediately above your hand. Small windows and enlarged text use vertical scrolling instead of moving the hand or piles to the side. Reports and screenshots go to `artifacts/responsive/`; use `ARTIFACTS_DIR` for another directory or `BASELINE=1` to record layout violations without failing on them. These are Chromium touch-viewport checks, not a claim of testing on physical iOS/Android devices or with native screen readers.
+The responsive smoke suite checks bidding, immediate play, manual pickups, suit shortcuts and dialogs across phone and tablet sizes. Reports and screenshots go to `artifacts/responsive/`. These are Chromium viewport checks, not physical-device tests.
 
 </details>
 
 <details>
 <summary>👑 Preparation & optional-pickup regression</summary>
 
-The preparation regression starts its own disposable server with a valid deterministic deck. It tests desktop clicks and phone/tablet taps with either seat as the starting player: the dealer cannot confirm before the starter, but can take optional pickups; after the starter confirms, the dealer picks up, refreshes, takes each newly exposed honor separately, confirms with no remaining pickups, and completes the first trick. It also verifies that a second tab in the same browser resumes the same seat. Run `npm run build` first. It also checks vertical pile/table/hand ordering, including 630×680 tiled desktop windows. Evidence goes to `artifacts/preparation/`.
+The preparation regression now verifies immediate play after bidding, absence of declaration and confirmation controls, optional off-turn pickups, refresh, same-browser seat resumption, and the first trick. It starts a disposable server with a deterministic deck. Run `npm run build` first; evidence goes to `artifacts/preparation/`.
 
 </details>
 
@@ -183,22 +184,22 @@ The score-history check starts its own disposable loopback server and determinis
 </details>
 
 <details>
-<summary>🔮 Deterministic announcement fixtures</summary>
+<summary>🔮 Deterministic pickup fixtures</summary>
 
-Rare announcement eligibility can also be checked against a separate deterministic, local-only fixture server:
+Bonus controls remain absent even with complete sets in hand; optional pickups can be checked against a separate deterministic, local-only fixture server:
 
 ```sh
 npm run build
 node scripts/serve-browser-fixtures.mjs
 ```
 
-In another terminal, with the production game still on port 3000:
+In another terminal, with a disposable test game on port 3000:
 
 ```sh
 FIXTURE_BASE_URL=http://127.0.0.1:3001 npm run test:browser
 ```
 
-The fixture has its own disposable temporary rooms, binds only to loopback, and adds no test or seed API to production. Its fixed valid deck exercises all four kings, trula, and nine optional pickups that unlock valat while leaving three face-up cards on piles. It also plays the fixture round to check the failed-valat score, bonus replacement and result heading. Stop the fixture server when finished; its temporary rooms are removed on normal shutdown.
+The fixture has its own disposable temporary rooms, binds only to loopback, and adds no test or seed API to production. Its fixed valid deck includes all four kings and trula, verifies that declaration controls are absent, and exercises nine optional pickups while leaving three face-up cards on piles. Stop the fixture server when finished; its temporary rooms are removed on normal shutdown.
 
 </details>
 
@@ -242,3 +243,5 @@ The entire game uses all 54 scanned faces from one Slovenian tarok deck; see [ca
 </div>
 
 Run `npm run test:identity` for isolated browser checks of invitations, QR codes, linked devices, recovery, conflicts, and revocation. It creates and removes its own temporary data directory.
+
+The card-loading check starts a disposable server and verifies immediate table entry while image downloads are delayed, visible-card priority, background preloading, and persistent artwork access from a fresh tab with the network unavailable. Only public card images are stored in Cache Storage, without a time-based expiry. Versioned artwork URLs also use a one-year immutable HTTP cache; bump `CARD_ART_VERSION` when replacing artwork. Game state, identity credentials and application pages are never cached by the card service worker.

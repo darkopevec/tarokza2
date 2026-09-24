@@ -56,7 +56,7 @@ try {
   if (aFirst) await a.getByTestId('bid-pass').click();
   await b.getByTestId('bid-pass').click();
   if (!aFirst) await a.getByTestId('bid-pass').click();
-  await expect(b.locator('.game-page')).toHaveAttribute('data-phase', 'announcements');
+  await expect(b.locator('.game-page')).toHaveAttribute('data-phase', 'playing');
   await b.getByRole('button', { name: 'Zapusti mizo', exact: true }).click();
   await b.getByRole('dialog').getByRole('button', { name: 'Zapusti mizo', exact: true }).click();
   await expect(b.getByRole('heading', { name: 'Moje mize' })).toBeVisible();

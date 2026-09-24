@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
 import { cardFor, createDeck } from "../shared/cards.mjs";
+import { CARD_BACK_IMAGE, prepareCardImages, registerCardCache } from './card-images.mjs';
 import { explainScoreRow } from "./score-explanation.mjs";
 import {
   ArrowRight,
@@ -76,7 +77,7 @@ function Card({
         className={`playing-card card-back ${small ? "small" : ""}`}
         aria-label="Zaprta karta"
       >
-        <img className="card-back-image" src="/cards/back-ornament.png" alt="" draggable="false" />
+        <img className="card-back-image" src={CARD_BACK_IMAGE} decoding="sync" loading="eager" fetchPriority="high" alt="" draggable="false" />
       </div>
     );
   card = cardFor(card.id) || card;
@@ -96,7 +97,7 @@ function Card({
           }
         : { "aria-label": card.name || `${card.label} ${suits[card.suit]}` })}
     >
-      <img className="card-face-image" src={card.image} alt={card.name} draggable="false" />
+      <img className="card-face-image" src={card.image} decoding="sync" loading="eager" fetchPriority="high" alt={card.name} draggable="false" />
     </Tag>
   );
 }
@@ -233,13 +234,8 @@ function Rules({ onClose }) {
             odločiš posebej. Prevzem ne porabi poteze.
           </li>
           <li>
-            <strong>Napovedi pred prvo karto.</strong> Kralje lahko napoveš,
-            ko imaš vse štiri v roki; trulo, ko imaš pagata, monda in škisa.
-            Štejejo tudi karte, ki jih pred tem vzameš s kupčkov. Valat lahko
-            napoveš, ko na nobenem tvojem kupčku ni več skrite karte: vsak
-            je prazen ali ima le eno odprto karto. Najprej izbere »Pripravljen« igralec, ki začne igro, nato drugi,
-            preden lahko kdorkoli odigra prvo karto. Po svoji potrditvi
-            priprave ne moreš več spreminjati; med igro je prevzem spet dovoljen.
+            <strong>Začni igro.</strong> Po izbiri »Igram« ali dveh »Naprej«
+            lahko takoj odigraš prvo karto. Začne igralec, ki ni delil.
           </li>
           <li>
             <strong>Sledi barvi.</strong> Upoštevajo se tudi odprte karte na
@@ -262,10 +258,8 @@ function Rules({ onClose }) {
               razliko × 1. Pri 35 : 35 se zapiše 0.
             </p>
             <p>
-              Vsi štirje kralji ali cela trula v tvojih štihih: +10 brez
-              napovedi, +20 ob uspešni napovedi, −20 ob neuspešni. Ni dovolj,
-              da so karte v roki. Valat pomeni vseh 27 štihov: +250 brez
-              napovedi, +500 ob uspešni ali −500 ob neuspešni napovedi.
+              Vsi štirje kralji ali cela trula v tvojih štihih: +10.
+              Ni dovolj, da so karte v roki. Valat pomeni vseh 27 štihov: +250.
               Valat nadomesti osnovno igro, kralje in trulo. Mondfang:
               če škis pobere tvojega monda, dobiš −21, tudi ob valatu.
             </p>
@@ -300,84 +294,6 @@ function Rules({ onClose }) {
       </div>
     </Modal>
   );
-}
-
-function AnnouncementPanel({ game, busy, action }) {
-  const [showInfo, setShowInfo] = useState(false);
-  const ready = game.announcementReady || [false, false];
-  const mine = (game.announcements || []).filter(call => call.player === game.you);
-  const pickupCount = (game.legalPickups || []).length;
-  const confirming = game.preparationTurn ?? [1 - game.dealer, game.dealer].find(seat => !ready[seat]);
-  const canConfirm = !ready[game.you] && confirming === game.you;
-  const hasCalls = mine.length > 0 || (game.legalAnnouncements || []).length > 0;
-  const requirements = {
-    kings: "V roki potrebuješ vse štiri kralje.",
-    trula: "V roki potrebuješ pagata, monda in škisa.",
-    valat: "Na vsakem tvojem kupčku sme ostati največ ena odprta karta.",
-  };
-  const outcomes = {
-    kings: "V svojih štihih zberi vse štiri kralje. Uspešna napoved prinese +20, neuspešna −20. Brez napovedi je cel komplet v štihih vreden +10.",
-    trula: "V svojih štihih zberi pagata, monda in škisa. Uspešna napoved prinese +20, neuspešna −20. Brez napovedi je cel komplet v štihih vreden +10.",
-    valat: "Osvoji vseh 27 štihov. Uspešna napoved prinese +500, neuspešna −500. Valat nadomesti igro, kralje in trulo; mondfang se obračuna posebej.",
-  };
-  return <div className="announcement-panel" data-testid="announcement-panel">
-    <div className="preparation-intro">
-      <div className="announcement-heading">
-        <h2>Priprava</h2>
-        <span data-testid="announcement-ready-count">{ready.filter(Boolean).length}/2 pripravljena</span>
-      </div>
-      <p className="preparation-status" data-testid="preparation-status">
-        {ready[game.you]
-          ? `Pripravo si potrdil. Čakamo še: ${game.players[1 - game.you].name}.`
-          : !canConfirm
-            ? `Prvi potrdi ${game.players[confirming].name}, ki začne igro. Karte lahko že prevzemaš.`
-            : ready[1 - game.you]
-              ? `${game.players[1 - game.you].name} je pripravljen. Zdaj potrdi še ti.`
-              : "Začneš ti. Prevzemi po želji in potrdi pripravo."}
-      </p>
-      <button className="announcement-info-button" type="button" data-testid="announcement-info"
-        aria-label="Pogoji in točke napovedi" aria-haspopup="dialog" onClick={() => setShowInfo(true)}>
-        <CircleHelp size={18} />
-      </button>
-    </div>
-    <p className="announcement-warning" id="announcement-warning" hidden={!hasCalls}>Napovedi niso obvezne. Oddana napoved je javna in dokončna.</p>
-    <div className="announcement-actions" hidden={!hasCalls}>
-      {Object.entries(bonusNames).map(([bonus, name]) => {
-        const called = mine.some(call => call.bonus === bonus);
-        return <button key={bonus} type="button" data-testid={`announce-${bonus}`}
-          aria-label={`Napovej ${{ kings: "kralje", trula: "trulo", valat: "valat" }[bonus]}`} aria-pressed={called}
-          aria-describedby="announcement-warning"
-          disabled={busy || ready[game.you] || !(game.legalAnnouncements || []).includes(bonus)}
-          title={called ? `${name}: napovedano` : requirements[bonus]}
-          onClick={() => action({ type: "announce", bonus })}>
-          <span>{called && <Check size={11} />}{name}</span>
-          <small>{called ? "Napovedano" : bonus === "valat" ? "+500 / −500" : "+20 / −20"}</small>
-        </button>;
-      })}
-    </div>
-    {!ready[game.you] && pickupCount === 0 && <p className="prep-pickup-empty" data-testid="pickup-empty">Na kupčkih ni taroka ali kralja za prevzem.</p>}
-    <div className="announcement-footer">
-      <button className="announcement-confirm" type="button" data-testid="confirm-announcements"
-        disabled={busy || !canConfirm} onClick={() => action({ type: "confirmAnnouncements" })}>
-        {ready[game.you] ? <><Check size={15} /> Čakam soigralca</> : !canConfirm ? <>Najprej {game.players[confirming].name}</> : <>Pripravljen <ArrowRight size={15} /></>}
-      </button>
-    </div>
-    {!ready[game.you] && <p className="preparation-lock-note">Igra se začne, ko potrdita oba.</p>}
-    {showInfo && createPortal(<Modal title="Napovedi: pogoji in točke" className="announcement-info-modal" onClose={() => setShowInfo(false)}>
-      <p className="announcement-info-intro">Napoved ni obvezna. Je javna in dokončna obljuba, da boš cilj dosegel v svojih štihih, ne nagrada za karte v roki.</p>
-      {Object.entries(bonusNames).map(([bonus, name]) => <section className="announcement-info-section" key={bonus}>
-        <h3>{name}</h3>
-        <p>{requirements[bonus]}</p>
-        <p>{outcomes[bonus]}</p>
-        <p className="announcement-eligibility">{mine.some(call => call.bonus === bonus)
-          ? "Že napovedano. Napovedi ni mogoče umakniti."
-          : ready[game.you] ? "Priprava je potrjena; novih napovedi ne moreš dodati."
-            : (game.legalAnnouncements || []).includes(bonus) ? "To napoved lahko zdaj oddaš."
-              : "Pogoj za to napoved še ni izpolnjen."}</p>
-      </section>)}
-      <p className="announcement-info-note">Odprte taroke in kralje lahko pred potrditvijo po želji vzameš v roko. Prevzem ne odigra karte in ne porabi poteze. Po »Pripravljen« ne moreš več napovedovati. Karte s kupčkov lahko spet jemlješ, ko se začne igra.</p>
-    </Modal>, document.body)}
-  </div>;
 }
 
 function ScoreTable({ game }) {
@@ -747,8 +663,6 @@ function Game({ state, busy, action, onScore, onRules }) {
   );
   const liveStatus = g.phase === "bidding"
     ? `Runda ${g.round}. ${myTurn ? "Izberi Igram ali Naprej." : `${other.name} izbira igro.`}`
-    : g.phase === "announcements"
-      ? `Priprava. ${(g.announcementReady || []).filter(Boolean).length}/2 pripravljena. ${g.announcementReady?.[you] ? `Čakamo ${other.name}.` : g.preparationTurn === you ? "Ti potrdiš pripravo. Prevzemi in napovedi so po želji." : `Najprej potrdi ${other.name}, ki začne igro. Prevzemi in napovedi so po želji.`}`
       : g.phase === "playing"
         ? `Štih ${g.trickNumber} od 27. ${myTurn ? "Na potezi si." : `Na potezi je ${other.name}.`}`
         : `Runda ${g.round} je končana. Za novo rundo morata potrditi oba.`;
@@ -872,14 +786,12 @@ function Game({ state, busy, action, onScore, onRules }) {
               <span>
                 {g.phase === "bidding"
                   ? "NAPOVED IGRE"
-                  : g.phase === "announcements"
-                    ? "PRIPRAVA IN NAPOVEDI"
                   : `ŠTIH ${Math.min(g.trickNumber, 27)} / 27`}
               </span>
             </div>
             <div className="opponent-zone">
             <div
-              className={`player-seat opponent ${g.phase !== "announcements" && !myTurn ? "active-seat" : ""}`}
+              className={`player-seat opponent ${!myTurn ? "active-seat" : ""}`}
             >
               <Avatar name={other.name} connected={conn} />
               <div>
@@ -962,8 +874,6 @@ function Game({ state, busy, action, onScore, onRules }) {
                     </span>
                   )}
                 </div>
-              ) : g.phase === "announcements" ? (
-                <AnnouncementPanel game={g} busy={busy} action={action} />
               ) : (
                 <>
                   <div className="trick-cards" ref={trickRef} style={collectingTrick ? { visibility: "hidden" } : undefined}>
@@ -1047,14 +957,12 @@ function Game({ state, busy, action, onScore, onRules }) {
                   </small>
                 </div>
               </div>
-              <span className={`turn-indicator ${(g.phase === "announcements" ? g.preparationTurn === you : myTurn) ? "your-turn" : ""}`}>
+              <span className={`turn-indicator ${myTurn ? "your-turn" : ""}`}>
                 <i />
                 {g.phase === "bidding"
                   ? myTurn
                     ? "Izberi igro"
                     : "Čakamo napoved"
-                  : g.phase === "announcements"
-                    ? g.announcementReady?.[you] ? "Pripravljen si" : g.preparationTurn === you ? "Ti potrdiš pripravo" : `Najprej potrdi ${other.name}`
                   : myTurn
                     ? "Na potezi si"
                     : "Na potezi je " + other.name}
@@ -1099,10 +1007,6 @@ function Game({ state, busy, action, onScore, onRules }) {
                 <Sparkles size={13} />
                 {g.phase === "bidding"
                   ? "Najprej izberi »Igram« ali »Naprej«."
-                  : g.phase === "announcements"
-                    ? g.announcementReady?.[you]
-                      ? "Priprava je potrjena. Ko potrdita oba, se začne igra."
-                      : "Po želji vzemi odprte taroke in kralje. Nato potrdi, da si pripravljen."
                   : myTurn
                     ? g.hand.length > 0 && g.trick.length === 0
                       ? "Štih začneš s karto iz roke; s kupčka šele, ko je roka prazna."
@@ -1152,6 +1056,13 @@ function Game({ state, busy, action, onScore, onRules }) {
 }
 
 function App() {
+  const [state, setState] = useState(null);
+  useEffect(() => { registerCardCache(); }, []);
+  useEffect(() => {
+    if (!state) return;
+    const visible = [...document.querySelectorAll('.playing-card img')].map(image => image.getAttribute('src'));
+    void prepareCardImages(visible);
+  }, [state]);
   const [name, setName] = useState(() => readSaved(NAME) || "");
   const [user, setUser] = useState(null);
   const [tables, setTables] = useState([]);
@@ -1162,7 +1073,6 @@ function App() {
   const [legacy, setLegacy] = useState(legacySeats);
   const userRef = useRef(null);
   const credentialRef = useRef(localStorage.getItem(DEVICE));
-  const [state, setState] = useState(null);
   const [online, setOnline] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");

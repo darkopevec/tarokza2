@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { act, countPoints, createDeck, createGame, exactPoints, legalMoves, legalPickups, legalAnnouncements, preparationTurn, viewFor } from '../shared/game.mjs';
-import { CARD_BY_ID, cardFor, createDeck as createCanonicalDeck } from '../shared/cards.mjs';
+import { act, countPoints, createDeck, createGame, exactPoints, legalMoves, legalPickups, legalAnnouncements, preparationTurn, resumeGame, viewFor } from '../shared/game.mjs';
+import { CARD_ART_VERSION, CARD_BY_ID, cardFor, createDeck as createCanonicalDeck } from '../shared/cards.mjs';
 
 function seeded(seed) {
   let value = seed >>> 0;
@@ -13,11 +13,7 @@ function seeded(seed) {
 const makeGame = (seed = 42) => createGame({ playerIds: ['ana', 'bor'], names: ['Ana', 'Bor'], dealer: 0, rng: seeded(seed) });
 const card = id => createDeck().find(item => item.id === id);
 const takeTurn = (game, action) => act(game, game.players[game.turn].id, action);
-const confirmBoth = game => {
-  if (game.phase === 'announcements') {
-    while (game.phase === 'announcements') act(game, game.players[preparationTurn(game)].id, { type: 'confirmAnnouncements' });
-  }
-};
+const assertPlaying = game => assert.equal(game.phase, 'playing');
 
 function allLiveCards(game) {
   return [
@@ -34,7 +30,7 @@ function assertConservation(game) {
 }
 
 function playToEnd(game, rng = seeded(10), usePickups = true) {
-  confirmBoth(game);
+  assertPlaying(game);
   while (game.phase === 'playing') {
     if (usePickups) {
       for (const player of game.players) {
@@ -83,7 +79,7 @@ test('the shared catalogue names all court cards clearly and maps every card to 
     assert.deepEqual(deck.filter(item => item.suit === suit && item.rank > 4).map(item => item.label), ['Fant', 'Kaval', 'Dama', 'Kralj']);
   }
   for (const item of deck) {
-    assert.equal(item.image, `/cards/deck/${item.id}.jpg`);
+    assert.equal(item.image, `/cards/deck/${item.id}.jpg?v=${CARD_ART_VERSION}`);
     assert.ok(!['A', 'F', 'C', 'D', 'K'].includes(item.label));
     assert.deepEqual(cardFor(item.id), item);
   }
@@ -127,11 +123,11 @@ test('the non-dealer bids first and also leads if the dealer takes the contract'
   assert.equal(game.turn, 0);
   assert.equal(game.phase, 'bidding');
   takeTurn(game, { type: 'bid', bid: 'play' });
-  assert.equal(game.phase, 'announcements');
+  assert.equal(game.phase, 'playing');
   assert.equal(game.contract.player, 0);
   assert.equal(game.turn, 1);
   assert.equal(game.bids.length, 2);
-  confirmBoth(game);
+  assertPlaying(game);
   assert.equal(game.phase, 'playing');
   assert.equal(game.turn, 1);
 });
@@ -140,7 +136,7 @@ test('two passes start an ordinary game, without klop or redealing', () => {
   const game = makeGame();
   takeTurn(game, { type: 'bid', bid: 'pass' });
   takeTurn(game, { type: 'bid', bid: 'pass' });
-  assert.equal(game.phase, 'announcements');
+  assert.equal(game.phase, 'playing');
   assert.deepEqual(game.contract, { player: null, kind: 'normal' });
   assert.equal(game.turn, 1);
   assert.equal(game.round, 1);
@@ -188,7 +184,7 @@ test('each manual pickup transfers exactly one honor and preserves play state, i
 function scenario({ hand, stacks = [], lead = null }) {
   const game = makeGame();
   takeTurn(game, { type: 'bid', bid: 'play' });
-  confirmBoth(game);
+  assertPlaying(game);
   game.turn = 0;
   game.players[0].hand = hand.map(card);
   game.players[0].stacks = [...stacks.map(stack => stack.map(card)), [], []].slice(0, 3);
@@ -344,7 +340,7 @@ test('views never contain secret opponent hand cards or cards below exposed stac
   for (const phase of ['bidding', 'playing']) {
     if (phase === 'playing') {
       takeTurn(game, { type: 'bid', bid: 'play' });
-      confirmBoth(game);
+      assertPlaying(game);
     }
     for (const [seat, id] of [[0, 'ana'], [1, 'bor']]) {
       const view = viewFor(game, id);
@@ -394,7 +390,6 @@ test('hundreds of randomized rounds conserve cards, finish exactly 27 tricks and
           declarations++;
         }
       }
-      act(game, player.id, { type: 'confirmAnnouncements' });
     }
     playToEnd(game, rng, seed % 5 !== 0);
     assert.equal(game.phase, 'roundEnd');
@@ -426,7 +421,7 @@ test('hundreds of randomized rounds conserve cards, finish exactly 27 tricks and
   }
   assert.ok(wins > 0 && losses > 0 && normal > 0);
   assert.ok(manualPickups > 0);
-  assert.ok(declarations > 0);
+  assert.equal(declarations, 0);
 });
 
 test('both players must be ready; next round rotates dealer and retains complete scoreboard', () => {
@@ -463,7 +458,7 @@ test('JSON persistence can resume bidding, an incomplete trick, scoring and a ne
   const picker = game.players.find(player => legalPickups(game, player.id).length);
   assert.ok(picker);
   act(game, picker.id, { type: 'pickup', cardId: legalPickups(game, picker.id)[0] });
-  confirmBoth(game);
+  assertPlaying(game);
   takeTurn(game, { type: 'play', cardId: legalMoves(game, game.players[game.turn].id)[0] });
   const pickups = structuredClone(game.pickups);
   game = JSON.parse(JSON.stringify(game));
@@ -537,7 +532,7 @@ test('a full legacy round preserves the same moves, points and score as canonica
   }
   for (const game of [current, legacy]) {
     takeTurn(game, { type: 'bid', bid: 'play' });
-    confirmBoth(game);
+    assertPlaying(game);
   }
   while (current.phase === 'playing') {
     const id = current.players[current.turn].id;
@@ -564,137 +559,38 @@ function announcementGame(dealer = 0) {
   return game;
 }
 
-test('new deals require both announcement confirmations before any card play', () => {
-  const game = announcementGame();
-  assert.equal(game.scoringVersion, 2);
-  assert.equal(game.phase, 'announcements');
-  assert.deepEqual(game.announcementReady, [false, false]);
-  const before = JSON.stringify(game);
-  assert.deepEqual(legalMoves(game, 'bor'), []);
-  assert.throws(() => takeTurn(game, { type: 'play', cardId: game.players[1].hand[0].id }));
-  assert.equal(JSON.stringify(game), before);
-  act(game, 'bor', { type: 'confirmAnnouncements' });
-  act(game, 'bor', { type: 'confirmAnnouncements' });
-  assert.equal(game.phase, 'announcements');
-  assert.deepEqual(game.announcementReady, [false, true]);
-  act(game, 'ana', { type: 'confirmAnnouncements' });
-  assert.equal(game.phase, 'playing');
-  assert.equal(game.turn, 1);
-  const started = JSON.stringify(game);
-  assert.throws(() => act(game, 'ana', { type: 'confirmAnnouncements' }));
-  assert.equal(JSON.stringify(game), started);
-});
-
-test('readiness follows the first-trick starter for either dealer without restricting optional preparation', () => {
+test('bidding starts play immediately for either dealer, without declarations or confirmation', () => {
   for (const dealer of [0, 1]) {
     const game = announcementGame(dealer);
-    const starter = 1 - dealer;
-    assert.equal(preparationTurn(game), starter);
-    assert.equal(viewFor(game, game.players[dealer].id).preparationTurn, starter);
-    const before = JSON.stringify(game);
-    assert.throws(() => act(game, game.players[dealer].id, { type: 'confirmAnnouncements' }), /Najprej mora pripravljenost potrditi/);
-    assert.equal(JSON.stringify(game), before);
+    assert.equal(game.phase, 'playing');
+    assert.equal(game.turn, 1 - dealer);
+    assert.ok(legalMoves(game, game.players[game.turn].id).length);
     for (const player of game.players) {
-      const pickup = legalPickups(game, player.id)[0];
-      if (pickup) act(game, player.id, { type: 'pickup', cardId: pickup });
+      assert.deepEqual(legalAnnouncements(game, player.id), []);
+      const before = structuredClone(game);
+      for (const type of ['announce', 'confirmAnnouncements']) {
+        assert.throws(() => act(game, player.id, { type, bonus: 'kings' }));
+        assert.deepEqual(game, before);
+      }
     }
-    act(game, game.players[starter].id, { type: 'confirmAnnouncements' });
-    assert.equal(preparationTurn(game), dealer);
-    const confirmed = JSON.stringify(game);
-    act(game, game.players[starter].id, { type: 'confirmAnnouncements' });
-    assert.equal(JSON.stringify(game), confirmed, 'Repeated own confirmation is idempotent');
-    const restored = JSON.parse(JSON.stringify(game));
-    assert.equal(preparationTurn(restored), dealer);
-    act(restored, restored.players[dealer].id, { type: 'confirmAnnouncements' });
-    assert.equal(restored.turn, starter);
-    assert.equal(preparationTurn(restored), null);
-    assert.equal(restored.phase, 'playing');
   }
-  assert.equal(preparationTurn(makeGame()), null);
 });
 
-test('saved preparation with the dealer already ready preserves that confirmation and lets the starter finish', () => {
+test('saved preparation resumes at the first trick without losing cards, pickups or prior declarations', () => {
   for (const dealer of [0, 1]) {
     const game = announcementGame(dealer);
-    game.announcementReady[dealer] = true;
-    const restored = JSON.parse(JSON.stringify(game));
-    assert.equal(preparationTurn(restored), 1 - dealer);
-    assert.deepEqual(legalPickups(restored, restored.players[dealer].id), []);
-    const before = JSON.stringify(restored);
-    act(restored, restored.players[dealer].id, { type: 'confirmAnnouncements' });
-    assert.equal(JSON.stringify(restored), before);
-    act(restored, restored.players[1 - dealer].id, { type: 'confirmAnnouncements' });
-    assert.equal(restored.phase, 'playing');
-    assert.deepEqual(restored.announcementReady, [true, true]);
+    game.phase = 'announcements';
+    game.announcementReady = [false, true];
+    game.announcements = [{ player: 0, bonus: 'kings' }];
+    const before = structuredClone(game);
+    resumeGame(game);
+    assert.deepEqual(game, { ...before, phase: 'playing', turn: 1 - dealer });
+    assert.ok(legalMoves(game, game.players[game.turn].id).length);
+    resumeGame(game);
+    assert.deepEqual(game, { ...before, phase: 'playing', turn: 1 - dealer });
   }
 });
 
-test('king and trula declarations require the full set in hand, including manually picked cards', () => {
-  const game = announcementGame();
-  game.players[0].hand = [...kings.slice(0, 3), ...trula.slice(0, 2)].map(card);
-  game.players[0].stacks = [[card('diamonds-8'), card('tarok-22'), card('clubs-1')], [], []];
-  assert.deepEqual(legalAnnouncements(game, 'ana'), []);
-  const before = JSON.stringify(game);
-  for (const bonus of ['kings', 'trula', 'unknown']) assert.throws(() => act(game, 'ana', { type: 'announce', bonus }));
-  assert.equal(JSON.stringify(game), before);
-  act(game, 'ana', { type: 'pickup', cardId: 'diamonds-8' });
-  assert.deepEqual(legalAnnouncements(game, 'ana'), ['kings']);
-  act(game, 'ana', { type: 'announce', bonus: 'kings' });
-  assert.deepEqual(legalAnnouncements(game, 'ana'), []);
-  act(game, 'ana', { type: 'pickup', cardId: 'tarok-22' });
-  assert.deepEqual(legalAnnouncements(game, 'ana'), ['trula', 'valat']);
-  act(game, 'ana', { type: 'announce', bonus: 'trula' });
-  assert.deepEqual(game.announcements, [{ player: 0, bonus: 'kings' }, { player: 0, bonus: 'trula' }]);
-  const called = JSON.stringify(game);
-  assert.throws(() => act(game, 'ana', { type: 'announce', bonus: 'kings' }));
-  assert.equal(JSON.stringify(game), called);
-});
-
-test('valat requires no hidden own pile cards, allows face-up cards, and never depends on opponent ordering', () => {
-  const game = announcementGame();
-  game.players[0].stacks = [[card('tarok-2'), card('tarok-3')], [], [card('clubs-1')]];
-  game.players[1].stacks = [[card('hearts-1')], [card('diamonds-1')], []];
-  assert.ok(!legalAnnouncements(game, 'ana').includes('valat'));
-  act(game, 'ana', { type: 'pickup', cardId: 'tarok-2' });
-  assert.deepEqual(game.players[0].stacks.map(stack => stack.length), [1, 0, 1]);
-  assert.ok(legalAnnouncements(game, 'ana').includes('valat'));
-  act(game, 'bor', { type: 'announce', bonus: 'valat' });
-  assert.ok(legalAnnouncements(game, 'ana').includes('valat'));
-  act(game, 'ana', { type: 'announce', bonus: 'valat' });
-  assert.ok(!legalAnnouncements(game, 'ana').includes('valat'));
-  assert.deepEqual(game.announcements, [{ player: 1, bonus: 'valat' }, { player: 0, bonus: 'valat' }]);
-});
-
-test('confirmation freezes only that player until play begins; declarations stay public and eligibility private', () => {
-  const game = announcementGame(1);
-  game.players[0].hand = kings.map(card);
-  game.players[0].stacks = [[card('tarok-22'), card('hearts-1')], [], []];
-  game.players[1].hand = [card('clubs-1')];
-  game.players[1].stacks = [[card('tarok-21'), card('diamonds-1')], [], []];
-  assert.deepEqual(viewFor(game, 'ana').legalAnnouncements, ['kings']);
-  assert.deepEqual(viewFor(game, 'bor').legalAnnouncements, []);
-  assert.ok(!JSON.stringify(viewFor(game, 'bor')).includes('clubs-8'));
-  act(game, 'ana', { type: 'announce', bonus: 'kings' });
-  assert.deepEqual(viewFor(game, 'bor').announcements, [{ player: 0, bonus: 'kings' }]);
-  assert.ok(!JSON.stringify(viewFor(game, 'bor')).includes('clubs-8'), 'a call must not expose hand descriptors');
-  act(game, 'ana', { type: 'confirmAnnouncements' });
-  assert.deepEqual(legalPickups(game, 'ana'), []);
-  assert.deepEqual(legalAnnouncements(game, 'ana'), []);
-  const frozen = JSON.stringify(game);
-  assert.throws(() => act(game, 'ana', { type: 'pickup', cardId: 'tarok-22' }));
-  assert.throws(() => act(game, 'ana', { type: 'announce', bonus: 'valat' }));
-  assert.equal(JSON.stringify(game), frozen);
-  act(game, 'bor', { type: 'pickup', cardId: 'tarok-21' });
-  act(game, 'bor', { type: 'confirmAnnouncements' });
-  assert.equal(game.phase, 'playing');
-  assert.deepEqual(legalPickups(game, 'ana'), ['tarok-22']);
-  act(game, 'ana', { type: 'pickup', cardId: 'tarok-22' });
-  assert.equal(game.turn, 0);
-  assert.deepEqual(legalAnnouncements(game, 'ana'), []);
-});
-
-// A complete legal last-trick position: 52 unique cards already captured and
-// exactly one card in each hand. Scoring fixtures need no artificial score API.
 function finishPosition({ required0 = [], excluded0 = [], count0 = 26, last = ['clubs-1', 'clubs-2'], announcements = [], legacy = false } = {}) {
   const game = makeGame();
   const available = createDeck().filter(item => !last.includes(item.id));
@@ -783,23 +679,6 @@ test('mondfang records one public capture and a separate -21 penalty, including 
   assert.deepEqual(safeMond.mondfangs, []);
 });
 
-test('announcements, confirmations, chosen pickups and mondfang survive JSON save and restore', () => {
-  let game = announcementGame(1);
-  game.players[0].hand = kings.map(card);
-  game.players[0].stacks = [[card('tarok-22'), card('clubs-1')], [], []];
-  act(game, 'ana', { type: 'announce', bonus: 'kings' });
-  act(game, 'ana', { type: 'pickup', cardId: 'tarok-22' });
-  act(game, 'ana', { type: 'confirmAnnouncements' });
-  const before = viewFor(game, 'ana');
-  game = JSON.parse(JSON.stringify(game));
-  assert.deepEqual(viewFor(game, 'ana'), before);
-  assert.deepEqual(legalAnnouncements(game, 'ana'), []);
-  act(game, 'bor', { type: 'confirmAnnouncements' });
-  assert.equal(game.phase, 'playing');
-  const finished = finishPosition({ last: ['tarok-21', 'tarok-22'] });
-  assert.deepEqual(viewFor(JSON.parse(JSON.stringify(finished)), 'bor'), viewFor(finished, 'bor'));
-});
-
 test('unmarked running rounds retain old phases and scoring; the next deal upgrades without rewriting history', () => {
   const bidding = makeGame();
   delete bidding.scoringVersion;
@@ -818,13 +697,13 @@ test('unmarked running rounds retain old phases and scoring; the next deal upgra
   assert.deepEqual(game.scoreboard, [oldRow]);
   assert.deepEqual(game.players.map(player => player.score), oldTotals);
   takeTurn(game, { type: 'bid', bid: 'play' });
-  assert.equal(game.phase, 'announcements');
+  assert.equal(game.phase, 'playing');
 });
 
 test('own won-trick history preserves completed pairs, survives old saves, and resets only on a new deal', () => {
   let game = makeGame(71);
   takeTurn(game, { type: 'bid', bid: 'play' });
-  confirmBoth(game);
+  assertPlaying(game);
   const expected = [[], []];
   while (game.phase === 'playing') {
     takeTurn(game, { type: 'play', cardId: legalMoves(game, game.players[game.turn].id)[0] });

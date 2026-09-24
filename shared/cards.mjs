@@ -3,6 +3,9 @@
 // The source calls the red single-pip card an "as". We display its physical
 // pip value, 1 (Enka), rather than an A. Full court names replace the previous
 // F = fant, C = cavalier/kaval, D = dama and K = kralj abbreviations.
+// Bump when replacing artwork so permanent browser caches receive the new edition.
+export const CARD_ART_VERSION = '1';
+
 const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
 const courts = ['Fant', 'Kaval', 'Dama', 'Kralj'];
 
@@ -29,7 +32,7 @@ function definitions() {
       cards.push({ id: `${suit}-${rank}`, suit, rank, label: labels[index], symbol, name: `${names[index]} ${noun}`, points: Math.max(1, rank - 3) });
     }
   }
-  return cards.map(card => Object.freeze({ ...card, image: `/cards/deck/${card.id}.jpg` }));
+  return cards.map(card => Object.freeze({ ...card, image: `/cards/deck/${card.id}.jpg?v=${CARD_ART_VERSION}` }));
 }
 
 const canonicalCards = Object.freeze(definitions());
