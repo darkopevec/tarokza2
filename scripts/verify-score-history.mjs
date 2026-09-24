@@ -108,11 +108,13 @@ async function inspectRoundEndScroll(page, label) {
       pageOverflow: game.scrollHeight - game.clientHeight,
       latestScoreVisible: inside([...body.querySelectorAll('[data-testid="scoreboard-row"]')].at(-1).querySelector('td:nth-child(2) strong')),
       totalsVisible: inside(body.querySelector('tfoot')),
+      namesVisible: [...document.querySelectorAll('.round-end-player-heading strong')].every(element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= bounds.top + 1; }),
       fixedElements: ['.site-header', '.game-footer'].map(selector => {
         const rect = document.querySelector(selector).getBoundingClientRect();
         return { selector, top: rect.top, bottom: rect.bottom, height: rect.height };
       }) };
   });
+  assert.ok(measurements.namesVisible, `${label}: player names stay visible while scores scroll.`);
   assert.equal(measurements.transform, 'none', `${label}: result text must remain at its native size.`);
   assert.ok(measurements.bodyHeight > 0 && measurements.contentHeight > measurements.bodyHeight, `${label}: score history must scroll within the results panel.`);
   assert.ok(Math.abs(measurements.bottomGap) <= 2, `${label}: results must initially scroll to the bottom.`);

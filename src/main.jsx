@@ -477,7 +477,7 @@ function Stacks({ player, mine, legalMoves, legalPickups = [], onPlay, onPickup,
                   ) : (
                     <Card back small />
                   )}
-                  <span className="stack-count">{stack.count}</span>
+                  <span className="stack-count" aria-label={`${stack.count} kart na kupčku`}>{stack.count}</span>
                 </>
               ) : (
                 <span className="empty-stack-mark">·</span>
@@ -723,6 +723,9 @@ function Game({ state, busy, action, onScore, onRules }) {
               <h1 data-testid="round-result-heading">{resultHeading}</h1>
               <p data-testid="round-result-description">{resultDescription}</p>
             </div>
+          </div>
+          <div className="round-end-player-heading" aria-label="Igralca">
+            <span>Runda</span>{g.players.map(player => <strong key={player.id}>{player.name}</strong>)}
           </div>
           <div className="round-end-body" ref={resultsRef} role="region" aria-label="Rezultati rund" tabIndex={0}>
             <div className="score-heading">
@@ -1023,8 +1026,8 @@ function Game({ state, busy, action, onScore, onRules }) {
                 <CircleHelp size={14} /> Pravila
               </button>
             </div>
-            {(!!g.announcements?.length || !!g.mondfangs?.length) && (
-              <div className="public-announcements" aria-label="Napovedani dodatki">
+            {(!!g.announcements?.length || !!g.mondfangs?.length) && createPortal(
+              <div className="public-announcements game-events-overlay" aria-label="Dodatki v igri" role="status">
                 {(g.announcements || []).map(call => <span key={`${call.player}-${call.bonus}`}
                   data-testid="public-announcement" data-player={call.player} data-bonus={call.bonus}>
                   <Flag size={11} /> {g.players[call.player].name}: {bonusNames[call.bonus]}
@@ -1033,7 +1036,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                   className="mondfang-warning" data-testid="mondfang-event" data-player={event.player}>
                   Ujet Mond · {g.players[event.player].name} −21
                 </span>)}
-              </div>
+              </div>, document.body
             )}
             <p className="pickup-feedback" role="status" aria-live="polite" aria-atomic="true">
               {latestPickup?.player === you && g.hand.some(card => card.id === latestPickup.card.id) ? `${latestPickup.card.name} je zdaj v roki.` : ""}
@@ -1108,35 +1111,32 @@ function App() {
         const px = value => parseFloat(value) || 0;
         const style = getComputedStyle(table);
         const landscape = matchMedia('(min-width: 561px) and (max-width: 960px) and (max-height: 600px)').matches;
-        let contentHeight = landscape ? 0 : [...center.children].reduce((height, child) => {
-          const css = getComputedStyle(child);
-          return height + Math.max(child.offsetHeight, child.scrollHeight) + px(css.marginTop) + px(css.marginBottom);
-        }, 0);
-        const pileHeight = pile.offsetHeight;
-        const overhead = px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap)
-          + opponent.offsetHeight - pileHeight + bottom.offsetHeight - pileHeight;
         const playing = page.dataset.phase === 'playing';
-        // Reserve a third card row even before a card is played, so the piles
-        // keep their size when the trick appears.
-        if (playing && !landscape) {
-          const trick = center.querySelector('.trick-cards');
-          const css = getComputedStyle(trick);
-          contentHeight = px(css.marginTop) + px(css.marginBottom) + 24;
+        // Fit one shared card size across both piles, the trick and the hand.
+        // Measuring the resulting layout also accounts for the reserved empty hand.
+        let low = 32;
+        let high = Math.floor(pile.offsetHeight);
+        const fits = height => {
+          page.style.setProperty('--fitted-pile-height', `${height}px`);
+          let contentHeight = [...center.children].reduce((total, child) => {
+            const css = getComputedStyle(child);
+            return total + Math.max(child.offsetHeight, child.scrollHeight) + px(css.marginTop) + px(css.marginBottom);
+          }, 0);
+          if (playing) {
+            const css = getComputedStyle(center.querySelector('.trick-cards'));
+            contentHeight = height + 32 + px(css.marginTop) + px(css.marginBottom);
+          }
+          const used = opponent.offsetHeight + bottom.offsetHeight
+            + px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap) + 4
+            + (landscape ? 0 : contentHeight);
+          return used <= table.clientHeight && (!landscape || contentHeight + 4 <= center.clientHeight);
+        };
+        while (low < high) {
+          const middle = Math.ceil((low + high) / 2);
+          if (fits(middle)) low = middle;
+          else high = middle - 1;
         }
-        let fitted = Math.min(pileHeight, Math.floor((table.clientHeight - overhead - contentHeight - 4) / (playing && !landscape ? 3 : 2)));
-        if (playing && landscape) fitted = Math.min(fitted, center.clientHeight - 28);
-        fitted = Math.max(32, fitted);
-        page.style.setProperty('--fitted-pile-height', `${fitted}px`);
-        // At small sizes the player label can be taller than the piles.
-        // Recheck the actual rows after fitting instead of assuming both shrink.
-        for (let pass = 0; pass < 3; pass++) {
-          const neededCenter = playing && !landscape ? contentHeight + fitted : contentHeight;
-          const used = opponent.offsetHeight + bottom.offsetHeight + neededCenter
-            + px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap) + 4;
-          if (used <= table.clientHeight) break;
-          fitted = Math.max(32, fitted - Math.ceil((used - table.clientHeight) / (playing && !landscape ? 2 : 1)));
-          page.style.setProperty('--fitted-pile-height', `${fitted}px`);
-        }
+        page.style.setProperty('--fitted-pile-height', `${low}px`);
         return;
       }
       page.style.removeProperty('--fitted-pile-height');

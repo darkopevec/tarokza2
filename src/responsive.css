@@ -910,3 +910,42 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
     min-height: calc(clamp(104px, 17dvh, 154px) + 24px);
   }
 }
+
+/* All full-size cards in the live game share one size, including the empty hand. */
+.game-page { --game-card-height: clamp(104px, 16dvh, 144px); }
+.game-page .game-table .stack,
+.game-page .game-table .stack .playing-card,
+.game-page .game-table .opponent-stacks .stack,
+.game-page .game-table .opponent-stacks .stack .playing-card,
+.game-page .game-table .played-card .playing-card,
+.game-page .hand-cards > .playing-card { --card-height: var(--game-card-height); }
+@media (max-width: 560px), (max-width: 960px) and (max-height: 600px) {
+  #root > .game-page:not([data-phase="roundEnd"]) {
+    --game-card-height: var(--fitted-pile-height, var(--preferred-pile-height));
+    --phone-hand-height: var(--game-card-height);
+  }
+}
+.game-events-overlay {
+  position: fixed; z-index: 18; top: max(136px, calc(env(safe-area-inset-top) + 80px));
+  left: 50%; transform: translateX(-50%); margin: 0;
+  max-width: calc(100vw - 24px); pointer-events: none;
+}
+.game-events-overlay > span { background: #f6ead7; box-shadow: 0 3px 12px #122b3533; }
+.game-page .game-table .stack-count {
+  top: min(4px, calc(var(--game-card-height) - 68px)); right: 4px; bottom: auto; z-index: 3;
+  width: 20px; height: 20px; font-size: 11px;
+}
+.score-table thead th {
+  position: sticky; top: 0; z-index: 2; background: #fffefa;
+  color: #375239; font-weight: 700; box-shadow: 0 1px 0 #dfe4d6;
+}
+
+.game-page[data-phase="playing"] .game-table .trick-cards { min-height: calc(var(--game-card-height) + 32px); }
+.round-end-player-heading {
+  flex: 0 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; padding: 10px 24px; background: #f1f4eb; color: #375239;
+  border-bottom: 1px solid #dfe4d6; font-size: 12px;
+}
+.round-end-player-heading strong { text-align: right; overflow-wrap: anywhere; }
+.round-end-player-heading > span { font-size: 10px; text-transform: uppercase; }
+.round-end .score-table thead th { position: static; }
