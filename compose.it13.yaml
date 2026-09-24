@@ -1,7 +1,7 @@
 name: tarokza2
 services:
   tarokza2:
-    image: tarokza2:stable-table-20260924
+    image: tarokza2:larger-hand-20260924
     container_name: tarokza2
     init: true
     read_only: true
