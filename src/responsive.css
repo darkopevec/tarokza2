@@ -738,7 +738,6 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
   overflow: hidden; transform: none;
 }
 .game-page[data-phase="roundEnd"] > .game-toolbar,
-.game-page[data-phase="roundEnd"] > .connection-notice,
 .game-page[data-phase="roundEnd"] > .game-footer { flex-shrink: 0; }
 .game-page[data-phase="roundEnd"] > .round-end {
   display: flex; flex-direction: column; flex: 1 1 0; min-height: 0;
@@ -882,4 +881,30 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .game-page .game-table .empty-trick > .turn-prompt { animation: none; }
+}
+
+/* Connection changes must never participate in the table's viewport fitting. */
+.connection-notice {
+  position: fixed; z-index: 19;
+  top: max(76px, calc(env(safe-area-inset-top) + 12px));
+  left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: min(420px, calc(100vw - 24px));
+  margin: 0; box-shadow: 0 4px 18px #122b3540;
+  pointer-events: none;
+}
+.connection-notice svg { flex-shrink: 0; }
+.connection-notice span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Retain the same card row and suit navigation after the last hand card. */
+.hand-navigation button:disabled { opacity: .5; }
+.empty-hand { position: relative; width: 100%; }
+.empty-hand .suit-group-label, .empty-hand-spacer { visibility: hidden; }
+.empty-hand-message {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: #788469; font-size: 13px;
+}
+@media (min-width: 561px) and (min-height: 601px) {
+  .game-page[data-phase="playing"] .game-table .trick-cards {
+    min-height: calc(clamp(104px, 17dvh, 154px) + 24px);
+  }
 }

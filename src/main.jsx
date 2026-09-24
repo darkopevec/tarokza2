@@ -640,8 +640,7 @@ function Game({ state, busy, action, onScore, onRules }) {
       ? `Oba sta zbrala ${last.points[0]} točk v kartah.`
       : `${g.players[last.winner].name}: ${last.points[last.winner]} točk v kartah.`;
   const groups = Object.keys(suits)
-    .map((suit) => ({ suit, cards: g.hand.filter((c) => c.suit === suit) }))
-    .filter((x) => x.cards.length);
+    .map((suit) => ({ suit, cards: g.hand.filter((c) => c.suit === suit) }));
   const latestPickup = g.pickups?.at(-1);
   const pickup = (cardId) => action({ type: "pickup", cardId });
   const showSuit = (suit) => {
@@ -707,11 +706,11 @@ function Game({ state, busy, action, onScore, onRules }) {
           </b>
         </button>
       </div>
-      {!conn && (
-        <div className="connection-notice">
-          <WifiOff size={16} /> {other.name} je brez povezave. Mesto je
-          shranjeno; igra se nadaljuje ob vrnitvi.
-        </div>
+      {!conn && createPortal(
+        <div className="connection-notice" role="status" aria-live="polite">
+          <WifiOff size={16} /> <span>{other.name} je brez povezave. Mesto je
+          shranjeno; igra se nadaljuje ob vrnitvi.</span>
+        </div>, document.body
       )}
       {showRoundEnd ? (
         <section className="round-end">
@@ -972,7 +971,7 @@ function Game({ state, busy, action, onScore, onRules }) {
               {groups.map(group => <button key={group.suit} type="button"
                 data-testid="hand-suit" data-suit={group.suit}
                 aria-label={`Pokaži ${suits[group.suit]} v roki (${group.cards.length} kart)`}
-                onClick={() => showSuit(group.suit)}>
+                disabled={!group.cards.length} onClick={() => showSuit(group.suit)}>
                 {suits[group.suit]} <small>{group.cards.length}</small>
               </button>)}
               {handOverflows && <span className="hand-swipe" title="Podrsaj po kartah" aria-label="Za več kart podrsaj levo ali desno">↔</span>}
@@ -983,7 +982,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                 event.preventDefault();
                 event.currentTarget.scrollBy({ left: (event.key === "ArrowRight" ? 1 : -1) * event.currentTarget.clientWidth * .75 });
               }}>
-              {groups.map((group) => (
+              {groups.filter(group => group.cards.length).map((group) => (
                 <div className="suit-group" key={group.suit} data-suit={group.suit}>
                   <span className="suit-group-label">
                     {suits[group.suit]} <small>{group.cards.length}</small>
@@ -1001,6 +1000,13 @@ function Game({ state, busy, action, onScore, onRules }) {
                   </div>
                 </div>
               ))}
+              {g.hand.length === 0 && <div className="suit-group empty-hand" data-testid="empty-hand">
+                <span className="suit-group-label" aria-hidden="true">Roka</span>
+                <div className="hand-cards">
+                  <div className="playing-card empty-hand-spacer" aria-hidden="true" />
+                </div>
+                <span className="empty-hand-message">Roka je prazna.</span>
+              </div>}
             </div>
             <div className="hand-hint">
               <span>
