@@ -1139,14 +1139,40 @@ function App() {
   const [resuming, setResuming] = useState(!!localStorage.getItem(DEVICE));
   const socketRef = useRef(null);
   const stateRef = useRef(null);
-  // Measure the natural page size: transforms do not affect ResizeObserver,
-  // so fitting cannot feed back into layout or accumulate rounding errors.
+  // Fit phone piles to the available table area; other pages retain their
+  // natural layout and the existing viewport scale.
   useLayoutEffect(() => {
     const root = document.getElementById("root");
     const page = root.querySelector(":scope > main");
     const header = root.querySelector(":scope > .site-header");
     if (!page || !header) return;
     const fit = () => {
+      if (page.matches('.game-page:not([data-phase="roundEnd"])') &&
+          matchMedia('(max-width: 560px), (max-width: 960px) and (max-height: 600px)').matches) {
+        // Keep full viewport width. Spend surplus table height on the piles,
+        // reserving the natural height of every central action and instruction.
+        page.style.removeProperty('--fitted-pile-height');
+        const table = page.querySelector('.game-table');
+        const center = page.querySelector('.center-play');
+        const opponent = page.querySelector('.opponent-zone');
+        const bottom = page.querySelector('.bottom-table');
+        const pile = page.querySelector('.my-stacks .stack');
+        if (!table || !center || !opponent || !bottom || !pile) return;
+        const px = value => parseFloat(value) || 0;
+        const style = getComputedStyle(table);
+        const landscape = matchMedia('(min-width: 561px) and (max-width: 960px) and (max-height: 600px)').matches;
+        const contentHeight = landscape ? 0 : [...center.children].reduce((height, child) => {
+          const css = getComputedStyle(child);
+          return height + Math.max(child.offsetHeight, child.scrollHeight) + px(css.marginTop) + px(css.marginBottom);
+        }, 0);
+        const pileHeight = pile.offsetHeight;
+        const overhead = px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap)
+          + opponent.offsetHeight - pileHeight + bottom.offsetHeight - pileHeight;
+        const fitted = Math.max(32, Math.min(pileHeight, Math.floor((table.clientHeight - overhead - contentHeight - 4) / 2)));
+        page.style.setProperty('--fitted-pile-height', `${fitted}px`);
+        return;
+      }
+      page.style.removeProperty('--fitted-pile-height');
       const available = Math.max(1, root.clientHeight - header.offsetHeight);
       const height = Math.max(page.offsetHeight, page.scrollHeight);
       const width = Math.max(page.offsetWidth, page.scrollWidth);
@@ -1154,7 +1180,7 @@ function App() {
       page.style.setProperty("--page-scale", String(scale));
     };
     const observer = new ResizeObserver(fit);
-    [root, header, page].forEach(element => observer.observe(element));
+    [root, header, page, ...page.querySelectorAll(".game-table, .center-play > *")].forEach(element => observer.observe(element));
     fit();
     return () => observer.disconnect();
   });
