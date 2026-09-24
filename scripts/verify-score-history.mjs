@@ -53,6 +53,7 @@ function fixture(options) {
     game.contract = { ...normal };
   } else {
     game.round = 8; game.phase = 'roundEnd'; game.turn = null; game.trickNumber = 27;
+    game.lastTrick = { winner: 0, number: 27, cards: engine.createDeck().slice(0, 2).map((card, player) => ({ card, player })) };
     game.players.forEach((player, index) => {
       player.hand = []; player.stacks = [[], [], []];
       player.captured = index === 0 ? engine.createDeck() : []; player.trickCount = index === 0 ? 27 : 0;
@@ -109,18 +110,20 @@ async function inspectRoundEndScroll(page, label) {
       latestScoreVisible: inside([...body.querySelectorAll('[data-testid="scoreboard-row"]')].at(-1).querySelector('td:nth-child(2) strong')),
       totalsVisible: inside(body.querySelector('tfoot')),
       namesVisible: [...document.querySelectorAll('.round-end-player-heading strong')].every(element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= bounds.top + 1; }),
-      fixedElements: ['.site-header', '.game-footer'].map(selector => {
+      footerHeight: document.querySelector('.game-footer').getBoundingClientRect().height,
+      fixedElements: ['.site-header'].map(selector => {
         const rect = document.querySelector(selector).getBoundingClientRect();
         return { selector, top: rect.top, bottom: rect.bottom, height: rect.height };
       }) };
   });
   assert.ok(measurements.namesVisible, `${label}: player names stay visible while scores scroll.`);
+  assert.equal(measurements.footerHeight, 0, `${label}: the footer must not consume results space.`);
   assert.equal(measurements.transform, 'none', `${label}: result text must remain at its native size.`);
   assert.ok(measurements.bodyHeight > 0 && measurements.contentHeight > measurements.bodyHeight, `${label}: score history must scroll within the results panel.`);
   assert.ok(Math.abs(measurements.bottomGap) <= 2, `${label}: results must initially scroll to the bottom.`);
   assert.ok(measurements.horizontalOverflow <= 1 && measurements.pageOverflow <= 1, `${label}: only the results body should scroll vertically.`);
   assert.ok(measurements.fixedElements.every(element => element.height > 0 && element.top >= -1 && element.bottom <= measurements.height + 1),
-    `${label}: the header and footer must remain in the viewport.`);
+    `${label}: the header must remain in the viewport.`);
   if (measurements.width === 390) assert.ok(measurements.latestScoreVisible, `${label}: the latest score must be visible on phone portrait.`);
   if (measurements.width === 320) assert.ok(measurements.totalsVisible, `${label}: totals must be visible on the smallest phone.`);
   await inspectLayout(page, label);
@@ -216,6 +219,10 @@ try {
     if (mode === 'modal') { await pages[0].keyboard.press('Escape'); assert.equal(await pages[0].getByRole('dialog').count(), 0); }
     assert.deepEqual(await persistedGame(room), original, 'Expanding or closing history must never mutate saved game state.');
     await pages[0].reload({ waitUntil: 'networkidle' }); await pages[0].locator('.game-page').waitFor();
+    if (mode !== 'modal') {
+      assert.equal(await pages[0].locator('.game-table').count(), 0, 'Refresh must not replay the saved last trick.');
+      assert.equal(await pages[0].locator('.round-end').count(), 1, 'Restored results appear immediately.');
+    }
     if (mode === 'modal') await pages[0].locator('.score-button').click();
     else await inspectRoundEndScroll(pages[0], 'round-end-refresh');
     await inspectRows(pages[0], mode); assert.deepEqual(await persistedGame(room), original, 'Refresh must preserve every saved row and the current game.');

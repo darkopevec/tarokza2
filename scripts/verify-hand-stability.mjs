@@ -7,7 +7,7 @@ import * as engine from '../shared/game.mjs';
 import { createTarokServer } from '../server/index.mjs';
 const dataDir = await mkdtemp(path.join(os.tmpdir(), 'tarok-hand-stability-'));
 const server = await createTarokServer({ dataDir, ...(process.env.DIST_DIR ? { distDir: path.resolve(process.env.DIST_DIR) } : {}), engine: { ...engine, createGame(options) {
-  const game = engine.createGame({...options, dealer:1});
+  const game = engine.createGame({...options, dealer:0});
   const deck = engine.createDeck();
   const mond = deck.splice(deck.findIndex(c=>c.id==='tarok-21'),1)[0];
   const skis = deck.splice(deck.findIndex(c=>c.id==='tarok-22'),1)[0];
@@ -16,7 +16,6 @@ const server = await createTarokServer({ dataDir, ...(process.env.DIST_DIR ? { d
   for(const p of game.players) p.stacks=[deck.splice(0,4),deck.splice(0,4),deck.splice(0,4)];
   // Include an available pickup, which adds a table overlay.
   [game.players[0].stacks[0][0], game.players[0].stacks[1][3]] = [game.players[0].stacks[1][3], game.players[0].stacks[0][0]];
-  game.phase='playing'; game.turn=1;
   return game;
 }}});
 const address=await server.listen(0,'127.0.0.1');
@@ -30,7 +29,12 @@ try {
   await pages[0].goto(origin); await pages[0].getByTestId('player-name').fill('Ana'); await pages[0].getByTestId('create-room').click();
   const invitation=await pages[0].getByRole('textbox',{name:'Povabilo za prijatelja',exact:true}).inputValue();
   await pages[1].goto(invitation); await pages[1].getByTestId('player-name').fill('Luka'); await pages[1].getByTestId('join-room').click();
+  await expect(pages[0].locator('.game-page')).toHaveAttribute('data-phase','bidding');
+  const biddingHeight = await pages[0].locator('.hand-cards .playing-card').first().evaluate(card => card.offsetHeight);
+  await pages[1].getByTestId('bid-play').click();
   await expect(pages[0].locator('.game-page')).toHaveAttribute('data-phase','playing');
+  assert.equal(await pages[0].locator('.hand-cards .playing-card').first().evaluate(card => card.offsetHeight), biddingHeight,
+    'Starting play keeps the card size selected when the round opened');
   await pages[0].waitForTimeout(300);
   const hand = pages[0].locator('.hand-scroll');
   await hand.evaluate(element => { element.scrollLeft = element.scrollWidth; });
@@ -68,6 +72,17 @@ try {
   assert.deepEqual(await geometry(), before, 'Opponent play preserves all hand card positions and scroll');
   assert.deepEqual(await pages[0].evaluate(() => window.handSizeChanges), [],
     'Game updates do not publish temporary hand sizes');
+  const cardHeight = () => pages[0].locator('.hand-cards .playing-card').first().evaluate(card => card.offsetHeight);
+  const originalHeight = await cardHeight();
+  // A small text/control reflow must not trigger another card-size search.
+  await pages[0].locator('.hand-navigation').evaluate(nav => { nav.style.paddingBottom = '2px'; });
+  await pages[0].waitForTimeout(200);
+  assert.equal(await cardHeight(), originalHeight, 'Minor control reflows cannot resize cards');
+  await pages[0].locator('.hand-navigation').evaluate(nav => { nav.style.paddingBottom = ''; });
+  await pages[0].setViewportSize({ width, height: height + 40 });
+  await expect.poll(cardHeight).not.toBe(originalHeight);
+  await pages[0].setViewportSize({ width, height });
+  await expect.poll(cardHeight).toBe(originalHeight);
   console.log(`${browserName} ${width}x${height}: idle and opponent play keep the hand still`);
   await Promise.all(contexts.map(c=>c.close()));
  }

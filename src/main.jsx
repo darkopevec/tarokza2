@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
@@ -530,6 +530,48 @@ function PickupFlight({ pickup, playerName }) {
   </>, document.body);
 }
 
+// Completed tricks own their animation, independently of the next live trick.
+function TrickCollection({ trick, you, players, collectNow, onComplete }) {
+  const ref = useRef(null);
+  const animationRef = useRef(null);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    const source = document.querySelector('.game-table .trick-cards');
+    const target = document.querySelector(trick.winner === you ? '.game-table .trick-stat' : '.game-table .player-seat');
+    const card = document.querySelector('.game-table .stack');
+    if (!element || !source || !target || !card) { onComplete(trick.key); return; }
+    element.style.setProperty('--card-height', `${card.getBoundingClientRect().height}px`);
+    const from = source.getBoundingClientRect();
+    const to = target.getBoundingClientRect();
+    const own = element.getBoundingClientRect();
+    const x = from.left + from.width / 2;
+    const y = from.top + from.height / 2;
+    Object.assign(element.style, { left: `${x - own.width / 2}px`, top: `${y - own.height / 2}px` });
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const animation = element.animate(reduced ? [{ opacity: 1 }, { opacity: 0 }] : [
+      { transform: 'translate(0, 0) scale(1)', opacity: 1, offset: 0 },
+      { transform: 'translate(0, 0) scale(1)', opacity: 1, offset: 2500 / 3150, easing: 'ease-in' },
+      { opacity: 1, offset: 2955 / 3150 },
+      { transform: `translate(${to.left + to.width / 2 - x}px, ${to.top + to.height / 2 - y}px) scale(.15)`, opacity: 0, offset: 1 },
+    ], { duration: reduced ? 200 : 3150, fill: 'forwards' });
+    animationRef.current = { animation, reduced };
+    animation.finished.then(() => onComplete(trick.key)).catch(() => {});
+    return () => { animation.cancel(); animationRef.current = null; };
+  }, [trick, you, onComplete]);
+  useLayoutEffect(() => {
+    const current = animationRef.current;
+    if (collectNow && current && !current.reduced && current.animation.currentTime < 2500) {
+      current.animation.currentTime = 2500;
+    }
+  }, [collectNow]);
+  return createPortal(<div ref={ref} className="trick-collection" style={{ animation: 'none' }}
+    aria-hidden="true" data-testid="trick-collection" data-winner={trick.winner}>
+    {trick.cards.map(t => <div className={`played-card ${t.player === you ? 'my-played' : ''}`} key={t.card.id}>
+      <Card card={t.card} /><span>{players[t.player].name}</span>
+    </div>)}
+  </div>, document.body);
+}
+
 function Game({ state, busy, action, onScore, onRules }) {
   const g = state.game;
   const you = g.you;
@@ -546,9 +588,9 @@ function Game({ state, busy, action, onScore, onRules }) {
     const timer = setTimeout(() => setBidReveal(false), 4500);
     return () => clearTimeout(timer);
   }, [g.round, opponentIsPlaying]);
-  const [settling, setSettling] = useState(false);
-  const [collectingTrick, setCollectingTrick] = useState(null);
-  const trickRef = useRef(null);
+  const [completedTricks, setCompletedTricks] = useState([]);
+  const finishCollection = useCallback(key => setCompletedTricks(tricks => tricks.filter(trick => trick.key !== key)), []);
+  const settling = completedTricks.length > 0;
   const [pickupReveals, setPickupReveals] = useState([]);
   const seenPickups = useRef({ round: g.round, count: g.pickups?.length || 0 });
   const pickupReveal = pickupReveals[0];
@@ -581,35 +623,18 @@ function Game({ state, busy, action, onScore, onRules }) {
     update();
     return () => observer.disconnect();
   }, [handSignature, g.phase]);
+  const lastTrickKey = g.lastTrick ? `${g.round}:${g.lastTrick.number}` : null;
+  const seenTrick = useRef(lastTrickKey);
   useLayoutEffect(() => {
-    setCollectingTrick(null);
-    if (!g.lastTrick || !["playing", "roundEnd"].includes(g.phase)) {
-      setSettling(false);
-      return;
+    const isNewTrick = lastTrickKey !== seenTrick.current;
+    seenTrick.current = lastTrickKey;
+    if (!g.lastTrick) { setCompletedTricks([]); return; }
+    // Restoring a saved result must not replay its last trick.
+    if (isNewTrick && ["playing", "roundEnd"].includes(g.phase)) {
+      setCompletedTricks(tricks => [...tricks, { ...g.lastTrick, key: lastTrickKey }]);
     }
-    setSettling(true);
-    const collectTimer = setTimeout(() => {
-      const trick = trickRef.current;
-      const target = trick?.closest(".game-table")?.querySelector(
-        g.lastTrick.winner === you ? ".trick-stat" : ".player-seat",
-      );
-      if (!trick || !target) return;
-      const from = trick.getBoundingClientRect();
-      const to = target.getBoundingClientRect();
-      setCollectingTrick({
-        left: from.left, top: from.top, width: from.width, height: from.height,
-        "--collect-x": `${to.left + to.width / 2 - from.left - from.width / 2}px`,
-        "--collect-y": `${to.top + to.height / 2 - from.top - from.height / 2}px`,
-        "--card-height": `${trick.querySelector(".playing-card").getBoundingClientRect().height}px`,
-      });
-    }, 2500);
-    const timer = setTimeout(() => {
-      setCollectingTrick(null);
-      setSettling(false);
-    }, 3150);
-    return () => { clearTimeout(collectTimer); clearTimeout(timer); };
-  }, [g.lastTrick?.number, g.round]);
-  const cardsOnTable = settling && g.lastTrick ? g.lastTrick.cards : g.trick;
+  }, [lastTrickKey]);
+  const cardsOnTable = g.trick;
   const showRoundEnd = g.phase === "roundEnd" && !settling;
   const resultsRef = useRef(null);
   useLayoutEffect(() => {
@@ -617,7 +642,6 @@ function Game({ state, busy, action, onScore, onRules }) {
       resultsRef.current.scrollTop = resultsRef.current.scrollHeight;
     }
   }, [showRoundEnd, g.scoreboard.at(-1)?.round]);
-  busy = busy || settling;
   // Bind the intent to the table the player actually saw, not a newer socket
   // snapshot: a reply from another tab must never become the next trick's lead.
   const play = (cardId) => action({
@@ -674,13 +698,9 @@ function Game({ state, busy, action, onScore, onRules }) {
       data-announcement-ready={(g.announcementReady || [false, false]).join(",")}
       data-announcements={JSON.stringify(g.announcements || [])}>
       <span className="sr-only" data-testid="game-status" role="status" aria-live="polite" aria-atomic="true">{liveStatus}</span>
-      {collectingTrick && createPortal(
-        <div className="trick-collection" style={collectingTrick} aria-hidden="true"
-          data-testid="trick-collection" data-winner={g.lastTrick.winner}>
-          {g.lastTrick.cards.map(t => <div className={`played-card ${t.player === you ? "my-played" : ""}`} key={t.card.id}>
-            <Card card={t.card} /><span>{g.players[t.player].name}</span>
-          </div>)}
-        </div>, document.body)}
+      {completedTricks.map(trick => <TrickCollection key={trick.key} trick={trick} you={you}
+        players={g.players} onComplete={finishCollection}
+        collectNow={g.trick.length > 0 || (g.lastTrick?.number || 0) > trick.number} />)}
       {bidReveal && createPortal(
         <div className="bid-reveal" role="status" aria-live="polite" data-testid="bid-reveal">
           <Flag size={32} aria-hidden="true" />
@@ -878,7 +898,7 @@ function Game({ state, busy, action, onScore, onRules }) {
                 </div>
               ) : (
                 <>
-                  <div className="trick-cards" ref={trickRef} style={collectingTrick ? { visibility: "hidden" } : undefined}>
+                  <div className="trick-cards">
                     {cardsOnTable.length ? (
                       cardsOnTable.map((t) => (
                         <div
@@ -890,11 +910,12 @@ function Game({ state, busy, action, onScore, onRules }) {
                         </div>
                       ))
                     ) : (
-                      <div className="empty-trick">
+                      <div className="empty-trick" style={settling ? { visibility: 'hidden' } : undefined}>
                         <Diamond size={29} strokeWidth={1} />
-                        <span className={myTurn ? "turn-prompt" : undefined}>
+                        <span className={myTurn ? "turn-prompt" : undefined}
+                          style={bidReveal || settling ? { animation: 'none' } : undefined}>
                           {myTurn
-                            ? "Tvoja poteza"
+                            ? g.trickNumber === 1 ? "Začneš!" : "Tvoja poteza"
                             : "Na vrsti je " + other.name}
                         </span>
                         <small>
@@ -1089,6 +1110,7 @@ function App() {
   const [resuming, setResuming] = useState(!!localStorage.getItem(DEVICE));
   const socketRef = useRef(null);
   const stateRef = useRef(null);
+  const cardFitRef = useRef({ page: null, viewport: '', size: null });
   // Fit phone piles to the available table area; other pages retain their
   // natural layout and the existing viewport scale.
   useLayoutEffect(() => {
@@ -1099,6 +1121,21 @@ function App() {
     const fit = () => {
       if (page.matches('.game-page:not([data-phase="roundEnd"])') &&
           matchMedia('(max-width: 560px), (max-width: 960px) and (max-height: 600px)').matches) {
+        const viewport = `${innerWidth}:${innerHeight}:${page.offsetWidth}:${page.offsetHeight}`;
+        if (cardFitRef.current.page !== page || cardFitRef.current.viewport !== viewport) {
+          cardFitRef.current = { page, viewport, size: null };
+        }
+        const applySize = height => {
+          if (page.style.getPropertyValue('--fitted-pile-height') !== `${height}px`) {
+            page.style.setProperty('--fitted-pile-height', `${height}px`);
+          }
+        };
+        // Hand contents and socket updates must not change the chosen size.
+        // Retain it across bidding, play and subsequent rounds as well.
+        if (cardFitRef.current.size !== null) {
+          applySize(cardFitRef.current.size);
+          return;
+        }
         // Probe sizes on an inert copy. Resizing the visible hand during the
         // search can disturb Firefox's asynchronous scrolling on game updates.
         const measurement = page.cloneNode(true);
@@ -1137,6 +1174,9 @@ function App() {
             if (playing) {
               const css = getComputedStyle(center.querySelector('.trick-cards'));
               contentHeight = height + 32 + px(css.marginTop) + px(css.marginBottom);
+            } else {
+              // Reserve played-card space before bidding finishes, too.
+              contentHeight = Math.max(contentHeight, height + 32);
             }
             const used = opponent.offsetHeight + bottom.offsetHeight
               + px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap) + 4
@@ -1148,9 +1188,8 @@ function App() {
             if (fits(middle)) low = middle;
             else high = middle - 1;
           }
-          if (page.style.getPropertyValue('--fitted-pile-height') !== `${low}px`) {
-            page.style.setProperty('--fitted-pile-height', `${low}px`);
-          }
+          cardFitRef.current.size = low;
+          applySize(low);
         } finally {
           measurement.remove();
         }
