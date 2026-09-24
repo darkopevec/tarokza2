@@ -623,15 +623,22 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
   .game-page .game-table .opponent-stacks .stack .playing-card { --card-height: 44px; }
 }
 
+/* Use a common scale for both players' piles and the current trick. */
+.game-page .game-table .stack,
+.game-page .game-table .stack .playing-card,
+.game-page .game-table .opponent-stacks .stack,
+.game-page .game-table .opponent-stacks .stack .playing-card { --card-height: clamp(96px, 16dvh, 144px); }
+.game-page .game-table .played-card .playing-card { --card-height: clamp(104px, 17dvh, 154px); }
+
 /* Phone play uses the viewport itself, rather than scaling the whole page. */
 @media (max-width: 560px), (max-width: 960px) and (max-height: 600px) {
   #root > .game-page:not([data-phase="roundEnd"]) {
     display: flex; flex-direction: column; flex: 1 1 0; min-height: 0;
     width: 100%; max-width: none; padding: 0 4px max(4px, env(safe-area-inset-bottom));
     overflow: hidden; transform: none;
-    --preferred-pile-height: min(clamp(68px, calc((100dvh - 410px) * .36), 160px), calc((100vw - 144px) * 113 / 189));
+    --preferred-pile-height: min(200px, calc((100vw - 112px) * 113 / 189));
     --phone-pile-height: var(--fitted-pile-height, var(--preferred-pile-height));
-    --phone-hand-height: clamp(76px, 14dvh, 128px);
+    --phone-hand-height: clamp(76px, 11dvh, 100px);
   }
   .game-page:not([data-phase="roundEnd"]) > .game-toolbar { flex: 0 0 44px; min-height: 44px; padding: 0 4px; }
   .game-page:not([data-phase="roundEnd"]) .play-layout {
@@ -659,7 +666,8 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
   .game-page .game-table .opponent-stacks .stack .playing-card { --card-height: var(--phone-pile-height); }
   .game-page .game-table .stack-pickup-space { height: 44px; }
   .game-page .game-table .stack-pickup { min-height: 44px; }
-  .game-page .game-table .played-card .playing-card { --card-height: clamp(68px, 12dvh, 112px); }
+  .game-page .game-table .played-card .playing-card { --card-height: var(--phone-pile-height); }
+  .game-page .game-table .trick-cards { margin: 0; }
   .game-page .game-table .contract-tag { position: absolute; bottom: calc(var(--phone-pile-height) + 66px); right: 8px; margin: 0; }
   .game-page .game-table .stacks { gap: 3px; }
   .game-page .hand-panel { flex: 0 0 auto; min-height: 0; padding-top: 4px; }
@@ -694,7 +702,7 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
 /* Landscape keeps the table and hand side by side at their full available width. */
 @media (min-width: 561px) and (max-width: 960px) and (max-height: 600px) {
   #root > .game-page:not([data-phase="roundEnd"]) {
-    --preferred-pile-height: clamp(66px, calc((100dvh - 170px) * .5), 110px);
+    --preferred-pile-height: clamp(76px, calc((100dvh - 140px) * .5), 150px);
     --phone-hand-height: clamp(48px, calc(100dvh - 272px), 100px);
   }
   .game-page:not([data-phase="roundEnd"]) .play-layout {
@@ -711,7 +719,7 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
   .game-page .preparation-intro .announcement-info-button { min-height: 24px; height: 24px; }
 
   .game-page .game-table .player-seat .avatar, .game-page .game-table .player-seat > div > span { display: none; }
-  .game-page .game-table .played-card .playing-card { --card-height: 56px; }
+  .game-page .game-table .played-card .playing-card { --card-height: var(--phone-pile-height); }
   .game-page .game-table .trick-cards { margin: 0; gap: 8px; }
   .game-page .game-table .empty-trick > small, .game-page .game-table .empty-trick svg,
   .game-page .preparation-status, .game-page .prep-pickup-empty,
@@ -855,4 +863,21 @@ html, body { width: 100%; height: 100%; min-width: 0; overflow: hidden; }
     --card-height: clamp(126px, 18dvh, 160px);
     width: calc(var(--card-height) * var(--card-width-ratio)); height: var(--card-height);
   }
+}
+
+/* Make the central turn cue easy to spot across the table. */
+.game-page .game-table .empty-trick > .turn-prompt {
+  font-size: clamp(28px, 7vw, 40px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #f3d3a5;
+  text-align: center;
+  animation-name: turn-prompt-zoom;
+}
+@keyframes turn-prompt-zoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-page .game-table .empty-trick > .turn-prompt { animation: none; }
 }

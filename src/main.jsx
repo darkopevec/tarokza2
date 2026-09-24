@@ -1192,15 +1192,35 @@ function App() {
         const px = value => parseFloat(value) || 0;
         const style = getComputedStyle(table);
         const landscape = matchMedia('(min-width: 561px) and (max-width: 960px) and (max-height: 600px)').matches;
-        const contentHeight = landscape ? 0 : [...center.children].reduce((height, child) => {
+        let contentHeight = landscape ? 0 : [...center.children].reduce((height, child) => {
           const css = getComputedStyle(child);
           return height + Math.max(child.offsetHeight, child.scrollHeight) + px(css.marginTop) + px(css.marginBottom);
         }, 0);
         const pileHeight = pile.offsetHeight;
         const overhead = px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap)
           + opponent.offsetHeight - pileHeight + bottom.offsetHeight - pileHeight;
-        const fitted = Math.max(32, Math.min(pileHeight, Math.floor((table.clientHeight - overhead - contentHeight - 4) / 2)));
+        const playing = page.dataset.phase === 'playing';
+        // Reserve a third card row even before a card is played, so the piles
+        // keep their size when the trick appears.
+        if (playing && !landscape) {
+          const trick = center.querySelector('.trick-cards');
+          const css = getComputedStyle(trick);
+          contentHeight = px(css.marginTop) + px(css.marginBottom) + 24;
+        }
+        let fitted = Math.min(pileHeight, Math.floor((table.clientHeight - overhead - contentHeight - 4) / (playing && !landscape ? 3 : 2)));
+        if (playing && landscape) fitted = Math.min(fitted, center.clientHeight - 28);
+        fitted = Math.max(32, fitted);
         page.style.setProperty('--fitted-pile-height', `${fitted}px`);
+        // At small sizes the player label can be taller than the piles.
+        // Recheck the actual rows after fitting instead of assuming both shrink.
+        for (let pass = 0; pass < 3; pass++) {
+          const neededCenter = playing && !landscape ? contentHeight + fitted : contentHeight;
+          const used = opponent.offsetHeight + bottom.offsetHeight + neededCenter
+            + px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap) + 4;
+          if (used <= table.clientHeight) break;
+          fitted = Math.max(32, fitted - Math.ceil((used - table.clientHeight) / (playing && !landscape ? 2 : 1)));
+          page.style.setProperty('--fitted-pile-height', `${fitted}px`);
+        }
         return;
       }
       page.style.removeProperty('--fitted-pile-height');
