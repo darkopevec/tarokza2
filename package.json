@@ -12,6 +12,7 @@
     "test:browser": "node scripts/verify-browser.mjs",
     "test:preparation": "node scripts/verify-preparation.mjs",
     "test:card-loading": "node scripts/verify-card-loading.mjs",
+    "test:hand-stability": "node scripts/verify-hand-stability.mjs",
     "test:responsive": "node scripts/verify-responsive.mjs",
     "test:trick-history": "node scripts/verify-trick-history.mjs",
     "test:score-history": "node scripts/verify-score-history.mjs",

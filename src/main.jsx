@@ -1099,44 +1099,61 @@ function App() {
     const fit = () => {
       if (page.matches('.game-page:not([data-phase="roundEnd"])') &&
           matchMedia('(max-width: 560px), (max-width: 960px) and (max-height: 600px)').matches) {
-        // Keep full viewport width. Spend surplus table height on the piles,
-        // reserving the natural height of every central action and instruction.
-        page.style.removeProperty('--fitted-pile-height');
-        const table = page.querySelector('.game-table');
-        const center = page.querySelector('.center-play');
-        const opponent = page.querySelector('.opponent-zone');
-        const bottom = page.querySelector('.bottom-table');
-        const pile = page.querySelector('.my-stacks .stack');
-        if (!table || !center || !opponent || !bottom || !pile) return;
-        const px = value => parseFloat(value) || 0;
-        const style = getComputedStyle(table);
-        const landscape = matchMedia('(min-width: 561px) and (max-width: 960px) and (max-height: 600px)').matches;
-        const playing = page.dataset.phase === 'playing';
-        // Fit one shared card size across both piles, the trick and the hand.
-        // Measuring the resulting layout also accounts for the reserved empty hand.
-        let low = 32;
-        let high = Math.floor(pile.offsetHeight);
-        const fits = height => {
-          page.style.setProperty('--fitted-pile-height', `${height}px`);
-          let contentHeight = [...center.children].reduce((total, child) => {
-            const css = getComputedStyle(child);
-            return total + Math.max(child.offsetHeight, child.scrollHeight) + px(css.marginTop) + px(css.marginBottom);
-          }, 0);
-          if (playing) {
-            const css = getComputedStyle(center.querySelector('.trick-cards'));
-            contentHeight = height + 32 + px(css.marginTop) + px(css.marginBottom);
+        // Probe sizes on an inert copy. Resizing the visible hand during the
+        // search can disturb Firefox's asynchronous scrolling on game updates.
+        const measurement = page.cloneNode(true);
+        measurement.inert = true;
+        measurement.setAttribute('aria-hidden', 'true');
+        Object.assign(measurement.style, {
+          position: 'fixed', left: '0', top: '0', visibility: 'hidden',
+          pointerEvents: 'none', width: `${page.offsetWidth}px`,
+          height: `${page.offsetHeight}px`, margin: '0',
+        });
+        root.appendChild(measurement);
+        try {
+          // Keep full viewport width. Spend surplus table height on the piles,
+          // reserving the natural height of every central action and instruction.
+          measurement.style.removeProperty('--fitted-pile-height');
+          const table = measurement.querySelector('.game-table');
+          const center = measurement.querySelector('.center-play');
+          const opponent = measurement.querySelector('.opponent-zone');
+          const bottom = measurement.querySelector('.bottom-table');
+          const pile = measurement.querySelector('.my-stacks .stack');
+          if (!table || !center || !opponent || !bottom || !pile) return;
+          const px = value => parseFloat(value) || 0;
+          const style = getComputedStyle(table);
+          const landscape = matchMedia('(min-width: 561px) and (max-width: 960px) and (max-height: 600px)').matches;
+          const playing = page.dataset.phase === 'playing';
+          // Fit one shared card size across both piles, the trick and the hand.
+          // Measuring the resulting layout also accounts for the reserved empty hand.
+          let low = 32;
+          let high = Math.floor(pile.offsetHeight);
+          const fits = height => {
+            measurement.style.setProperty('--fitted-pile-height', `${height}px`);
+            let contentHeight = [...center.children].reduce((total, child) => {
+              const css = getComputedStyle(child);
+              return total + Math.max(child.offsetHeight, child.scrollHeight) + px(css.marginTop) + px(css.marginBottom);
+            }, 0);
+            if (playing) {
+              const css = getComputedStyle(center.querySelector('.trick-cards'));
+              contentHeight = height + 32 + px(css.marginTop) + px(css.marginBottom);
+            }
+            const used = opponent.offsetHeight + bottom.offsetHeight
+              + px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap) + 4
+              + (landscape ? 0 : contentHeight);
+            return used <= table.clientHeight && (!landscape || contentHeight + 4 <= center.clientHeight);
+          };
+          while (low < high) {
+            const middle = Math.ceil((low + high) / 2);
+            if (fits(middle)) low = middle;
+            else high = middle - 1;
           }
-          const used = opponent.offsetHeight + bottom.offsetHeight
-            + px(style.paddingTop) + px(style.paddingBottom) + 2 * px(style.rowGap) + 4
-            + (landscape ? 0 : contentHeight);
-          return used <= table.clientHeight && (!landscape || contentHeight + 4 <= center.clientHeight);
-        };
-        while (low < high) {
-          const middle = Math.ceil((low + high) / 2);
-          if (fits(middle)) low = middle;
-          else high = middle - 1;
+          if (page.style.getPropertyValue('--fitted-pile-height') !== `${low}px`) {
+            page.style.setProperty('--fitted-pile-height', `${low}px`);
+          }
+        } finally {
+          measurement.remove();
         }
-        page.style.setProperty('--fitted-pile-height', `${low}px`);
         return;
       }
       page.style.removeProperty('--fitted-pile-height');
