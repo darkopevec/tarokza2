@@ -582,6 +582,38 @@ function Stacks({ player, mine, legalMoves, legalPickups = [], onPlay, onPickup,
   );
 }
 
+// Viewport coordinates keep the flight aligned even when the table is scaled.
+function PickupFlight({ pickup, playerName }) {
+  const ref = useRef(null);
+  useLayoutEffect(() => {
+    const source = document.querySelector(`.opponent-stacks [data-stack-index="${pickup.stack}"]`);
+    const target = document.querySelector('.pickup-hand-target');
+    if (!source || !target || !ref.current) return;
+    const from = source.getBoundingClientRect();
+    const to = target.getBoundingClientRect();
+    const element = ref.current;
+    Object.assign(element.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px` });
+    element.style.setProperty('--card-height', `${from.height}px`);
+    const dx = to.left + to.width / 2 - from.left - from.width / 2;
+    const dy = to.top + to.height / 2 - from.top - from.height / 2;
+    const scale = Math.min(1.35, (innerWidth - 16) / from.width);
+    const liftX = Math.max(8 + from.width * scale / 2, Math.min(innerWidth - 8 - from.width * scale / 2, from.left + from.width / 2 + dx * .2)) - from.left - from.width / 2;
+    const liftY = Math.max(8 + from.height * scale / 2, from.top + from.height / 2 + dy * .25) - from.top - from.height / 2;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const animation = element.animate(reduced ? [{ opacity: 1 }, { opacity: 0 }] : [
+      { transform: 'translate(0, 0) scale(1)', opacity: 1, offset: 0 },
+      { transform: `translate(${liftX}px, ${liftY}px) scale(${scale})`, opacity: 1, offset: .3 },
+      { transform: `translate(${liftX}px, ${liftY}px) scale(${scale})`, opacity: 1, offset: .6 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${to.height / from.height})`, opacity: 0, offset: 1 },
+    ], { duration: reduced ? 200 : 1400, easing: 'ease-in-out', fill: 'forwards' });
+    return () => animation.cancel();
+  }, [pickup]);
+  return createPortal(<>
+    <div ref={ref} className="pickup-flight" data-testid="pickup-flight" aria-hidden="true"><Card card={pickup.card} /></div>
+    <span className="pickup-announcement" role="status">{playerName} vzame v roko: {pickup.card.name}.</span>
+  </>, document.body);
+}
+
 function Game({ state, busy, action, onScore, onRules }) {
   const g = state.game;
   const you = g.you;
@@ -617,7 +649,8 @@ function Game({ state, busy, action, onScore, onRules }) {
   }, [g.round, g.pickups, you]);
   useEffect(() => {
     if (!pickupReveal || bidReveal) return;
-    const timer = setTimeout(() => setPickupReveals(queue => queue.slice(1)), 3200);
+    const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 250 : 1450;
+    const timer = setTimeout(() => setPickupReveals(queue => queue.slice(1)), duration);
     return () => clearTimeout(timer);
   }, [pickupReveal, bidReveal]);
   const handRef = useRef(null);
@@ -741,13 +774,8 @@ function Game({ state, busy, action, onScore, onRules }) {
           <strong>{other.name} igra!</strong>
           <span>Nasprotnik je izbral »Igram«.</span>
         </div>, document.body)}
-      {pickupReveal && !bidReveal && createPortal(
-        <div className="pickup-reveal" key={`${g.round}-${pickupReveal.card.id}`}
-          role="status" aria-live="polite" data-testid="pickup-reveal">
-          <Card card={pickupReveal.card} />
-          <div><strong>{g.players[pickupReveal.player].name} vzame v roko</strong>
-            <span>{pickupReveal.card.name}</span></div>
-        </div>, document.body)}
+      {pickupReveal && !bidReveal && <PickupFlight key={`${g.round}-${pickupReveal.card.id}`}
+        pickup={pickupReveal} playerName={g.players[pickupReveal.player].name} />}
       <div className="game-toolbar">
         <div className="table-title">
           <span className="eyebrow">VAJINA MIZA</span>
@@ -857,6 +885,9 @@ function Game({ state, busy, action, onScore, onRules }) {
               <div>
                 <div className="opponent-name">
                   <strong>{other.name}</strong>
+                  <span className="pickup-hand-target" aria-label={`${other.handCount} kart v roki`}>
+                    <Card back small /><Card back small /><Card back small />
+                  </span>
                   {opponentIsPlaying && <span className="bidder-badge" data-testid="opponent-bidder"><Flag size={11} /> IGRA</span>}
                 </div>
                 <span>

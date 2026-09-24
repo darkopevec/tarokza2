@@ -472,18 +472,12 @@
   70% { opacity: 1; }
   100% { transform: translate(var(--collect-x), var(--collect-y)) scale(.15); opacity: 0; }
 }
-.pickup-reveal {
-  position: fixed; z-index: 80; top: max(64px, env(safe-area-inset-top));
-  left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 24px);
-  display: flex; align-items: center; gap: 16px; padding: 14px 18px;
-  background: #fffdf7; color: #234c3d; border: 1px solid #d9bf8e; border-radius: 12px;
-  box-shadow: 0 8px 32px #122b3550; pointer-events: none;
-  animation: pickup-reveal-in 350ms ease-out;
-}
-.pickup-reveal .playing-card { --card-height: 144px; flex-shrink: 0; }
-.pickup-reveal > div:last-child { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.pickup-reveal strong { font-size: 14px; overflow-wrap: anywhere; }
-.pickup-reveal span { font-size: 16px; }
+.pickup-flight { position: fixed; z-index: 80; pointer-events: none; transform-origin: center; will-change: transform, opacity; }
+.pickup-flight .playing-card { --card-height: inherit; width: 100%; height: 100%; box-shadow: 0 8px 24px #122b3566; }
+.pickup-announcement { position: fixed; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.pickup-hand-target { display: inline-flex; align-items: center; flex-shrink: 0; width: 34px; height: 26px; margin-left: 5px; }
+.pickup-hand-target .playing-card { --card-height: 24px; flex-shrink: 0; margin-left: -7px; transform: rotate(8deg); }
+.pickup-hand-target .playing-card:first-child { margin-left: 0; transform: rotate(-12deg); }
 @keyframes pickup-reveal-in {
   from { opacity: 0; transform: translate(-50%, -18px) scale(.8); }
   to { opacity: 1; transform: translate(-50%, 0) scale(1); }
