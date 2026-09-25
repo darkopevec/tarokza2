@@ -1,7 +1,7 @@
 name: tarokza2
 services:
   tarokza2:
-    image: tarokza2:smrekar-deck-20260925
+    image: tarokza2:smrekar-restored-20260925
     container_name: tarokza2
     init: true
     read_only: true

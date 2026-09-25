@@ -7,7 +7,7 @@
   "rights": "Wikimedia Commons classifies each source scan as public domain under PD-Art (PD-old-auto-expired). Per-file source and licence records are included below.",
   "retrieved": "2026-09-25",
   "sourceFaces": 41,
-  "note": "22 complete trumps, 16 court cards and three pip cards are unchanged Commons JPEG thumbnails. The 13 missing pip cards are reconstructed separately from this deck’s suit symbols. The original card back is included separately.",
+  "note": "41 source faces and the original back have conventional color and perspective corrections. All paper margins and pip backgrounds are white. The other 13 pip cards use the existing extracted suit symbols on white SVG canvases.",
   "back": {
     "id": "back",
     "file": "back.jpg",
@@ -22,11 +22,73 @@
     "license": "Public domain",
     "licenseTemplate": "PD-Art (PD-old-auto-expired)",
     "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-    "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-    "width": 500,
-    "height": 840,
-    "bytes": 43613,
-    "sha256": "a72665f5fa913cd8549a37b91be917f37dcf90ac7c78758e3c2b19ca6fbf5d28"
+    "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+    "width": 504,
+    "height": 904,
+    "bytes": 43055,
+    "sha256": "339ef0353eac712bf3416b6d3eae4a0b46417ae82c73fd12a53cc80fe94e4e8d",
+    "adjusted": true,
+    "sourceScan": {
+      "width": 500,
+      "height": 840,
+      "bytes": 43613,
+      "sha256": "a72665f5fa913cd8549a37b91be917f37dcf90ac7c78758e3c2b19ca6fbf5d28"
+    },
+    "correction": {
+      "script": "scripts/restore-smrekar-deck.mjs",
+      "profile": "scripts/smrekar-restoration.json",
+      "quad": [
+        [
+          15,
+          20
+        ],
+        [
+          475,
+          20
+        ],
+        [
+          475,
+          820
+        ],
+        [
+          15,
+          820
+        ]
+      ],
+      "paperWhite": [
+        169,
+        166,
+        167
+      ],
+      "curve": [
+        [
+          0,
+          0
+        ],
+        [
+          0.18,
+          0.15
+        ],
+        [
+          0.5,
+          0.52
+        ],
+        [
+          0.78,
+          0.84
+        ],
+        [
+          0.94,
+          0.98
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "blackPoint": 3,
+      "background": "#ffffff"
+    }
   },
   "cards": [
     {
@@ -43,11 +105,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 823,
-      "bytes": 186804,
-      "sha256": "a09152c28cfc0ce1701c0a186ab16a995c0c56f74499c27cbe6ccd9a021a7a9d"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 251158,
+      "sha256": "a78864c976377983646b02a28426488601a7085c81c5fe31d7664750608bb8af",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 823,
+        "bytes": 186804,
+        "sha256": "a09152c28cfc0ce1701c0a186ab16a995c0c56f74499c27cbe6ccd9a021a7a9d"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            50.2,
+            51.6
+          ],
+          [
+            449.5,
+            50.4
+          ],
+          [
+            447.8,
+            776.6
+          ],
+          [
+            49.7,
+            778.1
+          ]
+        ],
+        "paperWhite": [
+          208,
+          182,
+          125
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-2",
@@ -63,11 +187,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 823,
-      "bytes": 193139,
-      "sha256": "69f7f9e3e492952b829fcf3c2619177e517850a9a01750b266b1fd52d2e9044f"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 257130,
+      "sha256": "bbf5dc2b6e2b6a2f9cc611ddd2af434799b4a76c693138e19a47b74544fcf3be",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 823,
+        "bytes": 193139,
+        "sha256": "69f7f9e3e492952b829fcf3c2619177e517850a9a01750b266b1fd52d2e9044f"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            54.3,
+            45.5
+          ],
+          [
+            450.5,
+            47.3
+          ],
+          [
+            447.8,
+            773.5
+          ],
+          [
+            51.7,
+            771.8
+          ]
+        ],
+        "paperWhite": [
+          212,
+          185,
+          127
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-3",
@@ -83,11 +269,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 823,
-      "bytes": 192476,
-      "sha256": "9a26192738a94ff4b1e915e77ce9f616a4ca66d810db4d6a5deaed14967eb27d"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 253823,
+      "sha256": "e97c37715f663134278a249f4d75e9031b0a315732c4070ae7be71bcf384d11a",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 823,
+        "bytes": 192476,
+        "sha256": "9a26192738a94ff4b1e915e77ce9f616a4ca66d810db4d6a5deaed14967eb27d"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            46.1,
+            44.7
+          ],
+          [
+            442.4,
+            45.9
+          ],
+          [
+            441.8,
+            772.9
+          ],
+          [
+            42.1,
+            771.6
+          ]
+        ],
+        "paperWhite": [
+          213,
+          186,
+          132
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-4",
@@ -103,11 +351,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 823,
-      "bytes": 197633,
-      "sha256": "375b6382596cc9001c54af9942af4f48ad52594effe98f7d27abdbfafb5b5fd7"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 264060,
+      "sha256": "0c50e4afe8a3f1c05de8420af1e4757c6120190c3ce6623c0e79ceb0cfabbe90",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 823,
+        "bytes": 197633,
+        "sha256": "375b6382596cc9001c54af9942af4f48ad52594effe98f7d27abdbfafb5b5fd7"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            50.6,
+            50.9
+          ],
+          [
+            448,
+            49.1
+          ],
+          [
+            449.5,
+            774.5
+          ],
+          [
+            51.8,
+            776.1
+          ]
+        ],
+        "paperWhite": [
+          212,
+          187,
+          130
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-5",
@@ -123,11 +433,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 837,
-      "bytes": 212442,
-      "sha256": "2795f19dee81876be89343b171707e04a8bcb8833a1a824daa6364ddcf123bb5"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 271158,
+      "sha256": "a194aa6c1ab89c7a8c1a3c55e7902383909543ceaeb4dfc3da9cf871d1201670",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 837,
+        "bytes": 212442,
+        "sha256": "2795f19dee81876be89343b171707e04a8bcb8833a1a824daa6364ddcf123bb5"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            45.6,
+            46.9
+          ],
+          [
+            451,
+            47
+          ],
+          [
+            451,
+            790.2
+          ],
+          [
+            44.6,
+            789.2
+          ]
+        ],
+        "paperWhite": [
+          211,
+          186,
+          129
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-6",
@@ -143,11 +515,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 837,
-      "bytes": 200885,
-      "sha256": "5f6881f54cbd94e6199373faca2b58b3cd8a4ea38d39cd3cc10623033c5050d3"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 260621,
+      "sha256": "2bf21b6d77d560807ba3d95cbb0f38c0df1b95b7ea58ea526246ef38fa5b9d3d",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 837,
+        "bytes": 200885,
+        "sha256": "5f6881f54cbd94e6199373faca2b58b3cd8a4ea38d39cd3cc10623033c5050d3"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            47.3,
+            54.5
+          ],
+          [
+            448.5,
+            52.1
+          ],
+          [
+            446.8,
+            788.6
+          ],
+          [
+            45.9,
+            790.4
+          ]
+        ],
+        "paperWhite": [
+          211,
+          184,
+          127
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-7",
@@ -163,11 +597,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 842,
-      "bytes": 218059,
-      "sha256": "b33c36eb5d79724aa7db029d206da1a5cd054523b0375b0ebbb8aede43e6b132"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 273310,
+      "sha256": "a26d22b939d2636ac296a390e9348a84ee3a070033726d1c0a8dea33f5951bcf",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 842,
+        "bytes": 218059,
+        "sha256": "b33c36eb5d79724aa7db029d206da1a5cd054523b0375b0ebbb8aede43e6b132"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            47.9,
+            54.4
+          ],
+          [
+            454,
+            52.5
+          ],
+          [
+            454,
+            794.1
+          ],
+          [
+            48.1,
+            795.7
+          ]
+        ],
+        "paperWhite": [
+          216,
+          192,
+          137
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-8",
@@ -183,11 +679,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 840,
-      "bytes": 201863,
-      "sha256": "a6c701306afd25689f2ff0ef4396effea974f313bb20fe2ad0e2975a0e7a3f14"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 252824,
+      "sha256": "52e792dbf03fe026923107273bd8c37f69b2c5eba3421b97e94b564dd9b83e63",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 840,
+        "bytes": 201863,
+        "sha256": "a6c701306afd25689f2ff0ef4396effea974f313bb20fe2ad0e2975a0e7a3f14"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            38.6,
+            47.1
+          ],
+          [
+            449.2,
+            43.3
+          ],
+          [
+            450.4,
+            792.5
+          ],
+          [
+            40.6,
+            796.5
+          ]
+        ],
+        "paperWhite": [
+          215,
+          191,
+          137
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-9",
@@ -203,11 +761,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 846,
-      "bytes": 214719,
-      "sha256": "5f72a10316dd0a04ff173fb3eabd8bb408efbe4da6edc0aa12c0d78100a84c2a"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 271397,
+      "sha256": "c6ff239a5cd5b5416fddff844afccce1615c035d69798829a9d23145cf5f1712",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 846,
+        "bytes": 214719,
+        "sha256": "5f72a10316dd0a04ff173fb3eabd8bb408efbe4da6edc0aa12c0d78100a84c2a"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            48.2,
+            46.4
+          ],
+          [
+            458.6,
+            44.6
+          ],
+          [
+            461.2,
+            800.9
+          ],
+          [
+            51.2,
+            801.1
+          ]
+        ],
+        "paperWhite": [
+          213,
+          187,
+          131
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-10",
@@ -223,11 +843,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 831,
-      "bytes": 199484,
-      "sha256": "058d1af782dea528a9004666325020b8fcb39573591b76cd0902f71357ed3506"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 260473,
+      "sha256": "fa5c8c57e1aefcfb55061004a95e25fd5475314d012586264da46470853ff96b",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 831,
+        "bytes": 199484,
+        "sha256": "058d1af782dea528a9004666325020b8fcb39573591b76cd0902f71357ed3506"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            47.7,
+            48
+          ],
+          [
+            448.4,
+            48
+          ],
+          [
+            451.5,
+            781.8
+          ],
+          [
+            49.6,
+            782.2
+          ]
+        ],
+        "paperWhite": [
+          211,
+          184,
+          130
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-11",
@@ -243,11 +925,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 834,
-      "bytes": 206078,
-      "sha256": "f507f41dd347f2b62bd3c3360896623453d828c477548f6ca3ff7a62a6881f48"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 267750,
+      "sha256": "4304072d43d8a4c9d4c95edec447e98321bf9c42f482b001b7af9ed6c6fb5a06",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 834,
+        "bytes": 206078,
+        "sha256": "f507f41dd347f2b62bd3c3360896623453d828c477548f6ca3ff7a62a6881f48"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            49.3,
+            49.9
+          ],
+          [
+            452.2,
+            50
+          ],
+          [
+            451.6,
+            785.3
+          ],
+          [
+            46.9,
+            786.4
+          ]
+        ],
+        "paperWhite": [
+          216,
+          189,
+          135
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-12",
@@ -263,11 +1007,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 839,
-      "bytes": 205339,
-      "sha256": "d3ee5bb7f9680e9c6b8064d0b57d689f7ade18c28939bf9c0a11acc50141731c"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 268791,
+      "sha256": "13ceda3561318a9b1f3f86c5aadd9bbc29da3d526f59bbf642cffde6cc163e63",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 839,
+        "bytes": 205339,
+        "sha256": "d3ee5bb7f9680e9c6b8064d0b57d689f7ade18c28939bf9c0a11acc50141731c"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            48.1,
+            51.9
+          ],
+          [
+            451.2,
+            50.1
+          ],
+          [
+            449.3,
+            784.6
+          ],
+          [
+            47.8,
+            785.6
+          ]
+        ],
+        "paperWhite": [
+          212,
+          187,
+          131
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-13",
@@ -283,11 +1089,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 833,
-      "bytes": 214908,
-      "sha256": "c1471b2933cdb0d1d94cd33e37448dc52531abdcba55bf224ca743ebb064015c"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 281327,
+      "sha256": "d340ac894643bb1afc0ef0fc1d6748d272f5381bd270d9693298785924c10d8f",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 833,
+        "bytes": 214908,
+        "sha256": "c1471b2933cdb0d1d94cd33e37448dc52531abdcba55bf224ca743ebb064015c"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            48.6,
+            50.6
+          ],
+          [
+            448.5,
+            48.5
+          ],
+          [
+            450.2,
+            779.7
+          ],
+          [
+            49.3,
+            781.4
+          ]
+        ],
+        "paperWhite": [
+          215,
+          190,
+          135
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-14",
@@ -303,11 +1171,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 837,
-      "bytes": 208450,
-      "sha256": "2884c37ccab414b6acd13fc505ebe3e2d9dd769b42560f4b6479a99ce122d071"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 268648,
+      "sha256": "9f02f9925766cc28172ee2f0f81c4e9c40b73048a63ef471e0fd49fbe405a81b",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 837,
+        "bytes": 208450,
+        "sha256": "2884c37ccab414b6acd13fc505ebe3e2d9dd769b42560f4b6479a99ce122d071"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            45.5,
+            52
+          ],
+          [
+            447.2,
+            52
+          ],
+          [
+            446.6,
+            785.5
+          ],
+          [
+            43.5,
+            787.4
+          ]
+        ],
+        "paperWhite": [
+          213,
+          186,
+          130
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-15",
@@ -323,11 +1253,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 830,
-      "bytes": 195161,
-      "sha256": "48349c264ab5f8faadb9df568ab1a70e91b4073da08c4c57afc3ff21831942eb"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 255026,
+      "sha256": "976856740ccc8e34f8c5b76af5a23d337997fe3bdc469f24538ceebc97107828",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 830,
+        "bytes": 195161,
+        "sha256": "48349c264ab5f8faadb9df568ab1a70e91b4073da08c4c57afc3ff21831942eb"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            47,
+            50
+          ],
+          [
+            447,
+            50
+          ],
+          [
+            447,
+            778.9
+          ],
+          [
+            47.1,
+            780.5
+          ]
+        ],
+        "paperWhite": [
+          214,
+          189,
+          132
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-16",
@@ -343,11 +1335,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 838,
-      "bytes": 209433,
-      "sha256": "b4eefc09da9c8649968006a763dc454def8f1bf2d144607d60dd6e1d10e0becf"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 267459,
+      "sha256": "0518a95f513b3323b48106ea42f3ea8fa8e4c33aaa8ec751378a09034788fb61",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 838,
+        "bytes": 209433,
+        "sha256": "b4eefc09da9c8649968006a763dc454def8f1bf2d144607d60dd6e1d10e0becf"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            47.8,
+            50.9
+          ],
+          [
+            451.9,
+            51.2
+          ],
+          [
+            454.1,
+            792.4
+          ],
+          [
+            48.1,
+            790.5
+          ]
+        ],
+        "paperWhite": [
+          212,
+          187,
+          131
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-17",
@@ -363,11 +1417,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 841,
-      "bytes": 213308,
-      "sha256": "c6a397b56f4f36a2b824ccb33ca3085f5da77c2ad66bcb580d063549d7eee155"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 268319,
+      "sha256": "6a7e992834f23dfc8256566b6b9185ae236095ee1dec83b173242fb2b91d43d6",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 841,
+        "bytes": 213308,
+        "sha256": "c6a397b56f4f36a2b824ccb33ca3085f5da77c2ad66bcb580d063549d7eee155"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            44.7,
+            48.6
+          ],
+          [
+            451.2,
+            46.3
+          ],
+          [
+            453.2,
+            788
+          ],
+          [
+            45.7,
+            790.4
+          ]
+        ],
+        "paperWhite": [
+          211,
+          186,
+          129
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-18",
@@ -383,11 +1499,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 832,
-      "bytes": 200979,
-      "sha256": "5ec97fb129f5a28ccc3ec61e37423fdb2577445ec790f6d76c6816c260627bc0"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 263303,
+      "sha256": "edd6ba32d17354b201a41a4ea7f15955484f4c2b787e38aa095a2c9f42a9b2ee",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 832,
+        "bytes": 200979,
+        "sha256": "5ec97fb129f5a28ccc3ec61e37423fdb2577445ec790f6d76c6816c260627bc0"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            48.3,
+            53.5
+          ],
+          [
+            445.8,
+            51.6
+          ],
+          [
+            447.6,
+            779
+          ],
+          [
+            49.5,
+            779
+          ]
+        ],
+        "paperWhite": [
+          211,
+          184,
+          127
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-19",
@@ -403,11 +1581,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 833,
-      "bytes": 197650,
-      "sha256": "95de54aa81e5f9bba8f0f2a4578a2d3e103c66cc8a8d55d4e0bbb0f27b8b8763"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 262527,
+      "sha256": "16a078efdaf31d209f6efb9b7e81da767061521e6ca6bbe9fe78c62ad555468e",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 833,
+        "bytes": 197650,
+        "sha256": "95de54aa81e5f9bba8f0f2a4578a2d3e103c66cc8a8d55d4e0bbb0f27b8b8763"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            48.9,
+            51
+          ],
+          [
+            448,
+            51
+          ],
+          [
+            447.8,
+            778.8
+          ],
+          [
+            50.9,
+            778.2
+          ]
+        ],
+        "paperWhite": [
+          215,
+          189,
+          136
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-20",
@@ -423,11 +1663,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 830,
-      "bytes": 201907,
-      "sha256": "da3456867188281b3d7f98428a6ec345edf114e42c4e80d895f1ac6a21eec2ac"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 265748,
+      "sha256": "d6d522b3051dd0b81838ca1d99e9ac0cdaddd1db9c35fef03f0f818c97bb4a3a",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 830,
+        "bytes": 201907,
+        "sha256": "da3456867188281b3d7f98428a6ec345edf114e42c4e80d895f1ac6a21eec2ac"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            49,
+            52.1
+          ],
+          [
+            448.1,
+            51.9
+          ],
+          [
+            447.8,
+            778.5
+          ],
+          [
+            49,
+            780.4
+          ]
+        ],
+        "paperWhite": [
+          208,
+          182,
+          127
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-21",
@@ -443,11 +1745,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 842,
-      "bytes": 184481,
-      "sha256": "12e3bd1b528eb9140f762d70dc265fe6f64b12925063658fe237508ac29dec5d"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 243236,
+      "sha256": "0389f86befb5b3539aae49668150b0d799e3783b6f70a22cf1288443572e6de9",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 842,
+        "bytes": 184481,
+        "sha256": "12e3bd1b528eb9140f762d70dc265fe6f64b12925063658fe237508ac29dec5d"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            46.6,
+            49.9
+          ],
+          [
+            450.6,
+            50.2
+          ],
+          [
+            448.7,
+            785.6
+          ],
+          [
+            44.7,
+            787
+          ]
+        ],
+        "paperWhite": [
+          210,
+          183,
+          129
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "tarok-22",
@@ -463,11 +1827,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 836,
-      "bytes": 193700,
-      "sha256": "0014df7e2cafd4613f385b2936ed61335bbe9cdc494462b741de2f986ef16a12"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 220879,
+      "sha256": "244529301febbb8880d811ef25ea674322db311ef955f7c21b16bd6a76348de1",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 836,
+        "bytes": 193700,
+        "sha256": "0014df7e2cafd4613f385b2936ed61335bbe9cdc494462b741de2f986ef16a12"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            45,
+            53
+          ],
+          [
+            447,
+            53
+          ],
+          [
+            447,
+            788.4
+          ],
+          [
+            45,
+            788.5
+          ]
+        ],
+        "paperWhite": [
+          209,
+          181,
+          121
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "clubs-1",
@@ -484,11 +1910,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 848,
-      "bytes": 49682,
-      "sha256": "e9a43dc98ec5fff47526c0e2a1d01ba8fc07ab85133faf7a70f6d0895670b25e"
+      "treatment": "Conventional correction of original pip scan; original marks and positions preserved on a uniform white background.",
+      "width": 504,
+      "height": 904,
+      "bytes": 25271,
+      "sha256": "ddaa86703a98c59f1786cd35cc590209911bf7235a4f0b8393e5ffd9385b6160",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 848,
+        "bytes": 49682,
+        "sha256": "e9a43dc98ec5fff47526c0e2a1d01ba8fc07ab85133faf7a70f6d0895670b25e"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            0,
+            0
+          ],
+          [
+            499,
+            0
+          ],
+          [
+            499,
+            847
+          ],
+          [
+            0,
+            847
+          ]
+        ],
+        "paperWhite": [
+          255,
+          255,
+          255
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "clubs-5",
@@ -504,11 +1992,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 870,
-      "bytes": 140031,
-      "sha256": "e68a859bb7007773891874537426c48d9d5801e844f5f2ea46b7fe5bacbd21ba"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 156421,
+      "sha256": "a49bffc0ed4d0bedece77b287aba2c79dd85c06ee2a707fc75511cc99a460647",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 870,
+        "bytes": 140031,
+        "sha256": "e68a859bb7007773891874537426c48d9d5801e844f5f2ea46b7fe5bacbd21ba"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            29.2,
+            15.6
+          ],
+          [
+            478.2,
+            13.7
+          ],
+          [
+            479.5,
+            847
+          ],
+          [
+            18.5,
+            841.7
+          ]
+        ],
+        "paperWhite": [
+          212,
+          213,
+          214
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "clubs-6",
@@ -524,11 +2074,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 895,
-      "bytes": 163399,
-      "sha256": "03300d99946204c91443e76bdc06462cf97821681e59230e950441c84169409a"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 174692,
+      "sha256": "10c91a04087d2a15070a65cef97c3d93abb3bcadac1f7a0b784fe2d995e5e68c",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 895,
+        "bytes": 163399,
+        "sha256": "03300d99946204c91443e76bdc06462cf97821681e59230e950441c84169409a"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            7.7,
+            11.2
+          ],
+          [
+            484.4,
+            7.3
+          ],
+          [
+            484.5,
+            879.8
+          ],
+          [
+            2.2,
+            883.9
+          ]
+        ],
+        "paperWhite": [
+          221,
+          219,
+          222
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "clubs-7",
@@ -544,11 +2156,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 891,
-      "bytes": 114203,
-      "sha256": "7ffd31408f35936155589cf9b5e8ab76bfe6ba655c53b5e13395b5d6ffe807a0"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 133819,
+      "sha256": "5ff4da260db25ff788bf5448a2895e278f388814864d991b66ea2c7d8b1d7ce2",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 891,
+        "bytes": 114203,
+        "sha256": "7ffd31408f35936155589cf9b5e8ab76bfe6ba655c53b5e13395b5d6ffe807a0"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            20.8,
+            27.9
+          ],
+          [
+            481.5,
+            19.8
+          ],
+          [
+            490,
+            871.9
+          ],
+          [
+            19.7,
+            876.9
+          ]
+        ],
+        "paperWhite": [
+          189,
+          186,
+          188
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "clubs-8",
@@ -564,11 +2238,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 877,
-      "bytes": 167104,
-      "sha256": "bb3f154e19768675e09d55e430e2f35cdab31d34f0f1326fb1bc63e6c853360a"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 187427,
+      "sha256": "6a90bdc4c4d50023ab3da6ce6a59bdb356b895a15f59eb214153f2d454a63b25",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 877,
+        "bytes": 167104,
+        "sha256": "bb3f154e19768675e09d55e430e2f35cdab31d34f0f1326fb1bc63e6c853360a"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            10.2,
+            19.4
+          ],
+          [
+            472.3,
+            11.6
+          ],
+          [
+            481.5,
+            859
+          ],
+          [
+            13.7,
+            866.5
+          ]
+        ],
+        "paperWhite": [
+          207,
+          209,
+          211
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "spades-1",
@@ -585,11 +2321,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 854,
-      "bytes": 53330,
-      "sha256": "7a876123a75aa6615bd6ff0217382301d31d87b8299a4766696e2b14f939e6b1"
+      "treatment": "Conventional correction of original pip scan; original marks and positions preserved on a uniform white background.",
+      "width": 504,
+      "height": 904,
+      "bytes": 28387,
+      "sha256": "499daf8c84900bb3bb23ae9976ad9e2bf5f074a558eb51ee79116f1c7c0d5d9c",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 854,
+        "bytes": 53330,
+        "sha256": "7a876123a75aa6615bd6ff0217382301d31d87b8299a4766696e2b14f939e6b1"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            0,
+            0
+          ],
+          [
+            499,
+            0
+          ],
+          [
+            499,
+            853
+          ],
+          [
+            0,
+            853
+          ]
+        ],
+        "paperWhite": [
+          255,
+          255,
+          255
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "spades-5",
@@ -605,11 +2403,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 897,
-      "bytes": 104879,
-      "sha256": "eec12ec03ab38165939793c5719dde20038b31259bf370e47033b6a9f10eee7a"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 122704,
+      "sha256": "8e31cc97492ef276ae80e58a4f7cac47cc2750a8c4709580d359cbe8bef54bf6",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 897,
+        "bytes": 104879,
+        "sha256": "eec12ec03ab38165939793c5719dde20038b31259bf370e47033b6a9f10eee7a"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            16.4,
+            10.7
+          ],
+          [
+            484.1,
+            8.1
+          ],
+          [
+            491.1,
+            868.4
+          ],
+          [
+            10.9,
+            873.6
+          ]
+        ],
+        "paperWhite": [
+          188,
+          187,
+          189
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "spades-6",
@@ -625,11 +2485,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 896,
-      "bytes": 162719,
-      "sha256": "2a47ffca87a09a0a73382bcb947e6a71c32ba2112b66efd54dc1bbde951a22b3"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 178647,
+      "sha256": "50f7670e4fe969d32c1bbd01c874437d2cf4d7fbd6790181f43d39d33a2f78f5",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 896,
+        "bytes": 162719,
+        "sha256": "2a47ffca87a09a0a73382bcb947e6a71c32ba2112b66efd54dc1bbde951a22b3"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            8.4,
+            8.5
+          ],
+          [
+            478.8,
+            2.4
+          ],
+          [
+            495.3,
+            866
+          ],
+          [
+            11.3,
+            880.8
+          ]
+        ],
+        "paperWhite": [
+          216,
+          216,
+          220
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "spades-7",
@@ -645,11 +2567,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 920,
-      "bytes": 132090,
-      "sha256": "1961f68586a4bbdc8ded5434b704545b6ca7b0728daea29aa22b9729efcaf4bc"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 143446,
+      "sha256": "12039fcbd8d404f05db5b4c0c421924a1b8568209192890d879b6eff0167b590",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 920,
+        "bytes": 132090,
+        "sha256": "1961f68586a4bbdc8ded5434b704545b6ca7b0728daea29aa22b9729efcaf4bc"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            6.8,
+            20.9
+          ],
+          [
+            483.7,
+            20
+          ],
+          [
+            495.6,
+            897.8
+          ],
+          [
+            1.3,
+            907.8
+          ]
+        ],
+        "paperWhite": [
+          183,
+          184,
+          183
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "spades-8",
@@ -665,11 +2649,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
       "height": 904,
-      "bytes": 167811,
-      "sha256": "2c8730cd021232b1f68b9e676e648dd37ede44e2c8349c7ae744b2965df8e563"
+      "bytes": 180242,
+      "sha256": "4f3b943a178d63c18a31819881d0f05ef7b6dfd2d1a8657bfa3f7c84ea28b299",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 904,
+        "bytes": 167811,
+        "sha256": "2c8730cd021232b1f68b9e676e648dd37ede44e2c8349c7ae744b2965df8e563"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            14.4,
+            6.7
+          ],
+          [
+            482.7,
+            4
+          ],
+          [
+            488,
+            872.4
+          ],
+          [
+            2.1,
+            874.7
+          ]
+        ],
+        "paperWhite": [
+          202,
+          198,
+          200
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "hearts-5",
@@ -685,11 +2731,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 863,
-      "bytes": 135573,
-      "sha256": "2e788b59d8d989533174ec8761fce9873725de37a1989f67e4fd4377ba16ac17"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 160332,
+      "sha256": "561327fcc9230a86607487b6ea5ae3d8f710fd5fab9f1b7aef8852dfb07839d2",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 863,
+        "bytes": 135573,
+        "sha256": "2e788b59d8d989533174ec8761fce9873725de37a1989f67e4fd4377ba16ac17"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            16.2,
+            26.2
+          ],
+          [
+            458.8,
+            11
+          ],
+          [
+            489.3,
+            826.7
+          ],
+          [
+            35.8,
+            846.9
+          ]
+        ],
+        "paperWhite": [
+          197,
+          198,
+          202
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "hearts-6",
@@ -705,11 +2813,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 853,
-      "bytes": 137142,
-      "sha256": "218bc0916147f869f783b1170c438695470a6aa3936064af4e73f38cde498050"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 158791,
+      "sha256": "705c753214232847ef4bbea4dd13e83cae10b84abd08171dd716961923dedb56",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 853,
+        "bytes": 137142,
+        "sha256": "218bc0916147f869f783b1170c438695470a6aa3936064af4e73f38cde498050"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            10,
+            3.6
+          ],
+          [
+            461,
+            -6.8
+          ],
+          [
+            484.6,
+            818.1
+          ],
+          [
+            28.2,
+            837.6
+          ]
+        ],
+        "paperWhite": [
+          216,
+          216,
+          219
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "hearts-7",
@@ -725,11 +2895,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 871,
-      "bytes": 153945,
-      "sha256": "4a5e81eb5dc5bb78b69f05d7e8639139d2ca9c966d184ac03c10cdbb313de9a9"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 175071,
+      "sha256": "c4fd747b7bf01415bc63726e2766a25130f59caa28c81fee624a758a96bdd41d",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 871,
+        "bytes": 153945,
+        "sha256": "4a5e81eb5dc5bb78b69f05d7e8639139d2ca9c966d184ac03c10cdbb313de9a9"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            4.7,
+            1.3
+          ],
+          [
+            470.9,
+            -3.6
+          ],
+          [
+            487.6,
+            840.9
+          ],
+          [
+            19.4,
+            858.4
+          ]
+        ],
+        "paperWhite": [
+          201,
+          198,
+          201
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "hearts-8",
@@ -745,11 +2977,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 887,
-      "bytes": 141662,
-      "sha256": "d2164ba02a9b06fd59f2e41baa278efe118b63a95c0a283fbe43521d86ed4d59"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 160808,
+      "sha256": "59540e6dbefa2f10139e6b3a8b2d36aa8543c63d6d3a2e13aa7cf609d42f2fae",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 887,
+        "bytes": 141662,
+        "sha256": "d2164ba02a9b06fd59f2e41baa278efe118b63a95c0a283fbe43521d86ed4d59"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            7,
+            11.1
+          ],
+          [
+            483.8,
+            1.6
+          ],
+          [
+            499.8,
+            878.3
+          ],
+          [
+            11.6,
+            885.9
+          ]
+        ],
+        "paperWhite": [
+          182,
+          183,
+          185
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "diamonds-4",
@@ -766,11 +3060,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 847,
-      "bytes": 39640,
-      "sha256": "61eaf36634825418d7f09d15053ea7e65e4c3fb85841080e7271f1dd299ffb52"
+      "treatment": "Conventional correction of original pip scan; original marks and positions preserved on a uniform white background.",
+      "width": 504,
+      "height": 904,
+      "bytes": 6711,
+      "sha256": "55cc447f5e299ba43ce0db7425022cc52137bf027a665bbe1cc473cc395f6156",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 847,
+        "bytes": 39640,
+        "sha256": "61eaf36634825418d7f09d15053ea7e65e4c3fb85841080e7271f1dd299ffb52"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            0,
+            0
+          ],
+          [
+            499,
+            0
+          ],
+          [
+            499,
+            846
+          ],
+          [
+            0,
+            846
+          ]
+        ],
+        "paperWhite": [
+          255,
+          255,
+          255
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "diamonds-5",
@@ -786,11 +3142,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 882,
-      "bytes": 141427,
-      "sha256": "c9a58106cb970038ab3150c174b6ff21bd58ffbb7a9d729d20368c064d86059b"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 154037,
+      "sha256": "7ed3b1fb1cab02a93938203a54e9a0866fa3ed5a42dd83d6f30a9fe8c80cc240",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 882,
+        "bytes": 141427,
+        "sha256": "c9a58106cb970038ab3150c174b6ff21bd58ffbb7a9d729d20368c064d86059b"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            9.7,
+            8.9
+          ],
+          [
+            471.3,
+            4.3
+          ],
+          [
+            485.9,
+            860
+          ],
+          [
+            4.7,
+            870.7
+          ]
+        ],
+        "paperWhite": [
+          189,
+          189,
+          190
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "diamonds-6",
@@ -806,11 +3224,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 814,
-      "bytes": 125956,
-      "sha256": "45a395039c67c000601bb0efb680068a3f5d5ec65860e38511d17d9bcc9f2e48"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 156856,
+      "sha256": "bde128010d1e2f201d9c54bfd44051c8828ef6508bc4315068ea140f374531da",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 814,
+        "bytes": 125956,
+        "sha256": "45a395039c67c000601bb0efb680068a3f5d5ec65860e38511d17d9bcc9f2e48"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            18,
+            40
+          ],
+          [
+            429,
+            3
+          ],
+          [
+            495,
+            767
+          ],
+          [
+            66,
+            801
+          ]
+        ],
+        "paperWhite": [
+          219,
+          222,
+          224
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "diamonds-7",
@@ -826,11 +3306,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 854,
-      "bytes": 122500,
-      "sha256": "e67a00f93888cadcc5db9e9ccb6698dc8ce10aed12d729b597fbb3e9936ba2f8"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 144827,
+      "sha256": "500681b7f22d0d56e2ea82266eba84bbd9df04cc75db3a5a34ff258320375210",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 854,
+        "bytes": 122500,
+        "sha256": "e67a00f93888cadcc5db9e9ccb6698dc8ce10aed12d729b597fbb3e9936ba2f8"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            15.5,
+            15.1
+          ],
+          [
+            463.6,
+            3.5
+          ],
+          [
+            489.8,
+            823.6
+          ],
+          [
+            34.4,
+            841.2
+          ]
+        ],
+        "paperWhite": [
+          199,
+          198,
+          200
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "diamonds-8",
@@ -846,11 +3388,73 @@
       "license": "Public domain",
       "licenseTemplate": "PD-Art (PD-old-auto-expired)",
       "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "treatment": "Wikimedia Commons JPEG thumbnail, downloaded unchanged from the source scan",
-      "width": 500,
-      "height": 841,
-      "bytes": 152546,
-      "sha256": "2e320e0b99aa05a02cc32094980568f19c24b22c6db0721980a1a8a81b3a166b"
+      "treatment": "Conventional perspective correction, paper-reference white balance and tonal curves; original artwork preserved within white margins.",
+      "width": 504,
+      "height": 904,
+      "bytes": 183840,
+      "sha256": "69b4851eb5bacbdf346451806ff0c319e831d7966214009c776d5a2bb859306b",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 500,
+        "height": 841,
+        "bytes": 152546,
+        "sha256": "2e320e0b99aa05a02cc32094980568f19c24b22c6db0721980a1a8a81b3a166b"
+      },
+      "correction": {
+        "script": "scripts/restore-smrekar-deck.mjs",
+        "profile": "scripts/smrekar-restoration.json",
+        "quad": [
+          [
+            18.5,
+            27.7
+          ],
+          [
+            455.5,
+            11
+          ],
+          [
+            496.5,
+            813.2
+          ],
+          [
+            47.4,
+            840
+          ]
+        ],
+        "paperWhite": [
+          194,
+          195,
+          198
+        ],
+        "curve": [
+          [
+            0,
+            0
+          ],
+          [
+            0.18,
+            0.15
+          ],
+          [
+            0.5,
+            0.52
+          ],
+          [
+            0.78,
+            0.84
+          ],
+          [
+            0.94,
+            0.98
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "blackPoint": 3,
+        "background": "#ffffff"
+      }
     },
     {
       "id": "clubs-2",
@@ -872,28 +3476,12 @@
         428,
         443
       ],
-      "paperColors": [
-        [
-          149,
-          154,
-          157
-        ],
-        [
-          164,
-          160,
-          161
-        ],
-        [
-          154,
-          150,
-          149
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 36524,
-      "sha256": "43066707a6c12ebe677182968794154c6da10b1ab7e53546cd17bdc4744ca148"
+      "bytes": 36304,
+      "sha256": "3e769520497d1b063ab55446b95cca355dbc9d170a6fe83f4957058cee98b72a"
     },
     {
       "id": "clubs-3",
@@ -915,28 +3503,12 @@
         428,
         443
       ],
-      "paperColors": [
-        [
-          149,
-          154,
-          157
-        ],
-        [
-          164,
-          160,
-          161
-        ],
-        [
-          154,
-          150,
-          149
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 36595,
-      "sha256": "e322cb98a24b3c589a5b63971073291d6ab4114e91ae98c4cfa6563609462401"
+      "bytes": 36375,
+      "sha256": "be6280d57f2150b342d398c19b8f1fc6c09caf005e9edc5da082fa84490a1116"
     },
     {
       "id": "clubs-4",
@@ -958,28 +3530,12 @@
         428,
         443
       ],
-      "paperColors": [
-        [
-          149,
-          154,
-          157
-        ],
-        [
-          164,
-          160,
-          161
-        ],
-        [
-          154,
-          150,
-          149
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 36676,
-      "sha256": "6491f1c68d12c7304aa10c08c2d5bb936dbb7a928d61a0dfb6de89e9af6d4b21"
+      "bytes": 36456,
+      "sha256": "78ffe70f834c95c62f7e440c177da7027859c615d7af315e7c5737df4e6326e7"
     },
     {
       "id": "spades-2",
@@ -1001,28 +3557,12 @@
         444,
         448
       ],
-      "paperColors": [
-        [
-          148,
-          143,
-          138
-        ],
-        [
-          162,
-          154,
-          152
-        ],
-        [
-          153,
-          158,
-          162
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 56406,
-      "sha256": "ec6997c70c14e38c09c096864e0a402a90403caa64bc72bc078390948c3e958d"
+      "bytes": 56186,
+      "sha256": "979bcf59255a47f4542cf3b2554317454a5ee7f15a54d382c3feb1f9ee2b8c97"
     },
     {
       "id": "spades-3",
@@ -1044,28 +3584,12 @@
         444,
         448
       ],
-      "paperColors": [
-        [
-          148,
-          143,
-          138
-        ],
-        [
-          162,
-          154,
-          152
-        ],
-        [
-          153,
-          158,
-          162
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 56478,
-      "sha256": "b4bde2f6791fb5c3e5d955a4dd2b566f5883c89585e52ccf2c2cb3b71009af21"
+      "bytes": 56258,
+      "sha256": "e545691c28181837f1dbda147fe99a6aaaed54e7bf3c2f243b519e6cc0a21532"
     },
     {
       "id": "spades-4",
@@ -1087,28 +3611,12 @@
         444,
         448
       ],
-      "paperColors": [
-        [
-          148,
-          143,
-          138
-        ],
-        [
-          162,
-          154,
-          152
-        ],
-        [
-          153,
-          158,
-          162
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 56560,
-      "sha256": "8b940da949a84d0dbe3577697b847d1302a778909c341bd7f91cb1857befbe82"
+      "bytes": 56340,
+      "sha256": "d25646588dcad4d182ce9d35451808ca9e56124a0e7f495546dfbe9fde0e7683"
     },
     {
       "id": "hearts-1",
@@ -1130,28 +3638,12 @@
         437,
         458
       ],
-      "paperColors": [
-        [
-          180,
-          181,
-          183
-        ],
-        [
-          166,
-          173,
-          176
-        ],
-        [
-          165,
-          173,
-          178
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 55330,
-      "sha256": "6d56567c12406f9b81a3f8d62f24f4e1833a3159785df2012810d888a328790d"
+      "bytes": 55110,
+      "sha256": "1e511a076379149a315139edad74dd6ce9237d2397954223f6d7ab7284a4035c"
     },
     {
       "id": "hearts-2",
@@ -1173,28 +3665,12 @@
         437,
         458
       ],
-      "paperColors": [
-        [
-          180,
-          181,
-          183
-        ],
-        [
-          166,
-          173,
-          176
-        ],
-        [
-          165,
-          173,
-          178
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 55249,
-      "sha256": "588f79f4e02dfb99b7e6b8da23f4807c7848a65bb9dab31bf8a5f94968675530"
+      "bytes": 55029,
+      "sha256": "9858690b8ed192a84b1d9578c3335ad73816bdd6c21b5ab499c6380fd648b949"
     },
     {
       "id": "hearts-3",
@@ -1216,28 +3692,12 @@
         437,
         458
       ],
-      "paperColors": [
-        [
-          180,
-          181,
-          183
-        ],
-        [
-          166,
-          173,
-          176
-        ],
-        [
-          165,
-          173,
-          178
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 55179,
-      "sha256": "c70910882daa14184daf9ff04edc56c8d21289b35beb4721c060a79685bddeef"
+      "bytes": 54959,
+      "sha256": "80bc6015abbd1a4efe2417eb99a3703af5236f33f447d66c39878c88530194f0"
     },
     {
       "id": "hearts-4",
@@ -1259,28 +3719,12 @@
         437,
         458
       ],
-      "paperColors": [
-        [
-          180,
-          181,
-          183
-        ],
-        [
-          166,
-          173,
-          176
-        ],
-        [
-          165,
-          173,
-          178
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 55096,
-      "sha256": "9f81a4d6ce3a13182b6be09fe04b61a952710c5419afe7611842239985d9d1de"
+      "bytes": 54876,
+      "sha256": "cfbaea362d482245abaa152feeaa46fdafc12853a7fa37107195137f3d22e07e"
     },
     {
       "id": "diamonds-1",
@@ -1302,28 +3746,12 @@
         379,
         415
       ],
-      "paperColors": [
-        [
-          155,
-          148,
-          142
-        ],
-        [
-          169,
-          159,
-          158
-        ],
-        [
-          156,
-          159,
-          164
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 33520,
-      "sha256": "8eb0290863c30eb9c046013c0ed4f1235cd9f3e708fa02023949faf01ddb815b"
+      "bytes": 33300,
+      "sha256": "3e043b6e0ca89ac6d124dc5cf34902b29efdab56c1b2a8bd76492208ec2f067f"
     },
     {
       "id": "diamonds-2",
@@ -1345,28 +3773,12 @@
         379,
         415
       ],
-      "paperColors": [
-        [
-          155,
-          148,
-          142
-        ],
-        [
-          169,
-          159,
-          158
-        ],
-        [
-          156,
-          159,
-          164
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 33437,
-      "sha256": "a5acf0f2e42b021046e6381674e1cbb2805a1977c9a6181c55e68170fa01f1dc"
+      "bytes": 33217,
+      "sha256": "19e15083c211b16a9438f2c961e38616eb20dc6f3e76e98e50683a397d773e74"
     },
     {
       "id": "diamonds-3",
@@ -1388,28 +3800,13 @@
         379,
         415
       ],
-      "paperColors": [
-        [
-          155,
-          148,
-          142
-        ],
-        [
-          169,
-          159,
-          158
-        ],
-        [
-          156,
-          159,
-          164
-        ]
-      ],
-      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and sampled paper colors. Reconstructed card, not an original scan.",
+      "background": "#ffffff",
+      "treatment": "AI-assisted extraction of an original Smrekar suit mark; self-contained SVG with exact pip count and a uniform white background. Reconstructed card, not an original scan.",
       "generator": "scripts/build-smrekar-pips.mjs",
       "prompt": "docs/smrekar-pips-prompt.md",
-      "bytes": 33365,
-      "sha256": "f8d65fefef47a36dd0ed7747c92d15e853c74f536c30b586d49d89d27e812506"
+      "bytes": 33145,
+      "sha256": "cea665dadf5f3ac06c2c6fc09065ae3653acff86bfcccc99f5d6b58f7f29103b"
     }
-  ]
+  ],
+  "artworkVersion": 2
 }

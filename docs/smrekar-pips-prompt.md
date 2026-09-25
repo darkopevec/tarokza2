@@ -2,7 +2,7 @@
 
 Thirteen pip cards are absent from the Commons collection: all four hearts,
 diamonds 2–4, clubs 8–10 and spades 8–10. Only these faces are reconstructed;
-the 41 available faces and original back remain unchanged source images.
+the 41 available faces and original back use the surviving source artwork.
 
 The built-in imagegen tool extracted a transparent four-symbol atlas from
 the high-resolution original Commons files corresponding to `hearts-8.jpg`,
@@ -15,9 +15,10 @@ This is an AI-assisted extraction, not a pixel-exact crop.
 `node scripts/build-smrekar-pips.mjs` trims transparent sprite padding,
 downsamples the marks and embeds them in self-contained SVGs. The shield's
 diagonal band, spearhead's collar, sword hilt and serrated leaf are retained.
-The card layouts use exact pip counts with lower symbols rotated. Subtle
-paper gradients use colors sampled from blank areas of the original suit
-cards. No new borders, text indexes or manufacturer marks are added. The
+The card layouts use exact pip counts with lower symbols rotated. All
+reconstructed platlci have a uniform white (`#ffffff`) background, as
+requested; no paper gradients or scan colors are sampled. No new borders,
+text indexes or manufacturer marks are added. The
 committed atlas is needed for exact reproduction; regenerating it with AI
 can change the artwork.
 

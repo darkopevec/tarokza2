@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { createDeck } from '../shared/cards.mjs';
 
-// Keep the historical scans unchanged. Commons provides 41 of the 54 faces;
-// build-smrekar-pips.mjs reconstructs the 13 missing pip cards separately.
-const destination = new URL('../public/cards/smrekar/', import.meta.url);
+// Retain unchanged historical scans outside the served artwork. Commons provides
+// 41 faces and a back; restore-smrekar-deck.mjs corrects those source scans before
+// build-smrekar-pips.mjs reconstructs the 13 missing pip cards.
+const destination = new URL('../artifacts/smrekar-deck/originals/', import.meta.url);
 const source = 'https://commons.wikimedia.org/wiki/Category:Smrekar%27s_Tarot';
 const attributionSource = 'https://smrekar.ng-slo.si/slovanski-tarok/';
 const headers = { 'User-Agent': 'Tarokza2DeckImporter/1.0 (https://github.com/darkopevec/tarokza2)' };
@@ -102,14 +103,6 @@ for (const card of downloadOrder) {
   console.log(`${card.id}: ${card.width}×${card.height}, ${card.bytes} bytes`);
 }
 
-// Read this after downloads, so a source refresh retains separately made faces.
-let generatedCards = [];
-try {
-  const previous = JSON.parse(await readFile(new URL('sources.json', destination), 'utf8'));
-  generatedCards = previous.cards?.filter(card => card.generated) ?? [];
-} catch (error) {
-  if (error.code !== 'ENOENT') throw error;
-}
 await writeFile(new URL('sources.json', destination), `${JSON.stringify({
   deck: 'Slovanski tarok — Hinko Smrekar',
   artist: 'Hinko Smrekar',
@@ -119,8 +112,9 @@ await writeFile(new URL('sources.json', destination), `${JSON.stringify({
   rights: 'Wikimedia Commons classifies each source scan as public domain under PD-Art (PD-old-auto-expired). Per-file source and licence records are included below.',
   retrieved: new Date().toISOString().slice(0, 10),
   sourceFaces: 41,
-  note: '22 complete trumps, 16 court cards and three pip cards are unchanged Commons JPEG thumbnails. The 13 missing pip cards are reconstructed separately from this deck’s suit symbols. The original card back is included separately.',
+  note: '22 complete trumps, 16 court cards and three pip cards are unchanged Commons JPEG thumbnails retained as restoration inputs. The original card back is included separately. Run the restorer and then the pip-card generator to create the served 54-card deck.',
   back,
-  cards: [...cards, ...generatedCards],
+  cards,
 }, null, 2)}\n`);
-console.log('Imported 41 source faces and the card back. The pip-card generator completes the 54-card deck.');
+console.log('Imported 41 source faces and the card back into artifacts/smrekar-deck/originals/.');
+console.log('Run node scripts/restore-smrekar-deck.mjs, then node scripts/build-smrekar-pips.mjs to update the served deck.');

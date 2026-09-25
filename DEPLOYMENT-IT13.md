@@ -1,6 +1,18 @@
 # IT13 deployment
 
-The current 2026-09-25 Smrekar release uses image
+The current 2026-09-25 Smrekar artwork correction uses image
+`tarokza2:smrekar-restored-20260925` and `compose.it13.yaml`. It corrects
+white balance, tonal curves and perspective, preserves the scanned linework,
+and gives all Smrekar platlci uniform white backgrounds. Faces and back use
+versioned URLs so browsers refresh the artwork. Modiano remains the default.
+Saved games and identities require no migration. Back up the stopped game
+volume before switching images; retain `tarokza2:smrekar-deck-20260925` for
+code rollback with the same saved data. Refresh browser tabs after deployment.
+See [card decks](docs/cards.md).
+
+## Previous Smrekar deck release
+
+The 2026-09-25 Smrekar release uses image
 `tarokza2:smrekar-deck-20260925` and `compose.it13.yaml`. It adds the optional
 Smrekarjev tarok · Hinko Smrekar deck under Cards; Modiano remains the default.
 The deck has 41 original faces, 13 reconstructed pip cards and its original back.

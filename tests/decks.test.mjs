@@ -39,7 +39,7 @@ test('each deck maps the same 54 identities to unique local artwork without chan
       else {
         const reconstructed = card.suit !== 'tarok' && card.rank <= 4
           && (id !== 'smrekar' || !['diamonds-4', 'clubs-1', 'spades-1'].includes(card.id));
-        assert.equal(cardImage(card, id), `/cards/${id}/${card.id}.${reconstructed ? 'svg' : 'jpg'}?v=1`);
+        assert.equal(cardImage(card, id), `/cards/${id}/${card.id}.${reconstructed ? 'svg' : 'jpg'}?v=${id === 'smrekar' ? 2 : 1}`);
       }
     }
   }
@@ -55,10 +55,16 @@ test('each deck maps the same 54 identities to unique local artwork without chan
 });
 
 test('Smrekar uses its original back and the existing decks keep their shared back', () => {
-  assert.equal(cardBackImage('smrekar'), '/cards/smrekar/back.jpg?v=1');
+  assert.equal(cardBackImage('smrekar'), '/cards/smrekar/back.jpg?v=2');
   assert.equal(cardBackImage('modiano'), CARD_BACK_IMAGE);
   assert.equal(cardBackImage('slovenian'), CARD_BACK_IMAGE);
   assert.equal(cardBackImage('unknown'), CARD_BACK_IMAGE);
+});
+
+test('all Smrekar faces and its back use the corrected artwork revision', () => {
+  assert.ok(cardImageUrls('smrekar').every(url => url.endsWith('?v=2')));
+  assert.ok(cardImageUrls('slovenian').every(url => url.endsWith('?v=1')));
+  assert.ok(cardImageUrls('modiano').every(url => url.endsWith('?v=1')));
 });
 
 test('Modiano remains the default and a chosen deck persists for this browser', async t => {
@@ -79,7 +85,7 @@ test('Modiano remains the default and a chosen deck persists for this browser', 
   assert.equal(f.getDeck(), 'smrekar');
   assert.equal(f.storage.get(f.DECK_STORAGE_KEY), 'smrekar');
   assert.match(f.cardImage('tarok-1'), /^\/cards\/smrekar\//);
-  assert.equal(f.cardBackImage(), '/cards/smrekar/back.jpg?v=1');
+  assert.equal(f.cardBackImage(), '/cards/smrekar/back.jpg?v=2');
   assert.equal(updates, 2);
   unsubscribe();
   f.setDeck('modiano');
@@ -114,7 +120,7 @@ test('selection works without browser storage and follows changes made in anothe
   assert.equal(f.getDeck(), 'slovenian');
   f.storageEvent({ key: f.DECK_STORAGE_KEY, newValue: 'smrekar' });
   assert.equal(f.getDeck(), 'smrekar');
-  assert.equal(f.cardBackImage(), '/cards/smrekar/back.jpg?v=1');
+  assert.equal(f.cardBackImage(), '/cards/smrekar/back.jpg?v=2');
   f.storageEvent({ key: f.DECK_STORAGE_KEY, newValue: null });
   assert.equal(f.getDeck(), 'modiano');
   f.setDeck('slovenian');
