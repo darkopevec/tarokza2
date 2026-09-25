@@ -531,6 +531,8 @@ function PickupFlight({ pickup, playerName }) {
 }
 
 // Completed tricks own their animation, independently of the next live trick.
+const TRICK_HOLD_MS = 1750;
+const TRICK_FLIGHT_MS = 1400;
 function TrickCollection({ trick, you, players, collectNow, onComplete }) {
   const ref = useRef(null);
   const animationRef = useRef(null);
@@ -547,21 +549,30 @@ function TrickCollection({ trick, you, players, collectNow, onComplete }) {
     const x = from.left + from.width / 2;
     const y = from.top + from.height / 2;
     Object.assign(element.style, { left: `${x - own.width / 2}px`, top: `${y - own.height / 2}px` });
+    const dx = to.left + to.width / 2 - x;
+    const dy = to.top + to.height / 2 - y;
+    const scale = Math.max(1, Math.min(1.25, (innerWidth - 32) / own.width, (innerHeight - 32) / own.height));
+    const clampCenter = (value, size, limit) => Math.max(16 + size / 2, Math.min(limit - 16 - size / 2, value));
+    const liftX = clampCenter(x + dx * .2, own.width * scale, innerWidth) - x;
+    const liftY = clampCenter(y + dy * .25, own.height * scale, innerHeight) - y;
+    const lifted = `translate(${liftX}px, ${liftY}px) scale(${scale})`;
+    const duration = TRICK_HOLD_MS + TRICK_FLIGHT_MS;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const animation = element.animate(reduced ? [{ opacity: 1 }, { opacity: 0 }] : [
       { transform: 'translate(0, 0) scale(1)', opacity: 1, offset: 0 },
-      { transform: 'translate(0, 0) scale(1)', opacity: 1, offset: 2500 / 3150, easing: 'ease-in' },
-      { opacity: 1, offset: 2955 / 3150 },
-      { transform: `translate(${to.left + to.width / 2 - x}px, ${to.top + to.height / 2 - y}px) scale(.15)`, opacity: 0, offset: 1 },
-    ], { duration: reduced ? 200 : 3150, fill: 'forwards' });
+      { transform: 'translate(0, 0) scale(1)', opacity: 1, offset: TRICK_HOLD_MS / duration, easing: 'ease-in-out' },
+      { transform: lifted, opacity: 1, offset: (TRICK_HOLD_MS + TRICK_FLIGHT_MS * .3) / duration },
+      { transform: lifted, opacity: 1, offset: (TRICK_HOLD_MS + TRICK_FLIGHT_MS * .6) / duration, easing: 'ease-in-out' },
+      { transform: `translate(${dx}px, ${dy}px) scale(.15)`, opacity: 0, offset: 1 },
+    ], { duration: reduced ? 200 : duration, fill: 'forwards' });
     animationRef.current = { animation, reduced };
     animation.finished.then(() => onComplete(trick.key)).catch(() => {});
     return () => { animation.cancel(); animationRef.current = null; };
   }, [trick, you, onComplete]);
   useLayoutEffect(() => {
     const current = animationRef.current;
-    if (collectNow && current && !current.reduced && current.animation.currentTime < 2500) {
-      current.animation.currentTime = 2500;
+    if (collectNow && current && !current.reduced && current.animation.currentTime < TRICK_HOLD_MS) {
+      current.animation.currentTime = TRICK_HOLD_MS;
     }
   }, [collectNow]);
   return createPortal(<div ref={ref} className="trick-collection" style={{ animation: 'none' }}
