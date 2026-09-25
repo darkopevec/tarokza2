@@ -179,7 +179,7 @@ try {
   if (!executablePath) { try { await access('/usr/bin/chromium'); executablePath = '/usr/bin/chromium'; } catch {} }
   browser = await chromium.launch({ headless: process.env.HEADLESS !== '0', ...(executablePath ? { executablePath } : {}), args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   for (let index = 0; index < 2; index++) {
-    const context = await browser.newContext({ viewport: viewports[index], isMobile: true, hasTouch: true });
+    const context = await browser.newContext({ locale: 'sl-SI', viewport: viewports[index], isMobile: true, hasTouch: true });
     const page = await context.newPage(); page.setDefaultTimeout(10_000);
     page.on('pageerror', error => report.browserErrors.push(error.message)); pages.push(page);
   }

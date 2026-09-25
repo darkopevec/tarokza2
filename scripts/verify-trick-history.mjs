@@ -33,7 +33,7 @@ try {
   const baseURL = `http://127.0.0.1:${address.port}`;
   browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE_PATH || '/usr/bin/chromium',
     args: ['--no-sandbox', '--disable-dev-shm-usage'] });
-  const contexts = await Promise.all([0, 1].map(() => browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true })));
+  const contexts = await Promise.all([0, 1].map(() => browser.newContext({ locale: 'sl-SI', viewport: { width: 390, height: 844 }, hasTouch: true })));
   const pages = await Promise.all(contexts.map(context => context.newPage()));
   pages.forEach(page => { page.setDefaultTimeout(10_000); page.on('pageerror', error => report.browserErrors.push(error.message)); });
   await pages[0].goto(baseURL);

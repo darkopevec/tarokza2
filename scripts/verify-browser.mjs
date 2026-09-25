@@ -48,7 +48,7 @@ const browser = await chromium.launch({
   args: ['--no-sandbox', '--disable-dev-shm-usage'],
 });
 const contexts = await Promise.all(report.players.map(({ viewport }) =>
-  browser.newContext({ viewport, deviceScaleFactor: 1, isMobile: true, hasTouch: true }),
+  browser.newContext({ locale: 'sl-SI', viewport, deviceScaleFactor: 1, isMobile: true, hasTouch: true }),
 ));
 const pages = await Promise.all(contexts.map(context => context.newPage()));
 pages.forEach((page, playerIndex) => {

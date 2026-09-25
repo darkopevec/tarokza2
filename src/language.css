@@ -1,0 +1,36 @@
+.language-picker {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.language-picker select {
+  max-width: 132px;
+  min-height: 36px;
+  padding: 6px 25px 6px 9px;
+  border: 1px solid var(--line, #dedbd2);
+  border-radius: 8px;
+  background-color: var(--paper, #faf9f6);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.language-picker select:focus-visible {
+  outline: 2px solid var(--green, #244d3e);
+  outline-offset: 2px;
+}
+.opponent-pickups {
+  max-width: 100%;
+}
+.opponent-pickups > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+@media (max-width: 560px) {
+  .language-picker select { max-width: 106px; min-height: 32px; font-size: 11px; padding-left: 6px; }
+  .header-right { gap: 8px; }
+}
+@media (max-width: 400px) {
+  .opponent-pickups > svg { display: none; }
+}

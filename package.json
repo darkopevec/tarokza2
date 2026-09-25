@@ -18,10 +18,12 @@
     "test:responsive": "node scripts/verify-responsive.mjs",
     "test:trick-history": "node scripts/verify-trick-history.mjs",
     "test:score-history": "node scripts/verify-score-history.mjs",
-    "test:identity": "node scripts/verify-identity.mjs"
+    "test:identity": "node scripts/verify-identity.mjs",
+    "test:language": "node scripts/verify-language.mjs"
   },
   "dependencies": {
     "express": "^5.1.0",
+    "geoip-country": "5.0.202609230144",
     "lucide-react": "^0.468.0",
     "proxy-addr": "2.0.7",
     "qrcode": "^1.5.4",

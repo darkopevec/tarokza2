@@ -376,7 +376,7 @@ try {
     args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   browser.on('disconnected', () => report.lifecycle.push({ event: 'browser-disconnected', intentional: intentionalClose, at: new Date().toISOString() }));
   const contexts = await Promise.all([{ width: 390, height: 844 }, { width: 1024, height: 768 }].map(viewport =>
-    browser.newContext({ viewport, deviceScaleFactor: 1, isMobile: true, hasTouch: true })));
+    browser.newContext({ locale: 'sl-SI', viewport, deviceScaleFactor: 1, isMobile: true, hasTouch: true })));
   pages = await Promise.all(contexts.map(context => context.newPage()));
   pages.forEach((page, index) => {
     page.setDefaultTimeout(10_000);

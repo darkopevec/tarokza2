@@ -23,7 +23,7 @@ const origin=`http://127.0.0.1:${address.port}`;
 const browser = await (process.env.BROWSER === 'firefox' ? firefox : chromium).launch(process.env.BROWSER === 'firefox' ? {} : {executablePath:process.env.CHROMIUM_EXECUTABLE_PATH});
 try {
  for(const [width,height] of [[390,844],[568,320]]) {
-  const contexts=await Promise.all([0,1].map(()=>browser.newContext({viewport:{width,height}})));
+  const contexts=await Promise.all([0,1].map(()=>browser.newContext({ locale: 'sl-SI',viewport:{width,height}})));
   const pages=await Promise.all(contexts.map(c=>c.newPage()));
   await pages[0].goto(origin); await pages[0].getByTestId('player-name').fill('Ana'); await pages[0].getByTestId('create-room').click();
   const invitation=await pages[0].getByRole('textbox',{name:'Povabilo za prijatelja',exact:true}).inputValue();

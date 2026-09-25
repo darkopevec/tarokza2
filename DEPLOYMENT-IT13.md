@@ -1,5 +1,16 @@
 # IT13 deployment
 
+The 2026-09-25 multilingual release uses image `tarokza2:multilingual-20260925`
+and `compose.it13.yaml`. It adds 12 interface languages, saved language choices
+and IP country defaults using a bundled local database. Existing game and identity
+files are unchanged. Back up the stopped game volume before switching images;
+the previous `tarokza2:trick-lift-20260925` image remains suitable for code rollback
+with the same saved data. Refresh browser tabs to load the language selector.
+The image is also tagged with its Git revision and carries that revision in its
+`org.opencontainers.image.revision` label. See [languages](docs/languages.md).
+
+## Previous releases and hosting setup
+
 The 2026-09-24 passwordless release uses image `tarokza2:passwordless-20260924`
 and `compose.it13.yaml`. It adds player identities, device/recovery links, private
 game invitations and migration of existing browser-held seat tokens. Refresh

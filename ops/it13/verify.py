@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only public HTTP, TLS, readiness, assets, and WebSocket smoke checks."""
+"""Read-only public HTTP, TLS, locale, readiness, assets, and WebSocket smoke checks."""
 import base64
 import json
 import os
@@ -32,6 +32,15 @@ for host in ('tarok.moonlitgarden.cc', 'tarok.moonlitgarden.xyz'):
         with urllib.request.urlopen(base + path, timeout=15) as response:
             data = json.load(response)
             assert response.status == 200 and data['ok'], data
+    with urllib.request.urlopen(base + '/api/locale', timeout=15) as response:
+        data = json.load(response)
+        assert response.status == 200 and response.headers.get_content_type() == 'application/json'
+        assert isinstance(data, dict) and set(data) == {'country'}, data
+        assert data['country'] is None or (
+            isinstance(data['country'], str) and re.fullmatch(r'[A-Z]{2}', data['country'])
+        ), data
+        cache_control = {part.strip().lower() for part in response.headers.get('Cache-Control', '').split(',')}
+        assert {'private', 'no-store'} <= cache_control, cache_control
     with urllib.request.urlopen(base + '/socket.io/?EIO=4&transport=polling', timeout=15) as response:
         packet = response.read().decode()
         assert packet.startswith('0') and 'websocket' in json.loads(packet[1:])['upgrades']
@@ -46,4 +55,4 @@ for host in ('tarok.moonlitgarden.cc', 'tarok.moonlitgarden.xyz'):
         while len(frame) < 2:
             frame += sock.recv(4096)
         assert frame[0] == 0x81, frame
-    print(host + ': HTTPS, assets, health, readiness, polling and WebSocket upgrade passed')
+    print(host + ': HTTPS, assets, locale country/privacy, health, readiness, polling and WebSocket upgrade passed')

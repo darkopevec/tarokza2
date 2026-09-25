@@ -20,7 +20,7 @@ const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXE
 const contexts = [];
 const errors = [];
 const fresh = async () => {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); contexts.push(ctx);
+  const ctx = await browser.newContext({ locale: 'sl-SI', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); contexts.push(ctx);
   const page = await ctx.newPage(); page.on('pageerror', e => errors.push(e.message));
   await page.goto(origin); return page;
 };

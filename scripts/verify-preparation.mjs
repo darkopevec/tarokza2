@@ -160,7 +160,7 @@ try {
     const readySeat = starter;
     const preparingSeat = fixtureDealer;
     const label = `${viewport.width}x${viewport.height}-starter-${starter}`;
-    const contexts = await Promise.all([0, 1].map(() => browser.newContext({
+    const contexts = await Promise.all([0, 1].map(() => browser.newContext({ locale: 'sl-SI',
       viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.touch, hasTouch: viewport.touch,
     })));
     const pages = await Promise.all(contexts.map(context => context.newPage()));

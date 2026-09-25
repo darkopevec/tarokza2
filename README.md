@@ -21,13 +21,16 @@ Create a private table, send its private invitation link or QR code, and play Sl
 | ✨ At the table | 🎁 What you get |
 | :--- | :--- |
 | 🤝 Just the two of you | Private tables with invitation links and QR codes. |
-| 👑 A full Slovenian deck | All 54 scanned card faces, with Slovenian names and an in-game gallery. |
+| 👑 A full Slovenian deck | All 54 scanned card faces, with translated names and an in-game gallery. |
+| 🌍 Choose your language | 12 languages, IP country defaults, browser fallback and a saved language selector on every screen. |
 | 📱 Made for touch | Responsive phone and tablet layouts, swipeable hands and suit shortcuts. |
 | 🔄 Pick up where you left off | Reclaim your seat in the same browser after a refresh or reconnect. |
 | 🏆 Every round counts | Persistent scoreboards, saved score explanations and your won-trick history. |
 | 🏡 Host your own table | Docker deployment with disk persistence; no database or external service required. |
 
 > 🧭 **Continuing development?** Start with the short [agent handoff](HANDOFF.md).
+
+The interface supports Slovenian, English, Spanish, German, French, Italian, Czech, Slovak, Hungarian, Danish, Romanian and Polish. Each player chooses independently; changing language keeps the same table, cards and scores. The game always uses the existing Slovenian two-player rules. See [language coverage and translation maintenance](docs/languages.md).
 
 ---
 

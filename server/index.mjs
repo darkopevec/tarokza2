@@ -11,6 +11,7 @@ import { Server } from 'socket.io';
 import * as defaultEngine from '../shared/game.mjs';
 import { createAbuseControls } from './abuse-controls.mjs';
 import { canonicalClientAddress, createCreationLimiter } from './creation-limiter.mjs';
+import { lookupCountry } from './ip-country.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -74,16 +75,20 @@ export async function createTarokServer({
   creationLimit = {},
   abuseLimits = {},
   trustedProxies = (process.env.TRUSTED_PROXIES || '').split(',').map(value => value.trim()).filter(Boolean),
+  countryLookup = lookupCountry,
   now = Date.now,
 } = {}) {
   const trustProxy = compileTrustedProxies(trustedProxies);
   const abuse = createAbuseControls(abuseLimits, now);
   const admitted = Symbol('tarokAdmission');
   const pendingAdmissions = new Set();
+  function clientAddress(request) {
+    let address;
+    try { address = proxyaddr(request, trustProxy); } catch { /* Use actual peer. */ }
+    return isIP(address || '') ? address : request.socket.remoteAddress;
+  }
   function clientKey(request) {
-    let key;
-    try { key = canonicalClientAddress(proxyaddr(request, trustProxy)); } catch { /* Use actual peer. */ }
-    return key || canonicalClientAddress(request.socket.remoteAddress) || 'unknown-peer';
+    return canonicalClientAddress(clientAddress(request)) || 'unknown-peer';
   }
   const creationLimiter = createCreationLimiter({
     limit: creationLimit.max ?? Number(process.env.ROOM_CREATE_LIMIT ?? 60),
@@ -162,6 +167,16 @@ export async function createTarokServer({
       ok,
       restoration: { status: unrestoredRoomIds.size || identities.degraded ? 'degraded' : 'ok', failedRooms: unrestoredRoomIds.size, ...(identities.degraded ? { identityRegistry: 'degraded' } : {}) },
     });
+  });
+  app.get('/api/locale', (request, response) => {
+    response.setHeader('Cache-Control', 'private, no-store');
+    response.vary('X-Forwarded-For');
+    let country = null;
+    try {
+      const result = countryLookup(clientAddress(request));
+      if (typeof result === 'string' && /^[A-Z]{2}$/.test(result)) country = result;
+    } catch { /* The browser language remains available if lookup fails. */ }
+    response.json({ country });
   });
   // Public artwork can be reused across moves, reconnects and page reloads.
   // Keep HTML and private game endpoints on their existing cache policies.

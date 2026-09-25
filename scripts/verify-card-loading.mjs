@@ -15,7 +15,7 @@ const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXE
 let release;
 const delayed = new Promise(resolve => { release = resolve; });
 try {
-  const contexts = await Promise.all([0, 1].map(() => browser.newContext({ viewport: { width: 390, height: 844 } })));
+  const contexts = await Promise.all([0, 1].map(() => browser.newContext({ locale: 'sl-SI', viewport: { width: 390, height: 844 } })));
   // Exercise the uncontrolled first-page path before activating the worker.
   await contexts[0].addInitScript(() => {
     window.enableCardWorker = navigator.serviceWorker.register.bind(navigator.serviceWorker);

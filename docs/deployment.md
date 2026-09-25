@@ -72,7 +72,7 @@ npm ci
 npm run server
 ```
 
-In a second terminal, run `npm run dev` and open the Vite address it prints. Vite forwards `/socket.io`, `/health`, and `/ready` to the multiplayer server on port 3000. Direct Node runs save tables in `./data`; set `DATA_DIR` to use another directory.
+In a second terminal, run `npm run dev` and open the Vite address it prints. Vite forwards `/socket.io`, `/api`, `/health`, and `/ready` to the multiplayer server on port 3000. The `/api/locale` endpoint supplies the IP-based language default described in [Languages](languages.md). Direct Node runs save tables in `./data`; set `DATA_DIR` to use another directory.
 
 For a production build without Docker:
 
