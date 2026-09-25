@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { chromium, expect } from '@playwright/test';
 import { createTarokServer } from '../server/index.mjs';
+import { CARD_DECKS, cardBackImage, cardImageUrls } from '../src/decks.mjs';
 
 const artifacts = path.resolve(process.env.ARTIFACTS_DIR || 'artifacts/decks');
 const dataDir = await mkdtemp(path.join(os.tmpdir(), 'tarok-decks-'));
@@ -31,7 +32,7 @@ async function snapshot(page) {
 async function layout(page, label) {
   await page.evaluate(async () => {
     await document.fonts.ready;
-    await Promise.all([...document.querySelectorAll('.card-face-image')].map(image => image.decode()));
+    await Promise.all([...document.querySelectorAll('.card-face-image, .card-back-image')].map(image => image.decode()));
   });
   const measure = await page.evaluate(() => {
     const dialog = document.querySelector('[role="dialog"]');
@@ -41,7 +42,7 @@ async function layout(page, label) {
       width: innerWidth, documentWidth: document.documentElement.scrollWidth,
       dialog: dialog && { ...box(dialog), clientWidth: dialog.clientWidth, scrollWidth: dialog.scrollWidth },
       picker: box(picker),
-      unloaded: [...document.querySelectorAll('.card-face-image')].filter(image => !image.complete || !image.naturalWidth).length,
+      unloaded: [...document.querySelectorAll('.card-face-image, .card-back-image')].filter(image => !image.complete || !image.naturalWidth).length,
     };
   });
   report.layouts.push({ label, ...measure });
@@ -63,6 +64,23 @@ async function selectDeck(page, value) {
   await page.getByTestId('deck-gallery').click();
   await page.getByTestId('deck-select').selectOption(value);
   await page.getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
+}
+
+async function verifyGallery(page, deck) {
+  const faces = page.getByRole('dialog').locator('.card-face-image');
+  await expect(faces).toHaveCount(54);
+  await expect.poll(() => faces.evaluateAll(images => images.map(image => new URL(image.src).pathname).sort()))
+    .toEqual(cardImageUrls(deck).slice(1).map(url => url.split('?')[0]).sort());
+}
+
+async function verifyTableArtwork(page, deck) {
+  const prefix = deck === 'modiano' ? '/cards/deck/' : `/cards/${deck}/`;
+  const faces = page.locator('.game-page .card-face-image');
+  const backs = page.locator('.game-page .card-back-image');
+  assert.ok(await faces.count() > 0, `${deck}: exposed cards are present`);
+  assert.ok(await backs.count() > 0, `${deck}: hidden cards are present`);
+  assert.ok(await faces.evaluateAll((images, prefix) => images.every(image => new URL(image.src).pathname.startsWith(prefix)), prefix), `${deck}: visible faces follow selection`);
+  assert.ok(await backs.evaluateAll((images, url) => images.every(image => new URL(image.src).pathname === url), cardBackImage(deck).split('?')[0]), `${deck}: hidden cards follow selection`);
 }
 
 try {
@@ -89,14 +107,17 @@ try {
   await a.getByTestId('deck-gallery').click();
   await expect(a.getByTestId('deck-select')).toHaveValue('modiano');
   await expect(a.getByTestId('deck-select')).toHaveAccessibleName('Komplet kart');
-  await a.getByTestId('deck-select').selectOption('slovenian');
-  await expect(a.getByRole('dialog').locator('.card-face-image')).toHaveCount(54);
-  await layout(a, 'Slovenian gallery at 320px');
-  await screenshot(a, 'gallery-slovenian-320.png');
-  // The red pip suit section makes both reconstructed and original faces visible.
-  const hearts = a.locator('.deck-section').filter({ has: a.locator('[data-card-id="hearts-4"]') });
-  await hearts.scrollIntoViewIfNeeded();
-  await screenshot(a, 'gallery-slovenian-pips-320.png');
+  assert.deepEqual(await a.getByTestId('deck-select').locator('option').evaluateAll(options => options.map(option => option.value)), CARD_DECKS.map(deck => deck.id));
+  for (const { id: deck } of CARD_DECKS) {
+    await a.getByTestId('deck-select').selectOption(deck);
+    await verifyGallery(a, deck);
+    await layout(a, `${deck} gallery at 320px`);
+    await screenshot(a, `gallery-${deck}-320.png`);
+    // The heart section shows pip and court faces together.
+    const hearts = a.locator('.deck-section').filter({ has: a.locator('[data-card-id="hearts-4"]') });
+    await hearts.scrollIntoViewIfNeeded();
+    await screenshot(a, `gallery-${deck}-pips-320.png`);
+  }
   await a.getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
   await a.getByTestId('player-name').fill('Ana');
   await a.getByTestId('create-room').click();
@@ -127,33 +148,38 @@ try {
   const before = await Promise.all(pages.map(snapshot));
   const savedBefore = await readFile(savePath, 'utf8');
   assert.ok(before[0].state.trickCardIds, 'The table contains a played card');
-  for (const deck of ['modiano', 'slovenian']) {
+  for (const deck of ['modiano', 'slovenian', 'smrekar', 'modiano', 'smrekar']) {
     await selectDeck(a, deck);
     assert.deepEqual(await Promise.all(pages.map(snapshot)), before, `${deck}: table, identities, legal cards and scores stay unchanged`);
-    const prefix = deck === 'modiano' ? '/cards/deck/' : '/cards/slovenian/';
-    assert.ok(await a.locator('.game-page .card-face-image').evaluateAll((images, prefix) => images.every(image => new URL(image.src).pathname.startsWith(prefix)), prefix));
+    await verifyTableArtwork(a, deck);
+    await verifyTableArtwork(b, 'modiano');
+    await layout(a, `${deck} live table at 320px`);
+    await screenshot(a, `table-${deck}-320.png`);
   }
   assert.equal(await readFile(savePath, 'utf8'), savedBefore, 'Changing artwork does not write game saves');
-  assert.ok(await b.locator('.game-page .card-face-image').evaluateAll(images => images.every(image => new URL(image.src).pathname.startsWith('/cards/deck/'))), 'The other player retains Modiano');
-  await layout(a, 'Slovenian live table at 320px');
-  await screenshot(a, 'table-slovenian-320.png');
   await a.reload();
   await expect(a.locator('.game-page')).toHaveAttribute('data-trick-number', '2');
   await expect.poll(async () => snapshot(a)).toEqual(before[0]);
+  await verifyTableArtwork(a, 'smrekar');
   await a.getByTestId('deck-gallery').click();
-  await expect(a.getByTestId('deck-select')).toHaveValue('slovenian');
+  await expect(a.getByTestId('deck-select')).toHaveValue('smrekar');
   await a.setViewportSize({ width: 1024, height: 900 });
-  await layout(a, 'Slovenian gallery at 1024px');
-  await screenshot(a, 'gallery-slovenian-1024.png');
-  await a.getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
-  await layout(a, 'Slovenian live table at 1024px');
-  await screenshot(a, 'table-slovenian-1024.png');
+  for (const deck of ['slovenian', 'smrekar']) {
+    await a.getByTestId('deck-select').selectOption(deck);
+    await verifyGallery(a, deck);
+    await layout(a, `${deck} gallery at 1024px`);
+    await screenshot(a, `gallery-${deck}-1024.png`);
+    await a.getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
+    await layout(a, `${deck} live table at 1024px`);
+    await screenshot(a, `table-${deck}-1024.png`);
+    if (deck === 'slovenian') await a.getByTestId('deck-gallery').click();
+  }
   assert.equal(await readFile(savePath, 'utf8'), savedBefore, 'Reload retains the identical game save');
-  report.checks.push('Modiano default, accessible selector, 54 loaded Slovenian faces, production CSP, no horizontal overflow at 320px and 1024px.');
-  report.checks.push('Switching both ways during the second trick retains played cards, legal moves, hand IDs, points, score display and the exact saved game; opponent choice is independent and reload preserves the selected deck.');
+  report.checks.push('Modiano default, accessible three-deck selector, all 54 Slovenian and 54 Smrekar faces, production CSP, no horizontal overflow at 320px and 1024px.');
+  report.checks.push('Switching all three decks during the second trick updates faces and backs, retains played cards, legal moves, hand IDs, points, score display and the exact saved game; opponent faces and backs are independent and reload preserves Smrekar.');
   assert.deepEqual(report.browserErrors, []);
   report.passed = true;
-  console.log('PASS: mobile and desktop Slovenian gallery/table, loaded pip cards under CSP, mid-round deck changes, independent artwork, unchanged saves and scores, reload persistence.');
+  console.log('PASS: mobile and desktop Slovenian/Smrekar galleries and tables, loaded pip cards under CSP, mid-round changes across all three decks and matching backs, independent artwork, unchanged saves and scores, Smrekar reload persistence.');
 } finally {
   await writeFile(path.join(artifacts, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();

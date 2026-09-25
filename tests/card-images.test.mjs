@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cardImageUrls } from '../src/decks.mjs';
+import { cardBackImage, cardImageUrls } from '../src/decks.mjs';
 
 async function fixture(t, { fail = false } = {}) {
   const original = globalThis.Image;
@@ -83,8 +83,24 @@ test('rapid repeated changes complete the final selected deck without warming in
   await Promise.all([
     f.prepareCardImages([], 'slovenian'),
     f.prepareCardImages([], 'modiano'),
-    f.prepareCardImages([], 'slovenian'),
+    f.prepareCardImages([], 'smrekar'),
   ]);
-  assert.deepEqual([...f.requests].sort(), cardImageUrls('slovenian').sort());
+  assert.deepEqual([...f.requests].sort(), cardImageUrls('smrekar').sort());
   assert.equal(f.active(), 0);
+});
+
+test('switching to Smrekar warms its original back once and reuses both decks on return', async t => {
+  const f = await fixture(t);
+  await f.prepareCardImages([], 'modiano');
+  await f.prepareCardImages([cardBackImage('smrekar')], 'smrekar');
+  assert.equal(f.requests[55], cardBackImage('smrekar'), 'A visible Smrekar back is prepared first');
+  assert.equal(f.requests.length, 110, 'Each deck has its own back and 54 faces');
+  for (const url of cardImageUrls('smrekar')) assert.ok(f.requests.includes(url), url);
+  await f.prepareCardImages([], 'modiano');
+  await f.prepareCardImages([], 'smrekar');
+  assert.equal(f.requests.length, 110, 'Revisiting either deck reuses decoded faces and backs');
+  assert.equal(f.requests.filter(url => url === cardBackImage('smrekar')).length, 1);
+  assert.equal(f.requests.filter(url => url === cardBackImage('modiano')).length, 1);
+  assert.equal(f.active(), 0);
+  assert.ok(f.peak() <= 2);
 });

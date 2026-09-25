@@ -1,6 +1,6 @@
 # Tarok card decks
 
-The game offers two complete 54-card decks: **Modiano · Maribor**, the default, and **Slovenski tarok · Piatnik**. Open **Cards → Card deck** to change the artwork for the game and card reference. The choice is saved only in the current browser and does not affect another player's choice or the game's rules, card identities, or saved hands. Both decks use the Piatnik Ornament back described below.
+The game offers three complete 54-card decks: **Modiano · Maribor**, the default, **Slovenski tarok · Piatnik**, and **Smrekarjev tarok · Hinko Smrekar**. Open **Cards → Card deck** to change the artwork for the game and card reference. The choice is saved only in the current browser and does not affect another player's choice or the game's rules, card identities, or saved hands. Modiano and Slovenski tarok use the Piatnik Ornament back described below; Smrekar uses its own matching back.
 
 ## Modiano · Maribor
 
@@ -54,13 +54,30 @@ node scripts/fetch-slovenian-deck.mjs
 node scripts/build-slovenian-pips.mjs
 ```
 
+## Smrekarjev tarok · Hinko Smrekar
+
+The optional Smrekar deck uses Hinko Smrekar's **Slovanski tarok**, dated **1910–1912** by the [National Gallery of Slovenia](https://smrekar.ng-slo.si/slovanski-tarok/). The gallery identifies the commissioner as Prva slovanska tovarna igralnih kart in Ljubljana and describes the cards' Slavic historical and folk motifs.
+
+[scripts/fetch-smrekar-deck.mjs](../scripts/fetch-smrekar-deck.mjs) imports **41 faces and the matching card back** from [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Smrekar%27s_Tarot): all 22 trumps, all 16 court cards, the diamond one, and the club and spade sevens. These are unchanged 500-pixel-wide Commons JPEG thumbnails. [public/cards/smrekar/sources.json](../public/cards/smrekar/sources.json) records each file's exact source and full-resolution URLs, Commons description page, dimensions, size, and SHA-256 hash, with the back recorded separately. The per-file pages classify these scans as public domain under **PD-Art (PD-old-auto-expired)**; this records Commons' classification for these particular files.
+
+The remaining **13 platlci** are reconstructed from this deck's four suit symbols using an AI-assisted extraction saved as [suit-symbols.png](../public/cards/smrekar/suit-symbols.png). The references and exact extraction prompt are recorded in [smrekar-pips-prompt.md](smrekar-pips-prompt.md). [scripts/build-smrekar-pips.mjs](../scripts/build-smrekar-pips.mjs) assembles the symbols into self-contained SVG faces with the correct physical pip counts. It preserves the three original pip scans. The manifest distinguishes reconstructed faces from source scans and records the atlas hash and source card used for each suit.
+
+To rebuild this deck, run the importer first and the pip generator second:
+
+```sh
+node scripts/fetch-smrekar-deck.mjs
+node scripts/build-smrekar-pips.mjs
+```
+
+Suggested credit: Karte: Hinko Smrekar, Slovanski tarok (1910–1912). Izvirne karte in hrbet: Wikimedia Commons, PD-Art (PD-old-auto-expired). Trinajst platlcev je rekonstruiranih iz znakov barv na izvirnih kartah.
+
 ## Display proportions
 
 Every card and stack slot uses the **63:113 width-to-height ratio** of the user's Piatnik Ornament reference. [Piatnik's product specification](https://www.piatnik.com/spiele/spielkarten/regionale-karten/tarockkarten-ornament) lists 63 × 113 mm for article 193514 (No. 1935). The ratio is shared through CSS custom properties, including hand cards, exposed stacks, hidden cards, trick cards, the landing page and the card reference. In-game heights are retained while widths are reduced. Images use centered `object-fit: cover` to fill the frame without stretching or mismatched bands above and below the scan. For the Modiano scans this clips only the outer paper margins (under 5% per side, checked across all 54 faces); ranks and illustrations remain visible. The Slovenian faces closely match the display ratio. Source image files are unchanged. Card faces stay opaque, including disabled cards, so overlapping edges cannot show through. A single fine warm edge, subtle surface highlight, and soft contact shadows give the cards depth without obscuring the scans. Corner rounding scales with card size. Playable cards have sage outlines, mouse hover lifts only enabled cards, and keyboard focus has a distinct outer ring. Reduced-motion preferences disable transitions.
 
 ## Piatnik Ornament card back
 
-All face-down cards use [public/cards/back-ornament.png](../public/cards/back-ornament.png), derived from the foreground card in the [product photograph supplied by the user](https://pl.nice-cdn.com/upload/image/product/large/default/piatnik-soehne-tarok-karte-ornament-1-st-821748-sl.jpg) on 2026-09-05. The original downloaded photograph is retained locally at `artifacts/piatnik-ornament-source.jpg`; this working artifact is excluded from Git. The linked source photograph remains the provenance reference for repository readers.
+Face-down cards in the Modiano and Slovenski tarok decks use [public/cards/back-ornament.png](../public/cards/back-ornament.png), derived from the foreground card in the [product photograph supplied by the user](https://pl.nice-cdn.com/upload/image/product/large/default/piatnik-soehne-tarok-karte-ornament-1-st-821748-sl.jpg) on 2026-09-05. The original downloaded photograph is retained locally at `artifacts/piatnik-ornament-source.jpg`; this working artifact is excluded from Git. The linked source photograph remains the provenance reference for repository readers.
 
 The built-in image-editing tool isolated and straightened the blue-and-white ornamental back for a flat portrait game asset. This is an AI-assisted extraction, not an unmodified scan or a pixel-exact perspective crop. The 54 face scans, their identities, and game rules are unchanged. The photograph is a separate user-supplied source; the Commons public-domain classification above does not apply to this back. No redistribution license or permission for this back is documented in this project.
 

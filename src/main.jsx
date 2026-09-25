@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
 import { cardFor, createDeck } from "../shared/cards.mjs";
-import { CARD_BACK_IMAGE, prepareCardImages, registerCardCache } from './card-images.mjs';
-import { CARD_DECKS, cardImage, getDeck, setDeck, subscribeDeck } from './decks.mjs';
+import { prepareCardImages, registerCardCache } from './card-images.mjs';
+import { CARD_DECKS, cardBackImage, cardImage, getDeck, setDeck, subscribeDeck } from './decks.mjs';
 import { explainScoreRow } from "./score-explanation.mjs";
 import {
   ArrowRight,
@@ -73,6 +73,7 @@ function Card({
   disabled = false,
   decorative = false,
 }) {
+  const selectedDeck = useSyncExternalStore(subscribeDeck, getDeck, getDeck);
   const Tag = onPlay ? "button" : "div";
   if (back)
     return (
@@ -80,7 +81,7 @@ function Card({
         className={`playing-card card-back ${small ? "small" : ""}`}
         aria-label={t("Zaprta karta")}
       >
-        <img className="card-back-image" src={CARD_BACK_IMAGE} decoding="sync" loading="eager" fetchPriority="high" alt="" draggable="false" />
+        <img className="card-back-image" src={cardBackImage(selectedDeck)} decoding="sync" loading="eager" fetchPriority="high" alt="" draggable="false" />
       </div>
     );
   card = cardFor(card.id) || card;
@@ -100,7 +101,7 @@ function Card({
           }
         : { "aria-label": cardName(card) })}
     >
-      <img className="card-face-image" src={cardImage(card) || card.image} decoding="sync" loading="eager" fetchPriority="high" alt={cardName(card)} draggable="false" />
+      <img className="card-face-image" src={cardImage(card, selectedDeck) || card.image} decoding="sync" loading="eager" fetchPriority="high" alt={cardName(card)} draggable="false" />
     </Tag>
   );
 }
@@ -213,7 +214,9 @@ function DeckGallery({ onClose, selectedDeck }) {
         <Card card={card}/><span>{cardName(card)}</span>
       </div>)}</div>
     </section>)}
-    {selectedDeck === 'slovenian'
+    {selectedDeck === 'smrekar'
+      ? <p className="deck-credit">Hinko Smrekar (1910–1912). {t("41 izvirnih kart in hrbet; 13 platlcev je rekonstruiranih iz znakov barv na izvirnih kartah.")} <a href="https://commons.wikimedia.org/wiki/Category:Smrekar%27s_Tarot" target="_blank" rel="noreferrer">Wikimedia Commons</a>. <a href="/cards/smrekar/sources.json" target="_blank" rel="noreferrer">{t("Viri kart")}</a>.</p>
+      : selectedDeck === 'slovenian'
       ? <p className="deck-credit">{t("Slovenski tarok · Piatnik")}. {t("Taroki in figure: slovenski-tarok.si. Preostale karte so sestavljene iz znakov barv na izvirnih kartah.")} <a href="https://slovenski-tarok.si" target="_blank" rel="noreferrer">slovenski-tarok.si</a>. <a href="/cards/slovenian/sources.json" target="_blank" rel="noreferrer">{t("Viri kart")}</a>.</p>
       : <p className="deck-credit">{t("S. Modiano · Tarok Študentski servis Maribor (1995). Fotografije: Martin Okrslar,")} <a href="https://commons.wikimedia.org/wiki/Category:Industrie_und_Gl%C3%BCck" target="_blank" rel="noreferrer">Wikimedia Commons</a>. <a href="/cards/deck/sources.json" target="_blank" rel="noreferrer">{t("Viri fotografij")}</a>.</p>}
   </Modal>;

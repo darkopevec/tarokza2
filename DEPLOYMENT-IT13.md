@@ -1,6 +1,17 @@
 # IT13 deployment
 
-The current 2026-09-25 card-deck release uses image
+The current 2026-09-25 Smrekar release uses image
+`tarokza2:smrekar-deck-20260925` and `compose.it13.yaml`. It adds the optional
+Smrekarjev tarok · Hinko Smrekar deck under Cards; Modiano remains the default.
+The deck has 41 original faces, 13 reconstructed pip cards and its original back.
+Deck preferences belong to each browser. Saved games and identities require
+no migration. Back up the stopped game volume before switching images; retain
+`tarokza2:slovenian-deck-20260925` for code rollback with the same saved data.
+Refresh browser tabs to load the new option. See [card decks](docs/cards.md).
+
+## Previous Slovenian deck release
+
+The 2026-09-25 Slovenian card-deck release uses image
 `tarokza2:slovenian-deck-20260925` and `compose.it13.yaml`. It adds the optional
 Slovenski tarok · Piatnik deck under Cards; Modiano remains the default. The
 54 faces include 38 original gallery images and 16 reconstructed pip cards.

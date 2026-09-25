@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createDeck } from '../shared/cards.mjs';
-import { CARD_BACK_IMAGE, CARD_DECKS, cardImage, cardImageUrls } from '../src/decks.mjs';
+import { CARD_BACK_IMAGE, CARD_DECKS, cardBackImage, cardImage, cardImageUrls } from '../src/decks.mjs';
 
 async function fixture(t, { saved = null, blocked = false } = {}) {
   const original = globalThis.window;
@@ -31,21 +31,34 @@ test('each deck maps the same 54 identities to unique local artwork without chan
     const urls = cardImageUrls(id);
     assert.equal(urls.length, 55);
     assert.equal(new Set(urls).size, 55);
-    assert.equal(urls[0], CARD_BACK_IMAGE);
+    assert.equal(urls[0], cardBackImage(id));
     for (const card of cards) {
       assert.equal(cardImage(card, id), cardImage(card.id, id));
       assert.ok(urls.includes(cardImage(card, id)));
       if (id === 'modiano') assert.equal(cardImage(card, id), card.image);
-      else assert.equal(cardImage(card, id), `/cards/slovenian/${card.id}.${card.suit !== 'tarok' && card.rank <= 4 ? 'svg' : 'jpg'}?v=1`);
+      else {
+        const reconstructed = card.suit !== 'tarok' && card.rank <= 4
+          && (id !== 'smrekar' || !['diamonds-4', 'clubs-1', 'spades-1'].includes(card.id));
+        assert.equal(cardImage(card, id), `/cards/${id}/${card.id}.${reconstructed ? 'svg' : 'jpg'}?v=1`);
+      }
     }
   }
   assert.equal(cardImageUrls('slovenian').filter(url => url.includes('.svg?')).length, 16);
+  assert.equal(cardImageUrls('smrekar').filter(url => url.includes('.svg?')).length, 13);
+  assert.equal(cardImageUrls('smrekar').filter(url => url.includes('.jpg?')).length, 42);
   assert.deepEqual(cards, before);
   assert.deepEqual(createDeck(), before);
   assert.equal(cardImage('../secret'), null);
   assert.equal(cardImage('toString'), null);
   assert.equal(cardImage(null), null);
   assert.equal(cardImage('tarok-1', 'unknown'), cardImage('tarok-1', 'modiano'));
+});
+
+test('Smrekar uses its original back and the existing decks keep their shared back', () => {
+  assert.equal(cardBackImage('smrekar'), '/cards/smrekar/back.jpg?v=1');
+  assert.equal(cardBackImage('modiano'), CARD_BACK_IMAGE);
+  assert.equal(cardBackImage('slovenian'), CARD_BACK_IMAGE);
+  assert.equal(cardBackImage('unknown'), CARD_BACK_IMAGE);
 });
 
 test('Modiano remains the default and a chosen deck persists for this browser', async t => {
@@ -62,14 +75,25 @@ test('Modiano remains the default and a chosen deck persists for this browser', 
   f.setDeck('invalid');
   assert.equal(updates, 1);
   assert.equal(f.getDeck(), 'slovenian');
+  f.setDeck('smrekar');
+  assert.equal(f.getDeck(), 'smrekar');
+  assert.equal(f.storage.get(f.DECK_STORAGE_KEY), 'smrekar');
+  assert.match(f.cardImage('tarok-1'), /^\/cards\/smrekar\//);
+  assert.equal(f.cardBackImage(), '/cards/smrekar/back.jpg?v=1');
+  assert.equal(updates, 2);
   unsubscribe();
   f.setDeck('modiano');
-  assert.equal(updates, 1);
+  assert.equal(updates, 2);
 });
 
 test('saved preferences restore', async t => {
-  const restored = await fixture(t, { saved: 'slovenian' });
-  assert.equal(restored.getDeck(), 'slovenian');
+  for (const { id } of CARD_DECKS) {
+    await t.test(id, async t => {
+      const restored = await fixture(t, { saved: id });
+      assert.equal(restored.getDeck(), id);
+      assert.equal(restored.cardBackImage(), cardBackImage(id));
+    });
+  }
 });
 
 test('corrupt preferences retain the existing default', async t => {
@@ -88,6 +112,9 @@ test('selection works without browser storage and follows changes made in anothe
   assert.equal(f.getDeck(), 'modiano');
   f.storageEvent({ key: f.DECK_STORAGE_KEY, newValue: 'slovenian' });
   assert.equal(f.getDeck(), 'slovenian');
+  f.storageEvent({ key: f.DECK_STORAGE_KEY, newValue: 'smrekar' });
+  assert.equal(f.getDeck(), 'smrekar');
+  assert.equal(f.cardBackImage(), '/cards/smrekar/back.jpg?v=1');
   f.storageEvent({ key: f.DECK_STORAGE_KEY, newValue: null });
   assert.equal(f.getDeck(), 'modiano');
   f.setDeck('slovenian');

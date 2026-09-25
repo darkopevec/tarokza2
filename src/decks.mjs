@@ -5,23 +5,31 @@ export const DEFAULT_DECK = 'modiano';
 export const CARD_DECKS = Object.freeze([
   Object.freeze({ id: 'modiano', name: 'Modiano · Maribor' }),
   Object.freeze({ id: 'slovenian', name: 'Slovenski tarok · Piatnik' }),
+  Object.freeze({ id: 'smrekar', name: 'Smrekarjev tarok · Hinko Smrekar' }),
 ]);
 const deckIds = new Set(CARD_DECKS.map(deck => deck.id));
 const validDeck = value => deckIds.has(value) ? value : DEFAULT_DECK;
 
 export const CARD_BACK_IMAGE = `/cards/back-ornament.png?v=${CARD_ART_VERSION}`;
+const smrekarOriginalPips = new Set(['diamonds-4', 'clubs-1', 'spades-1']);
+
+export function cardBackImage(deck = selectedDeck) {
+  return validDeck(deck) === 'smrekar' ? '/cards/smrekar/back.jpg?v=1' : CARD_BACK_IMAGE;
+}
 
 /** Artwork is a browser preference; canonical card metadata and game saves stay unchanged. */
 export function cardImage(value, deck = selectedDeck) {
   const card = cardFor(typeof value === 'string' ? value : value?.id);
   if (!card) return null;
-  if (validDeck(deck) === 'modiano') return card.image;
-  const extension = card.suit !== 'tarok' && card.rank <= 4 ? 'svg' : 'jpg';
-  return `/cards/slovenian/${card.id}.${extension}?v=1`;
+  const selected = validDeck(deck);
+  if (selected === 'modiano') return card.image;
+  const reconstructed = card.suit !== 'tarok' && card.rank <= 4
+    && (selected !== 'smrekar' || !smrekarOriginalPips.has(card.id));
+  return `/cards/${selected}/${card.id}.${reconstructed ? 'svg' : 'jpg'}?v=1`;
 }
 
 export function cardImageUrls(deck = selectedDeck) {
-  return [CARD_BACK_IMAGE, ...createDeck().map(card => cardImage(card, deck))];
+  return [cardBackImage(deck), ...createDeck().map(card => cardImage(card, deck))];
 }
 
 function savedDeck() {
