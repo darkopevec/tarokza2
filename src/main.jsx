@@ -625,6 +625,7 @@ function Game({ state, busy, action, onScore, onRules }) {
   }, [handSignature, g.phase]);
   const lastTrickKey = g.lastTrick ? `${g.round}:${g.lastTrick.number}` : null;
   const seenTrick = useRef(lastTrickKey);
+  const newTrickPending = !!g.lastTrick && lastTrickKey !== seenTrick.current;
   useLayoutEffect(() => {
     const isNewTrick = lastTrickKey !== seenTrick.current;
     seenTrick.current = lastTrickKey;
@@ -635,7 +636,9 @@ function Game({ state, busy, action, onScore, onRules }) {
     }
   }, [lastTrickKey]);
   const cardsOnTable = g.trick;
-  const showRoundEnd = g.phase === "roundEnd" && !settling;
+  // Keep the fitted table mounted until the final trick has been captured for
+  // animation; briefly rendering results here discards its fitted card size.
+  const showRoundEnd = g.phase === "roundEnd" && !settling && !newTrickPending;
   const resultsRef = useRef(null);
   useLayoutEffect(() => {
     if (showRoundEnd && resultsRef.current) {
@@ -690,7 +693,7 @@ function Game({ state, busy, action, onScore, onRules }) {
         ? `Štih ${g.trickNumber} od 27. ${myTurn ? "Na potezi si." : `Na potezi je ${other.name}.`}`
         : `Runda ${g.round} je končana. Za novo rundo morata potrditi oba.`;
   return (
-    <main className="game-page" data-phase={g.phase === "roundEnd" && settling ? "playing" : g.phase} data-round={g.round}
+    <main className="game-page" data-phase={g.phase === "roundEnd" && !showRoundEnd ? "playing" : g.phase} data-round={g.round}
       data-turn={g.turn ?? ""} data-you={you} data-trick-number={g.trickNumber}
       data-trick-card-ids={g.trick.map(({ card }) => card.id).join(",")}
       data-pickup-count={g.pickups?.length || 0}

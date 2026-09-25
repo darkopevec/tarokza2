@@ -12,6 +12,7 @@
     "test:browser": "node scripts/verify-browser.mjs",
     "test:preparation": "node scripts/verify-preparation.mjs",
     "test:card-loading": "node scripts/verify-card-loading.mjs",
+    "test:final-trick-size": "node scripts/verify-final-trick-size.mjs",
     "test:fast-play": "node scripts/verify-fast-play.mjs",
     "test:hand-stability": "node scripts/verify-hand-stability.mjs",
     "test:responsive": "node scripts/verify-responsive.mjs",
