@@ -36,6 +36,7 @@ import "./styles.css";
 import "./responsive.css";
 import "./language.css";
 import "./deck.css";
+import "./waiting.css";
 import { t, translateMessage, cardName, getLocale, setLocale, subscribeLocale, languages, trickCountLabel } from "./i18n.mjs";
 
 const incomingLink = captureLink();
@@ -355,54 +356,64 @@ function ScoreTable({ game }) {
   );
 }
 
-function Waiting({ state, onCopy, onLeave, invitation, onInvite, onDevices }) {
+function Waiting({ state, onCopy, onLeave, invitation, onInvite, onDevices, busy, online }) {
   const url = invitation ? sharedLink("invite", invitation, state.roomId) : "";
   return (
-    <main className="waiting-page">
-      <button className="text-button" onClick={onLeave}>
-        <ChevronLeft size={16} /> {t("Nazaj")} </button>
-      <div className="waiting-layout">
-        <div className="waiting-copy">
-          <span className="eyebrow">{t("DOBRODOŠEL ZA MIZO")}</span>
-          <h1>{t("Še prijatelj.")} <br />
-            <em>{t("Pa začnemo.")}</em>
-          </h1>
-          <p>{t("Vse je pripravljeno za vajino partijo.")} <br />{t("Pošlji povabilo in počakaj, da prisedeta oba.")} </p>
-          <div className="invite-box">
-            <span className="field-label">{t("TVOJA MIZA")}</span>
-            <strong data-testid="room-code">{state.roomId}</strong>
-            <LinkCard url={url} title={t("Povabilo za prijatelja")} onCopy={onCopy} />
-            <button className="secondary-button" onClick={onInvite}>{url ? t("Zamenjaj povabilo") : t("Ustvari povabilo")}</button>
-            <p>{t("Novo povabilo razveljavi prejšnje.")}</p>
-          </div>
-          <p className="private-note">
-            <ShieldCheck size={15} /> {t("Samo oseba s povabilom se lahko pridruži.")} </p>
-          <button className="text-button" onClick={onDevices}>{t("Shrani obnovitveno povezavo za svoje mize")}</button>
+    <main className="waiting-page" data-testid="waiting-page">
+      <div className="waiting-content">
+        <button className="text-button waiting-back" onClick={onLeave}>
+          <ChevronLeft size={17} aria-hidden="true" /> {t("Nazaj na moje mize")}
+        </button>
+        <div className="waiting-heading">
+          <span className="eyebrow">{t("TAROK V DVOJE")}</span>
+          <h1>{t("Povabi prijatelja za mizo.")}</h1>
+          <p>{t("Pošlji povezavo prijatelju. Ko se pridruži, se igra začne.")}</p>
         </div>
-        <div className="waiting-table felt">
-          <div className="felt-border" />
-          <div className="waiting-seat vacant">
-            <span className="avatar empty">
-              <Plus size={24} />
-            </span>
-            <span>{t("Prosto mesto")}</span>
-            <small>{t("Čakamo prijatelja")} <span className="loading-dots" />
-            </small>
-          </div>
-          <div className="waiting-deck">
-            <Card back />
-            <Card back />
-            <Card back />
-          </div>
-          <div className="table-wordmark">
-            tarokza2<span>.</span>
-          </div>
-          <div className="waiting-seat">
-            <Avatar name={state.players[0].name} you />
-            <strong>{state.players[0].name}</strong>
-            <small>
-              <span className="status-dot" /> {t("Za mizo")} </small>
-          </div>
+        <div className="waiting-room-layout">
+          <section className="waiting-invitation" aria-label={t("Povabilo za prijatelja")}>
+            <div className="waiting-room-heading">
+              <div>
+                <span className="field-label">{t("TVOJA MIZA")}</span>
+                <strong data-testid="room-code">{state.roomId}</strong>
+              </div>
+              <span className="waiting-room-mark" aria-hidden="true"><Layers3 size={25} strokeWidth={1.5} /></span>
+            </div>
+            {url ? <>
+              <LinkCard url={url} title={t("Povabilo za prijatelja")} onCopy={onCopy} invitation />
+              <details className="invitation-replace">
+                <summary>{t("Zamenjaj povabilo")}</summary>
+                <p>{t("Novo povabilo razveljavi prejšnje.")}</p>
+                <button className="secondary-button" data-testid="invite-regenerate" disabled={busy || !online} aria-busy={busy} onClick={onInvite}>
+                  {busy && <LoaderCircle size={17} className="spin" aria-hidden="true" />}{t("Ustvari povabilo")}
+                </button>
+              </details>
+            </> : <div className="invitation-create">
+              <p>{t("Ustvari povezavo in jo pošlji prijatelju.")}</p>
+              <button className="primary-button" data-testid="invite-generate" disabled={busy || !online} aria-busy={busy} onClick={onInvite}>
+                {busy ? <LoaderCircle size={18} className="spin" aria-hidden="true" /> : <Link size={18} aria-hidden="true" />}
+                {t("Ustvari povabilo")}
+              </button>
+              <p className="invitation-replace-note">{t("Novo povabilo razveljavi prejšnje.")}</p>
+            </div>}
+            <p className="waiting-private"><ShieldCheck size={16} aria-hidden="true" />{t("Samo oseba s povabilom se lahko pridruži.")}</p>
+          </section>
+          <aside className="waiting-side">
+            <section className="waiting-roster" aria-label={t("Za mizo")}>
+              <div className="waiting-roster-heading"><h2>{t("Za mizo")}</h2><span><Users size={15} aria-hidden="true" />1 / 2</span></div>
+              <div className="waiting-player">
+                <Avatar name={state.players[0].name} you connected={online} />
+                <div><strong>{state.players[0].name}</strong><small>{t("Ti")}</small></div>
+                {online ? <Check size={18} className="waiting-player-ready" aria-label={t("Za mizo")} /> : <WifiOff size={18} aria-label={t("Povezovanje …")} />}
+              </div>
+              <div className="waiting-player waiting-player-empty">
+                <span className="waiting-empty-avatar"><Plus size={20} aria-hidden="true" /></span>
+                <div><strong>{t("Prosto mesto")}</strong><small>{t("Čakamo prijatelja")}</small></div>
+              </div>
+            </section>
+            <button className="text-button waiting-recovery" data-testid="waiting-recovery" disabled={busy || !online} onClick={onDevices}>
+              <ShieldCheck size={17} aria-hidden="true" />{t("Naprave in obnovitev")}<ArrowUpRight size={15} aria-hidden="true" />
+            </button>
+          </aside>
         </div>
       </div>
     </main>
@@ -1422,6 +1433,8 @@ function App() {
         <Waiting
           state={state}
           onCopy={copy}
+          busy={busy}
+          online={online}
           invitation={invitation}
           onDevices={openDevices}
           onInvite={() => run(async () => { const result = await request("room:invite", { roomId: state.roomId }); setInvitation(result.invitation); })}

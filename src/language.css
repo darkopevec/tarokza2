@@ -1,3 +1,4 @@
+.site-header .logo { min-height: 44px; }
 .language-picker {
   display: flex;
   flex: 0 1 auto;
@@ -5,7 +6,7 @@
 }
 .language-picker select {
   max-width: 132px;
-  min-height: 36px;
+  min-height: 44px;
   padding: 6px 25px 6px 9px;
   border: 1px solid var(--line, #dedbd2);
   border-radius: 8px;
@@ -27,9 +28,68 @@
   overflow-wrap: anywhere;
   hyphens: auto;
 }
-@media (max-width: 560px) {
-  .language-picker select { max-width: 106px; min-height: 32px; font-size: 11px; padding-left: 6px; }
+@media (min-width: 561px) and (max-width: 760px) {
   .header-right { gap: 8px; }
+}
+@media (max-width: 560px) {
+  .header-inner {
+    gap: 12px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  .header-right { gap: 4px; }
+  .language-picker { flex: 0 0 auto; position: relative; }
+  .language-picker::after {
+    content: "";
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+  .language-picker select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 112px;
+    max-width: none;
+    padding: 8px 20px 8px 8px;
+    font-size: 12px;
+  }
+  .header-right .connection-status {
+    display: flex;
+    flex: 0 0 14px;
+    justify-content: center;
+    height: 20px;
+    margin-right: 0;
+  }
+  .header-cards, .header-rules, .header-right > .icon-button {
+    flex: 0 0 44px;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+@media (max-width: 460px) {
+  .site-header .logo {
+    flex: 0 0 44px;
+    width: 44px;
+    justify-content: center;
+  }
+  .site-header .logo > span:not(.logo-mark) { display: none; }
+  .site-header .logo-mark { width: 29px; height: 34px; }
+}
+@media (max-width: 360px) {
+  .header-inner {
+    gap: 4px;
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+  .header-right { gap: 2px; }
+  .language-picker select { width: 100px; }
 }
 @media (max-width: 400px) {
   .opponent-pickups > svg { display: none; }

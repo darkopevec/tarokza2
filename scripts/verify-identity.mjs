@@ -39,6 +39,7 @@ try {
   await a.getByTestId('player-name').fill('Ana'); await a.getByTestId('create-room').click();
   await expect(a.getByTestId('room-code')).toBeVisible();
   const invitation = await a.getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue();
+  await a.getByTestId('invite-details').locator('summary').click();
   await expect(a.getByAltText('QR: Povabilo za prijatelja')).toBeVisible();
   await a.screenshot({ path: 'artifacts/identity/invitation.png', fullPage: true });
   const b = await fresh(); await b.goto(invitation);

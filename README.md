@@ -247,4 +247,6 @@ The entire game uses all 54 scanned faces from one Slovenian tarok deck; see [ca
 
 Run `npm run test:identity` for isolated browser checks of invitations, QR codes, linked devices, recovery, conflicts, and revocation. It creates and removes its own temporary data directory.
 
+Run `npm run test:waiting` after building to check mobile and desktop invitation sharing, copying, QR disclosure, reloads, replacement, and joining. It uses temporary local rooms and checks that sharing and reloading preserve the invitation.
+
 The card-loading check starts a disposable server and verifies immediate table entry while image downloads are delayed, visible-card priority, background preloading, and persistent artwork access from a fresh tab with the network unavailable. Only public card images are stored in Cache Storage, without a time-based expiry. Versioned artwork URLs also use a one-year immutable HTTP cache; bump `CARD_ART_VERSION` when replacing artwork. Game state, identity credentials and application pages are never cached by the card service worker.

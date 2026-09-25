@@ -1,6 +1,18 @@
 # IT13 deployment
 
-The current 2026-09-25 Smrekar artwork correction uses image
+The current 2026-09-25 waiting-page release uses image
+`tarokza2:waiting-page-20260925` and `compose.it13.yaml`. It separates the table
+code and invitation actions, adds native sharing where available, keeps copying
+and an optional QR code, and shows the two player seats. The mobile header fits
+all controls with 44px targets. New copy is translated into all 12 languages.
+Reloading preserves existing invitations; replacing one remains an explicit
+action. Saved games and identities require no migration. Back up the stopped
+game volume before switching images; retain `tarokza2:smrekar-restored-20260925`
+for code rollback with the same saved data. Refresh browser tabs after deployment.
+
+## Previous Smrekar artwork correction
+
+The 2026-09-25 Smrekar artwork correction uses image
 `tarokza2:smrekar-restored-20260925` and `compose.it13.yaml`. It corrects
 white balance, tonal curves and perspective, preserves the scanned linework,
 and gives all Smrekar platlci uniform white backgrounds. Faces and back use

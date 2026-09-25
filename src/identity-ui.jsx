@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import QRCode from 'qrcode';
+import { Check, ChevronDown, Copy, Link, QrCode, Share2 } from 'lucide-react';
 import { getLocale, t } from './i18n.mjs';
 
 export const DEVICE = 'tarokza2.device';
@@ -24,16 +25,53 @@ export function sharedLink(kind, token, roomId) {
   if (roomId) params.set('room', roomId);
   return `${location.origin}/#${params}`;
 }
-export function LinkCard({ url, onCopy, title }) {
+export function LinkCard({ url, onCopy, title, invitation = false }) {
   const [qr, setQr] = useState('');
   const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const inputRef = useRef(null);
+  const inputId = useId();
   useEffect(() => {
     let active = true;
     setQr(''); setCopied(false);
     if (url) QRCode.toDataURL(url, { width: 240, margin: 4, errorCorrectionLevel: 'M' }).then(value => { if (active) setQr(value); }).catch(() => {});
     return () => { active = false; };
   }, [url]);
+  async function copyLink() {
+    if (await onCopy(url)) setCopied(true);
+    else { inputRef.current?.focus(); inputRef.current?.select(); }
+  }
+  async function shareLink() {
+    setSharing(true);
+    try { await navigator.share({ title, url }); }
+    catch (error) { if (error.name !== 'AbortError') await copyLink(); }
+    finally { setSharing(false); }
+  }
   if (!url) return null;
+  if (invitation) {
+    const canShare = typeof navigator.share === 'function';
+    return <div className="invitation-link">
+      <p className="invitation-feedback" role="status" aria-live="polite" data-testid="invite-feedback">
+        <Check size={16} aria-hidden="true" />{copied ? t('Povezava je kopirana.') : t('Povabilo je pripravljeno.')}
+      </p>
+      <div className="invitation-actions">
+        {canShare && <button className="primary-button" data-testid="invite-share" onClick={shareLink} disabled={sharing} aria-busy={sharing}>
+          <Share2 size={18} aria-hidden="true" />{t('Deli povabilo')}
+        </button>}
+        <button className={canShare ? 'secondary-button' : 'primary-button'} data-testid="invite-copy" aria-label={t('Kopiraj povezavo')} onClick={copyLink}>
+          {copied ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}{t(copied ? 'Kopirano' : canShare ? 'Kopiraj' : 'Kopiraj povezavo')}
+        </button>
+      </div>
+      <label className="sr-only" htmlFor={inputId}>{t('Povezava s povabilom')}</label>
+      <div className="invitation-url-row"><Link size={16} aria-hidden="true" />
+        <input ref={inputRef} id={inputId} className="invite-url" aria-label={title} value={url} readOnly onFocus={event => event.target.select()} />
+      </div>
+      <details className="invitation-qr" data-testid="invite-details">
+        <summary><QrCode size={18} aria-hidden="true" />{t('Pokaži kodo QR')}<ChevronDown size={16} aria-hidden="true" /></summary>
+        {qr && <img src={qr} width="240" height="240" alt={t('QR: {title}', { title })} />}
+      </details>
+    </div>;
+  }
   return <section className="identity-link"><h3>{title}</h3>
     {qr && <img src={qr} width="240" height="240" alt={t('QR: {title}', { title })} />}
     <input className="invite-url" aria-label={title} value={url} readOnly onFocus={e => e.target.select()} />
