@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { setTimeout as delay } from 'node:timers/promises';
 import { chromium, expect } from '@playwright/test';
 import { detectLanguage, LANGUAGE_STORAGE_KEY, translatorFor } from '../../src/i18n.mjs';
 import { cardImage, DECK_STORAGE_KEY } from '../../src/decks.mjs';
@@ -38,7 +39,10 @@ const browser = await chromium.launch({
   ...(process.env.CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {}),
 });
 try {
-  for (const host of ['tarok.moonlitgarden.cc', 'tarok.moonlitgarden.xyz']) {
+  for (const [index, host] of ['tarok.moonlitgarden.cc', 'tarok.moonlitgarden.xyz'].entries()) {
+    // Both hosts share a 20 requests/second, burst-100 limit for this runner's IP.
+    // Let its allowance recover between independent, uncached deck galleries.
+    if (index > 0) await delay(6000);
     const context = await browser.newContext({ locale: 'en-US' });
     await context.addInitScript(() => {
       window.securityViolations = [];
