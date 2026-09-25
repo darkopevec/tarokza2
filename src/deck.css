@@ -1,0 +1,28 @@
+.deck-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green, #244d3e);
+}
+.deck-picker select {
+  max-width: 100%;
+  min-height: 42px;
+  padding: 8px 30px 8px 10px;
+  border: 1px solid var(--line, #dedbd2);
+  border-radius: 8px;
+  background-color: var(--paper, #faf9f6);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.deck-picker select:focus-visible {
+  outline: 2px solid var(--green, #244d3e);
+  outline-offset: 2px;
+}
+.deck-intro .deck-preference-note {
+  margin: 0 0 20px;
+}

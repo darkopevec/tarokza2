@@ -358,5 +358,11 @@
   "V tej rundi še nisi osvojil nobenega štiha.": "Vous n’avez encore remporté aucun pli dans cette manche.",
   "Zadnji štih": "Dernier pli",
   "Štih:": "Pli remporté par :",
-  "QR: {title}": "Code QR : {title}"
+  "QR: {title}": "Code QR : {title}",
+  "Komplet kart": "Jeu de cartes",
+  "Modiano · Maribor": "Modiano · Maribor",
+  "Slovenski tarok · Piatnik": "Slovenski tarok · Piatnik",
+  "Izbrani komplet velja samo v tem brskalniku.": "Le jeu de cartes choisi est utilisé uniquement dans ce navigateur.",
+  "Taroki in figure: slovenski-tarok.si. Preostale karte so sestavljene iz znakov barv na izvirnih kartah.": "Atouts et figures : slovenski-tarok.si. Les autres cartes sont composées des symboles de couleur des cartes originales.",
+  "Viri kart": "Sources des cartes"
 }

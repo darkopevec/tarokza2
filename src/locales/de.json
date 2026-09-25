@@ -358,5 +358,11 @@
   "V tej rundi še nisi osvojil nobenega štiha.": "Du hast in dieser Runde noch keinen Stich gewonnen.",
   "Zadnji štih": "Letzter Stich",
   "Štih:": "Stich gewonnen von:",
-  "QR: {title}": "QR-Code: {title}"
+  "QR: {title}": "QR-Code: {title}",
+  "Komplet kart": "Kartensatz",
+  "Modiano · Maribor": "Modiano · Maribor",
+  "Slovenski tarok · Piatnik": "Slovenski tarok · Piatnik",
+  "Izbrani komplet velja samo v tem brskalniku.": "Der gewählte Kartensatz wird nur in diesem Browser verwendet.",
+  "Taroki in figure: slovenski-tarok.si. Preostale karte so sestavljene iz znakov barv na izvirnih kartah.": "Tarock- und Bildkarten: slovenski-tarok.si. Die übrigen Karten wurden aus den Farbzeichen der Originalkarten zusammengesetzt.",
+  "Viri kart": "Bildquellen der Karten"
 }

@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
 import { cardFor, createDeck } from "../shared/cards.mjs";
 import { CARD_BACK_IMAGE, prepareCardImages, registerCardCache } from './card-images.mjs';
+import { CARD_DECKS, cardImage, getDeck, setDeck, subscribeDeck } from './decks.mjs';
 import { explainScoreRow } from "./score-explanation.mjs";
 import {
   ArrowRight,
@@ -34,6 +35,7 @@ import './identity.css';
 import "./styles.css";
 import "./responsive.css";
 import "./language.css";
+import "./deck.css";
 import { t, translateMessage, cardName, getLocale, setLocale, subscribeLocale, languages, trickCountLabel } from "./i18n.mjs";
 
 const incomingLink = captureLink();
@@ -98,7 +100,7 @@ function Card({
           }
         : { "aria-label": cardName(card) })}
     >
-      <img className="card-face-image" src={card.image} decoding="sync" loading="eager" fetchPriority="high" alt={cardName(card)} draggable="false" />
+      <img className="card-face-image" src={cardImage(card) || card.image} decoding="sync" loading="eager" fetchPriority="high" alt={cardName(card)} draggable="false" />
     </Tag>
   );
 }
@@ -190,10 +192,17 @@ function Modal({ title, children, onClose, wide = false, className = "" }) {
   );
 }
 
-function DeckGallery({ onClose }) {
+function DeckGallery({ onClose, selectedDeck }) {
   const deck = createDeck();
   return <Modal title={t("Prave tarok karte")} onClose={onClose} className="deck-modal">
     <div className="deck-intro">
+      <label className="deck-picker">
+        <span>{t("Komplet kart")}</span>
+        <select value={selectedDeck} onChange={event => setDeck(event.target.value)} data-testid="deck-select">
+          {CARD_DECKS.map(deck => <option key={deck.id} value={deck.id}>{t(deck.name)}</option>)}
+        </select>
+      </label>
+      <p className="deck-preference-note">{t("Izbrani komplet velja samo v tem brskalniku.")}</p>
       <span className="eyebrow">{t("CELOTEN KOMPLET · 54 KART")}</span>
       <p>{t("22 tarokov in po 8 kart vsake barve. Prikazane so od najmočnejše do najšibkejše.")}</p>
       <p>{t("Figure so kralj, dama, kaval in fant. V srcu in karu so še karte z enim, dvema, tremi in štirimi znaki; v piku in križu so 10, 9, 8 in 7.")}</p>
@@ -204,7 +213,9 @@ function DeckGallery({ onClose }) {
         <Card card={card}/><span>{cardName(card)}</span>
       </div>)}</div>
     </section>)}
-    <p className="deck-credit">{t("S. Modiano · Tarok Študentski servis Maribor (1995). Fotografije: Martin Okrslar,")} <a href="https://commons.wikimedia.org/wiki/Category:Industrie_und_Gl%C3%BCck" target="_blank" rel="noreferrer">Wikimedia Commons</a>. <a href="/cards/deck/sources.json" target="_blank" rel="noreferrer">{t("Viri fotografij")}</a>.</p>
+    {selectedDeck === 'slovenian'
+      ? <p className="deck-credit">{t("Slovenski tarok · Piatnik")}. {t("Taroki in figure: slovenski-tarok.si. Preostale karte so sestavljene iz znakov barv na izvirnih kartah.")} <a href="https://slovenski-tarok.si" target="_blank" rel="noreferrer">slovenski-tarok.si</a>. <a href="/cards/slovenian/sources.json" target="_blank" rel="noreferrer">{t("Viri kart")}</a>.</p>
+      : <p className="deck-credit">{t("S. Modiano · Tarok Študentski servis Maribor (1995). Fotografije: Martin Okrslar,")} <a href="https://commons.wikimedia.org/wiki/Category:Industrie_und_Gl%C3%BCck" target="_blank" rel="noreferrer">Wikimedia Commons</a>. <a href="/cards/deck/sources.json" target="_blank" rel="noreferrer">{t("Viri fotografij")}</a>.</p>}
   </Modal>;
 }
 
@@ -1029,13 +1040,9 @@ function Game({ state, busy, action, onScore, onRules }) {
 
 function App() {
   const locale = useSyncExternalStore(subscribeLocale, getLocale, getLocale);
+  const selectedDeck = useSyncExternalStore(subscribeDeck, getDeck, getDeck);
   const [state, setState] = useState(null);
   useEffect(() => { registerCardCache(); }, []);
-  useEffect(() => {
-    if (!state) return;
-    const visible = [...document.querySelectorAll('.playing-card img')].map(image => image.getAttribute('src'));
-    void prepareCardImages(visible);
-  }, [state]);
   const [name, setName] = useState(() => readSaved(NAME) || "");
   const [user, setUser] = useState(null);
   const [tables, setTables] = useState([]);
@@ -1050,6 +1057,11 @@ function App() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [modal, setModal] = useState(null);
+  useEffect(() => {
+    if (!state && modal !== 'deck') return;
+    const visible = [...document.querySelectorAll('.playing-card img')].map(image => image.getAttribute('src'));
+    void prepareCardImages(visible, selectedDeck);
+  }, [state, selectedDeck, modal]);
   const [resuming, setResuming] = useState(!!localStorage.getItem(DEVICE));
   const socketRef = useRef(null);
   const stateRef = useRef(null);
@@ -1433,7 +1445,7 @@ function App() {
           onRecovery={() => makeDeviceLink('recovery')} onCopy={copy} {...(deviceLink || {})} />
       </Modal>}
       {modal === "rules" && <Rules onClose={() => setModal(null)} />}
-      {modal === "deck" && <DeckGallery onClose={() => setModal(null)} />}
+      {modal === "deck" && <DeckGallery onClose={() => setModal(null)} selectedDeck={selectedDeck} />}
       {modal === "score" && state?.game && (
         <Modal title={t("Vajini rezultati")} onClose={() => setModal(null)} wide>
           <ScoreTable game={state.game} />

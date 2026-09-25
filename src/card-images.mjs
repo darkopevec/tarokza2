@@ -1,13 +1,15 @@
-import { createDeck, CARD_ART_VERSION } from '../shared/cards.mjs';
+import { CARD_BACK_IMAGE, DEFAULT_DECK, cardImageUrls, getDeck } from './decks.mjs';
 
-export const CARD_BACK_IMAGE = `/cards/back-ornament.png?v=${CARD_ART_VERSION}`;
-export const CARD_IMAGE_URLS = [CARD_BACK_IMAGE, ...createDeck().map(card => card.image)];
+export { CARD_BACK_IMAGE };
+export const CARD_IMAGE_URLS = cardImageUrls(DEFAULT_DECK);
 
 // Keep decoded images alive for pile reveals and cards moving between regions.
 // Share in-flight work, including React StrictMode's repeated effects.
 const images = new Map();
 let deckPromise;
 let visibleWork = Promise.resolve();
+let warmingDeck;
+let pending = [];
 
 export function registerCardCache() {
   if ('serviceWorker' in navigator) {
@@ -52,19 +54,30 @@ function prepareImage(url, priority = 'low') {
   return entry.promise;
 }
 
-export async function prepareCardImages(visible = []) {
+export async function prepareCardImages(visible = [], deck = getDeck()) {
+  // A new choice replaces the queued artwork. Two shared workers finish any
+  // in-flight downloads, then warm only the currently selected deck.
+  if (warmingDeck !== deck || !deckPromise) {
+    warmingDeck = deck;
+    pending = cardImageUrls(deck).filter(url => !images.has(url));
+  }
   // Let the cards already rendered on the table finish before warming the rest.
   const foreground = Promise.allSettled([...new Set(visible)].map(url => prepareImage(url, 'high')));
   visibleWork = Promise.all([visibleWork, foreground]);
   await foreground;
-  if (deckPromise) return deckPromise;
-  const pending = CARD_IMAGE_URLS.filter(url => !images.has(url));
-  deckPromise = Promise.all(Array.from({ length: 2 }, async () => {
-    while (pending.length) {
-      await visibleWork;
-      if (!pending.length) break;
-      try { await prepareImage(pending.shift()); } catch { /* Retry on the next table update. */ }
+  // Recheck after a completed job: a switch can arrive as its workers finish.
+  while (pending.length || deckPromise) {
+    if (!deckPromise) {
+      deckPromise = Promise.all(Array.from({ length: 2 }, async () => {
+        while (pending.length) {
+          await visibleWork;
+          if (!pending.length) break;
+          const url = pending.shift();
+          if (images.has(url)) continue;
+          try { await prepareImage(url); } catch { /* Retry on the next table update. */ }
+        }
+      })).finally(() => { deckPromise = null; });
     }
-  })).finally(() => { deckPromise = null; });
-  return deckPromise;
+    await deckPromise;
+  }
 }

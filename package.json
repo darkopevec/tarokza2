@@ -19,7 +19,8 @@
     "test:trick-history": "node scripts/verify-trick-history.mjs",
     "test:score-history": "node scripts/verify-score-history.mjs",
     "test:identity": "node scripts/verify-identity.mjs",
-    "test:language": "node scripts/verify-language.mjs"
+    "test:language": "node scripts/verify-language.mjs",
+    "test:decks": "node scripts/verify-decks.mjs"
   },
   "dependencies": {
     "express": "^5.1.0",

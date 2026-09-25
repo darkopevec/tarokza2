@@ -1,10 +1,38 @@
 import assert from 'node:assert/strict';
 import { chromium, expect } from '@playwright/test';
 import { detectLanguage, LANGUAGE_STORAGE_KEY, translatorFor } from '../../src/i18n.mjs';
+import { cardImage, DECK_STORAGE_KEY } from '../../src/decks.mjs';
+import { createDeck } from '../../shared/cards.mjs';
 
 // Read-only public browser checks. No identities, tables or games are created.
-// Language changes only update storage in this disposable browser context.
+// Language and deck changes only update storage in this disposable browser context.
 const languageCodes = ['sl', 'en', 'es', 'de', 'fr', 'it', 'cs', 'sk', 'hu', 'da', 'ro', 'pl'];
+const slovenianFaces = createDeck().map(card => cardImage(card, 'slovenian').split('?')[0]).sort();
+
+async function verifySlovenianGallery(page) {
+  const faces = page.getByRole('dialog').locator('.card-face-image');
+  await expect(faces).toHaveCount(54);
+  await expect.poll(() => faces.evaluateAll(images => images.map(image => new URL(image.src).pathname).sort()))
+    .toEqual(slovenianFaces);
+  const decoded = await faces.evaluateAll(async images => {
+    let timer;
+    try {
+      await Promise.race([
+        Promise.all(images.map(image => image.decode())),
+        new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Card image decoding timed out')), 30000); }),
+      ]);
+      return images.map(image => ({ path: new URL(image.currentSrc || image.src).pathname, loaded: image.complete && image.naturalWidth > 0 }));
+    } finally {
+      clearTimeout(timer);
+    }
+  });
+  assert.ok(decoded.every(image => image.loaded), 'Every Slovenian card face must decode');
+  assert.equal(decoded.filter(image => image.path.endsWith('.svg')).length, 16, 'All sixteen Slovenian pip cards must decode');
+  for (const rank of [1, 21, 22]) {
+    assert.ok(decoded.some(image => image.path === `/cards/slovenian/tarok-${rank}.jpg`), 'The gallery trula must use the selected artwork');
+  }
+}
+
 const browser = await chromium.launch({
   headless: true,
   ...(process.env.CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {}),
@@ -54,18 +82,29 @@ try {
     const explicitLanguage = defaultLanguage === 'es' ? 'en' : 'es';
     await selector.selectOption(explicitLanguage);
     assert.equal(await page.evaluate(key => localStorage.getItem(key), LANGUAGE_STORAGE_KEY), explicitLanguage);
+    assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), null);
+    await page.getByTestId('deck-gallery').click();
+    const deckSelector = page.getByTestId('deck-select');
+    await expect(deckSelector).toHaveValue('modiano');
+    await deckSelector.selectOption('slovenian');
+    await expect(deckSelector).toHaveValue('slovenian');
+    await verifySlovenianGallery(page);
+    assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), 'slovenian');
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     await page.reload({ waitUntil: 'networkidle' });
     await expect(selector).toHaveValue(explicitLanguage);
     await expect(page.locator('html')).toHaveAttribute('lang', explicitLanguage);
     await expect(page).toHaveTitle(translatorFor(explicitLanguage)('TarokZa2 · Dobra družba. Dobre karte.'));
+    await page.getByTestId('deck-gallery').click();
+    await expect(deckSelector).toHaveValue('slovenian');
+    await verifySlovenianGallery(page);
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     assert.deepEqual(errors, []);
     const headers = response.headers();
     assert.match(headers['content-security-policy'], /frame-ancestors 'none'/);
     assert.equal(headers['x-frame-options'], 'DENY');
     assert.equal(headers['strict-transport-security'], 'max-age=31536000');
-    console.log(`${host}: 12 languages, IP/browser default (${defaultLanguage}), saved choice, CSP and secure WebSocket checked`);
+    console.log(`${host}: 12 languages, IP/browser default (${defaultLanguage}), default Modiano and 54 Slovenian faces (16 SVG), saved language/deck choices, CSP and secure WebSocket checked`);
     await context.close();
   }
 } finally {

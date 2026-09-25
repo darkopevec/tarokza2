@@ -1,5 +1,16 @@
 # IT13 deployment
 
+The current 2026-09-25 card-deck release uses image
+`tarokza2:slovenian-deck-20260925` and `compose.it13.yaml`. It adds the optional
+Slovenski tarok · Piatnik deck under Cards; Modiano remains the default. The
+54 faces include 38 original gallery images and 16 reconstructed pip cards.
+Deck preferences belong to each browser. Saved games and identities require
+no migration. Back up the stopped game volume before switching images; retain
+`tarokza2:multilingual-20260925` for code rollback with the same saved data.
+Refresh browser tabs to load the selector. See [card decks](docs/cards.md).
+
+## Previous multilingual release
+
 The 2026-09-25 multilingual release uses image `tarokza2:multilingual-20260925`
 and `compose.it13.yaml`. It adds 12 interface languages, saved language choices
 and IP country defaults using a bundled local database. Existing game and identity
