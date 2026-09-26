@@ -1054,6 +1054,7 @@ function Game({ state, busy, action, onScore, onRules }) {
 
 function App() {
   const locale = useSyncExternalStore(subscribeLocale, getLocale, getLocale);
+  const selectedLanguage = languages.find(language => language.code === locale);
   const selectedDeck = useSyncExternalStore(subscribeDeck, getDeck, getDeck);
   const [state, setState] = useState(null);
   useEffect(() => { registerCardCache(); }, []);
@@ -1382,7 +1383,8 @@ function App() {
           <div className="header-right">
             <label className="language-picker">
               <span className="sr-only">{t("Jezik")}</span>
-              <select aria-label={t("Jezik")} value={locale} onChange={event => setLocale(event.target.value)} data-testid="language-select">
+              <img className="language-flag" src={`/flags/${selectedLanguage.flag}.svg`} width="22" height="17" alt="" aria-hidden="true" />
+              <select aria-label={t("Jezik")} title={`${t("Jezik")}: ${selectedLanguage.name}`} value={locale} onChange={event => setLocale(event.target.value)} data-testid="language-select">
                 {languages.map(language => <option key={language.code} value={language.code} lang={language.code}>{language.name}</option>)}
               </select>
             </label>

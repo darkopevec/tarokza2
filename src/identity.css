@@ -1,11 +1,40 @@
-.identity-home { width: min(900px, 100%); margin: 0 auto; padding: 30px 20px 60px; overflow: auto; }
-.identity-home h1 { font-size: clamp(30px, 6vw, 54px); margin: 12px 0 24px; }
+.identity-home { width: min(800px, 100%); margin: 0 auto; padding: 40px 28px max(40px, env(safe-area-inset-bottom)); overflow: auto; }
+.identity-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.identity-heading > div { min-width: 0; }
+.identity-heading .eyebrow { color: #65745f; font-size: 10px; letter-spacing: 1.6px; }
+.identity-home h1 { font-size: clamp(30px, 4.5vw, 42px); line-height: 1.2; letter-spacing: -1.3px; margin: 8px 0 0; overflow-wrap: anywhere; }
+.identity-home .identity-create { gap: 8px; min-height: 46px; padding: 11px 16px; font-size: 14px; border-radius: 9px; white-space: normal; }
+.identity-create svg { flex-shrink: 0; }
+.identity-intro { margin-top: 14px; color: #68786b; line-height: 1.6; }
 .identity-panel { background: #fffdf7; color: #253d35; border: 1px solid #ddd9cb; border-radius: 18px; padding: 22px; margin: 20px 0; }
 .identity-panel h2 { margin-bottom: 16px; }
 .identity-panel p, .identity-settings p { line-height: 1.6; margin: 14px 0; }
 .identity-home input, .identity-settings input { display: block; box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #c3c7bb; border-radius: 8px; margin: 8px 0 16px; background: white; color: #253d35; font: inherit; }
 .identity-panel .text-button { margin: 12px; }
 .identity-toolbar, .identity-table { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.identity-toolbar { gap: 4px 16px; padding: 14px 0 16px; margin-bottom: 20px; border-bottom: 1px solid #dfe4d9; }
+.identity-toolbar p { min-width: 0; color: #68786b; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.identity-toolbar .identity-devices { min-height: 44px; gap: 7px; padding: 8px 0; font-size: 12px; line-height: 1.4; color: #526a56; text-align: left; }
+.identity-devices svg { flex-shrink: 0; }
+.identity-devices:hover { color: #234c3d; text-decoration: underline; text-underline-offset: 3px; }
+.identity-table-list { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.identity-table-card { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 96px; padding: 18px 20px; text-align: left; border: 1px solid #dfe4d9; border-radius: 14px; color: #253d35; background: #fffefa; transition: background .15s, border-color .15s; }
+.identity-table-card:hover:not(:disabled) { background: #f0f4eb; border-color: #9caf96; }
+.identity-table-card:disabled { opacity: .55; }
+.identity-table-mark { display: grid; place-items: center; flex: 0 0 44px; height: 44px; border-radius: 12px; background: #e8f0e5; color: #496e4b; }
+.identity-table-card[data-status="waiting"] .identity-table-mark { background: #f2f1e9; color: #7c8167; }
+.identity-table-card[data-status="finished"] .identity-table-mark { background: #f6ebda; color: #946832; }
+.identity-table-info { display: block; flex: 1; min-width: 0; }
+.identity-table-info strong { display: block; font-size: 16px; font-weight: 650; line-height: 1.4; overflow-wrap: anywhere; }
+.identity-table-info small { display: block; margin-top: 5px; color: #65745f; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.identity-room-code { font-variant-numeric: tabular-nums; letter-spacing: .5px; }
+.identity-table-status { color: #55774c; }
+.identity-table-card[data-status="waiting"] .identity-table-status { color: #71775d; }
+.identity-table-card[data-status="finished"] .identity-table-status { color: #896431; }
+.identity-table-action { display: flex; align-items: center; flex-shrink: 0; gap: 6px; color: #476944; font-size: 12px; font-weight: 600; }
+.identity-empty { display: flex; align-items: center; flex-direction: column; gap: 18px; padding: 40px 24px; border: 1px dashed #cbd5c4; border-radius: 14px; text-align: center; }
+.identity-empty-mark { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: #eaf0e4; color: #6d8560; }
+.identity-empty p { max-width: 290px; font-size: 14px; line-height: 1.7; color: #68786b; }
 .identity-table { padding: 14px 0; border-bottom: 1px solid #ddd9cb; }
 .identity-table small { display: block; margin-top: 6px; }
 .identity-link { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; margin: 20px 0; }
@@ -13,9 +42,28 @@
 .identity-link input { width: 100%; min-width: 0; }
 .identity-settings > button { margin-top: 16px; }
 .identity-settings { overflow-wrap: anywhere; }
-@media(max-width: 480px) { .identity-home { padding: 20px 14px 40px; } .identity-panel { padding: 16px; } .identity-toolbar > button { width: 100%; } }
+@media(max-width: 600px) {
+  .identity-home { padding: 24px max(18px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)); }
+  .identity-home h1 { font-size: 32px; letter-spacing: -1px; }
+  .identity-heading { gap: 14px; }
+  .identity-home .identity-create { font-size: 13px; padding-inline: 13px; }
+  .identity-toolbar { padding: 8px 0 12px; margin-bottom: 18px; }
+  .identity-toolbar p { font-size: 13px; }
+  .identity-panel { padding: 18px; }
+  .identity-table-list { gap: 10px; }
+  .identity-table-card { gap: 12px; padding: 16px 14px; }
+  .identity-table-mark { flex-basis: 38px; height: 42px; border-radius: 10px; }
+  .identity-table-info strong { font-size: 15px; }
+  .identity-table-action > span { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+@media(max-width: 360px) {
+  .identity-home { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
+  .identity-home h1 { font-size: 29px; }
+  .identity-table-card { gap: 10px; padding-inline: 12px; }
+}
+@media(prefers-reduced-motion: reduce) { .identity-table-card { transition: none; } }
 /* Lists and QR instructions must scroll at readable size as their content grows. */
 #root > main.identity-home, #root > main.waiting-page {
   flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; transform: none;
 }
-#root > main.identity-home { width: min(900px, 100%); }
+#root > main.identity-home { width: min(800px, 100%); }

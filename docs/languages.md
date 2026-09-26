@@ -6,6 +6,11 @@ An explicit choice is saved locally under `tarokza2.language`. Storage being una
 
 Changing language updates visible text, accessible labels, card names, rules, saved score explanations, errors, date formatting, page title and document language. It does not alter card IDs, bids, scoring, saved games or player-entered names. Card artwork retains the original printed deck.
 
+The header shows the selected language as a compact flag with a 44px touch
+target. The native menu retains full language names and keyboard navigation.
+Flags are local SVGs from flag-icons; their attribution and MIT license are in
+[`public/flags/`](../public/flags/README.md).
+
 ## IP country detection
 
 `GET /api/locale` returns only `{ "country": "SI" }` (or `null` for an unknown country) with `Cache-Control: private, no-store`. The server uses the local IPv4/IPv6 database bundled with `geoip-country`. There are no external lookup requests, API keys or location permission prompts. This feature does not log or persist visitor IPs. Private/LAN, loopback and reserved addresses fall back to browser preferences. An IP country is approximate and can reflect a VPN or proxy's location; the language selector always remains available.

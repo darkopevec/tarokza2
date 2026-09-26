@@ -14,18 +14,18 @@ import { cardFor } from '../shared/cards.mjs';
 export const LANGUAGE_STORAGE_KEY = 'tarokza2.language';
 export const LOCALE_LOOKUP_TIMEOUT_MS = 1500;
 export const languages = Object.freeze([
-  { code: 'sl', name: 'Slovenščina' },
-  { code: 'en', name: 'English' },
-  { code: 'es', name: 'Español' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'fr', name: 'Français' },
-  { code: 'it', name: 'Italiano' },
-  { code: 'cs', name: 'Čeština' },
-  { code: 'sk', name: 'Slovenčina' },
-  { code: 'hu', name: 'Magyar' },
-  { code: 'da', name: 'Dansk' },
-  { code: 'ro', name: 'Română' },
-  { code: 'pl', name: 'Polski' },
+  { code: 'sl', name: 'Slovenščina', flag: 'si' },
+  { code: 'en', name: 'English', flag: 'gb' },
+  { code: 'es', name: 'Español', flag: 'es' },
+  { code: 'de', name: 'Deutsch', flag: 'de' },
+  { code: 'fr', name: 'Français', flag: 'fr' },
+  { code: 'it', name: 'Italiano', flag: 'it' },
+  { code: 'cs', name: 'Čeština', flag: 'cz' },
+  { code: 'sk', name: 'Slovenčina', flag: 'sk' },
+  { code: 'hu', name: 'Magyar', flag: 'hu' },
+  { code: 'da', name: 'Dansk', flag: 'dk' },
+  { code: 'ro', name: 'Română', flag: 'ro' },
+  { code: 'pl', name: 'Polski', flag: 'pl' },
 ]);
 export const catalogs = Object.freeze({ en, es, de, fr, it, cs, sk, hu, da, ro, pl });
 const codes = new Set(languages.map(language => language.code));

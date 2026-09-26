@@ -1,6 +1,18 @@
 # IT13 deployment
 
-The current 2026-09-25 waiting-page release uses image
+The current 2026-09-26 lobby and flag-selector release uses image
+`tarokza2:lobby-flags-20260926` and `compose.it13.yaml`. It makes the table list
+more compact, moves new-table creation beside the heading, and makes each table
+row tappable with a status icon. The header uses local flag images for the native
+language selector and keeps the tarokza2 wordmark visible on portrait phones.
+Full language names remain in the menu, with 44px header controls at 320px.
+Saved games and identities require no migration. Back up the stopped game volume
+before switching images; retain `tarokza2:waiting-page-20260925` for code rollback
+with the same saved data. Refresh browser tabs after deployment.
+
+## Previous waiting-page release
+
+The 2026-09-25 waiting-page release uses image
 `tarokza2:waiting-page-20260925` and `compose.it13.yaml`. It separates the table
 code and invitation actions, adds native sharing where available, keeps copying
 and an optional QR code, and shows the two player seats. The mobile header fits

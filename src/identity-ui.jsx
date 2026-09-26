@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { Check, ChevronDown, Copy, Link, QrCode, Share2 } from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, Copy, Layers3, Link, MonitorSmartphone, Plus, QrCode, Share2, Trophy, Users } from 'lucide-react';
 import { getLocale, t } from './i18n.mjs';
 
 export const DEVICE = 'tarokza2.device';
@@ -80,27 +80,48 @@ export function LinkCard({ url, onCopy, title, invitation = false }) {
 }
 export function IdentityHome({ user, name, setName, tables, link, busy, online, onCreate, onJoin, onRedeem, onDismiss, onResume, onDevices, legacy, onClaim }) {
   const special = link && link.kind !== 'invite';
+  const showTables = user && !link;
   return <main className="identity-home">
-    <span className="eyebrow">{t('TAROK V DVOJE')}</span>
-    <h1>{special ? t('Poveži svojega igralca.') : user ? t('Moje mize') : t('Dobra družba. Dobre karte.')}</h1>
+    <div className="identity-heading">
+      <div>
+        <span className="eyebrow">{t('TAROK V DVOJE')}</span>
+        <h1>{special ? t('Poveži svojega igralca.') : user ? t('Moje mize') : t('Dobra družba. Dobre karte.')}</h1>
+      </div>
+      {showTables && <button type="button" data-testid="create-room" className="primary-button identity-create" disabled={busy || !online} onClick={onCreate}>
+        <Plus size={18} aria-hidden="true" />{t('Nova miza')}
+      </button>}
+    </div>
     {special ? <section className="identity-panel">
       <h2>{link.kind === 'device' ? t('Dodaj ta brskalnik') : t('Obnovi dostop')}</h2>
       <p>{t('Ta povezava omogoči dostop do vseh miz istega igralca.')} {user && t('Ta brskalnik že uporablja igralec {name}. Če povezava pripada drugemu igralcu, uporabi drug profil brskalnika.', { name: user.name })}</p>
       <button className="primary-button" disabled={busy || !online} onClick={onRedeem}>{t('Poveži brskalnik')}</button>
       <button className="text-button" onClick={onDismiss}>{t('Prekliči')}</button>
     </section> : <>
-      {user ? <div className="identity-toolbar"><p>{t('Igraš kot {name}.', { name: user.name })}</p><button className="secondary-button" onClick={onDevices}>{t('Naprave in obnovitev')}</button></div> : <p>{t('Le prikazno ime. Brez uporabniškega imena in gesla.')}</p>}
-      <form className="identity-panel" onSubmit={e => { e.preventDefault(); link ? onJoin() : onCreate(); }}>
+      {user ? <div className="identity-toolbar"><p>{t('Igraš kot {name}.', { name: user.name })}</p><button className="text-button identity-devices" onClick={onDevices}><MonitorSmartphone size={17} aria-hidden="true" /><span>{t('Naprave in obnovitev')}</span></button></div> : <p className="identity-intro">{t('Le prikazno ime. Brez uporabniškega imena in gesla.')}</p>}
+      {!showTables && <form className="identity-panel" onSubmit={e => { e.preventDefault(); link ? onJoin() : onCreate(); }}>
         <h2>{link ? t('Povabilo za mizo') : t('Nova miza')}</h2>
         {!user && <label>{t('Kako ti je ime?')}<input data-testid="player-name" autoComplete="nickname" maxLength={24} value={name} onChange={e => setName(e.target.value)} required /></label>}
         {link && <p>{t('Pridruži se prijatelju s svojim igralcem. Povabilo ne omogoča dostopa do prijateljevih drugih miz.')}</p>}
         <button data-testid={link ? 'join-room' : 'create-room'} className="primary-button" disabled={busy || !online || (!user && !name.trim())}>{link ? t('Pridruži se') : t('Ustvari mizo')}</button>
         {link && <button type="button" className="text-button" onClick={onDismiss}>{t('Nazaj na moje mize')}</button>}
-      </form>
-      {user && <section className="identity-panel"><h2>{t('Tvoje mize')}</h2>{tables.length ? tables.map(table => <div className="identity-table" key={table.roomId}>
-        <div><strong>{table.opponent || t('Čakamo prijatelja')}</strong><small>{table.roomId} · {table.status === 'waiting' ? t('Povabi prijatelja') : table.status === 'roundEnd' ? t('Rezultati kroga') : t('Igra v teku')}</small></div>
-        <button className="secondary-button" onClick={() => onResume(table.roomId)} disabled={busy || !online}>{t('Nadaljuj')}</button>
-      </div>) : <p>{t('Še nimaš miz. Ustvari prvo ali odpri prijateljevo povabilo.')}</p>}</section>}
+      </form>}
+      {user && <section className="identity-tables" aria-label={t('Tvoje mize')}>
+        <h2 className="sr-only">{t('Tvoje mize')}</h2>
+        {tables.length ? <ul className="identity-table-list">{tables.map(table => {
+          const status = table.status === 'waiting' ? 'waiting' : table.status === 'roundEnd' ? 'finished' : 'playing';
+          const StatusIcon = status === 'waiting' ? Users : status === 'finished' ? Trophy : Layers3;
+          return <li key={table.roomId}>
+            <button type="button" className="identity-table-card" data-status={status} onClick={() => onResume(table.roomId)} disabled={busy || !online}>
+              <span className="identity-table-mark" aria-hidden="true"><StatusIcon size={21} strokeWidth={1.6} /></span>
+              <span className="identity-table-info">
+                <strong>{table.opponent || t('Čakamo prijatelja')}</strong>
+                <small><span className="identity-room-code">{table.roomId}</span>{' · '}<span className="identity-table-status">{status === 'waiting' ? t('Povabi prijatelja') : status === 'finished' ? t('Rezultati kroga') : t('Igra v teku')}</span></small>
+              </span>
+              <span className="identity-table-action"><span>{t('Nadaljuj')}</span><ChevronRight size={18} aria-hidden="true" /></span>
+            </button>
+          </li>;
+        })}</ul> : <div className="identity-empty"><span className="identity-empty-mark" aria-hidden="true"><Layers3 size={28} strokeWidth={1.4} /></span><p>{t('Še nimaš miz. Ustvari prvo ali odpri prijateljevo povabilo.')}</p></div>}
+      </section>}
       {legacy.length > 0 && <section className="identity-panel"><h2>{t('Obnovi stare mize')}</h2><p>{t('Izberi svoje mesto. Če imaš shranjeni obe mesti iste mize, lahko povežeš samo eno. Neuspešno obnovljeni ključi ostanejo shranjeni.')}</p>{legacy.map((seat, index) => <button className="secondary-button" key={`${seat.roomId}:${index}`} disabled={busy || !online} onClick={() => onClaim(seat)}>{t('Miza {room} · {name}', { room: seat.roomId, name: seat.name || t('mesto {number}', { number: index + 1 }) })}</button>)}</section>}
     </>}
   </main>;
