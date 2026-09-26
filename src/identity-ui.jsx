@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { Check, ChevronDown, ChevronRight, Copy, Layers3, Link, MonitorSmartphone, Plus, QrCode, Share2, Trophy, Users } from 'lucide-react';
+import { Archive, Check, ChevronDown, ChevronRight, Copy, Layers3, Link, MonitorSmartphone, Plus, QrCode, Share2, Trash2, Trophy, Users } from 'lucide-react';
 import { getLocale, t } from './i18n.mjs';
 
 export const DEVICE = 'tarokza2.device';
@@ -78,9 +78,11 @@ export function LinkCard({ url, onCopy, title, invitation = false }) {
     <button className="primary-button" onClick={async () => { if (await onCopy(url)) setCopied(true); }}>{copied ? t('Kopirano') : t('Kopiraj povezavo')}</button>
   </section>;
 }
-export function IdentityHome({ user, name, setName, tables, link, busy, online, onCreate, onJoin, onRedeem, onDismiss, onResume, onDevices, legacy, onClaim }) {
+export function IdentityHome({ user, name, setName, tables, link, busy, online, onCreate, onJoin, onRedeem, onDismiss, onResume, onAbandon, onDisposition, onDeleteArchive, onDevices, legacy, onClaim }) {
   const special = link && link.kind !== 'invite';
   const showTables = user && !link;
+  const activeTables = tables.filter(table => table.status !== 'abandoned');
+  const archivedTables = tables.filter(table => table.status === 'abandoned');
   return <main className="identity-home">
     <div className="identity-heading">
       <div>
@@ -107,10 +109,10 @@ export function IdentityHome({ user, name, setName, tables, link, busy, online, 
       </form>}
       {user && <section className="identity-tables" aria-label={t('Tvoje mize')}>
         <h2 className="sr-only">{t('Tvoje mize')}</h2>
-        {tables.length ? <ul className="identity-table-list">{tables.map(table => {
+        {activeTables.length ? <ul className="identity-table-list">{activeTables.map(table => {
           const status = table.status === 'waiting' ? 'waiting' : table.status === 'roundEnd' ? 'finished' : 'playing';
           const StatusIcon = status === 'waiting' ? Users : status === 'finished' ? Trophy : Layers3;
-          return <li key={table.roomId}>
+          return <li key={table.roomId} className="identity-table-row">
             <button type="button" className="identity-table-card" data-status={status} onClick={() => onResume(table.roomId)} disabled={busy || !online}>
               <span className="identity-table-mark" aria-hidden="true"><StatusIcon size={21} strokeWidth={1.6} /></span>
               <span className="identity-table-info">
@@ -119,10 +121,25 @@ export function IdentityHome({ user, name, setName, tables, link, busy, online, 
               </span>
               <span className="identity-table-action"><span>{t('Nadaljuj')}</span><ChevronRight size={18} aria-hidden="true" /></span>
             </button>
+            <button type="button" className="icon-button identity-table-abandon" data-testid="abandon-table" aria-label={t('Opusti mizo {room}', { room: table.roomId })} title={t('Opusti mizo')} disabled={busy || !online} onClick={() => onAbandon(table)}>
+              <Trash2 size={17} aria-hidden="true" />
+            </button>
           </li>;
-        })}</ul> : <div className="identity-empty"><span className="identity-empty-mark" aria-hidden="true"><Layers3 size={28} strokeWidth={1.4} /></span><p>{t('Še nimaš miz. Ustvari prvo ali odpri prijateljevo povabilo.')}</p></div>}
+        })}</ul> : <div className="identity-empty"><span className="identity-empty-mark" aria-hidden="true"><Layers3 size={28} strokeWidth={1.4} /></span><p>{archivedTables.length ? t('Ni aktivnih miz.') : t('Še nimaš miz. Ustvari prvo ali odpri prijateljevo povabilo.')}</p></div>}
       </section>}
       {legacy.length > 0 && <section className="identity-panel"><h2>{t('Obnovi stare mize')}</h2><p>{t('Izberi svoje mesto. Če imaš shranjeni obe mesti iste mize, lahko povežeš samo eno. Neuspešno obnovljeni ključi ostanejo shranjeni.')}</p>{legacy.map((seat, index) => <button className="secondary-button" key={`${seat.roomId}:${index}`} disabled={busy || !online} onClick={() => onClaim(seat)}>{t('Miza {room} · {name}', { room: seat.roomId, name: seat.name || t('mesto {number}', { number: index + 1 }) })}</button>)}</section>}
+      {user && !link && archivedTables.length > 0 && <section className="identity-archive" aria-label={t('Arhiv')}>
+        <div className="identity-archive-heading"><h2>{t('Arhiv')}</h2><span>{archivedTables.length}</span></div>
+        <ul className="identity-table-list">{archivedTables.map(table => <li className="identity-table-row identity-archive-row" key={table.roomId} data-testid={table.disposition === 'archived' ? 'archived-table' : 'pending-table'}>
+          <span className="identity-table-mark" aria-hidden="true"><Archive size={20} strokeWidth={1.6} /></span>
+          <div className="identity-table-info">
+            <strong>{table.opponent || t('Opuščena miza')}</strong>
+            <small><span className="identity-room-code">{table.roomId}</span> · {new Date(table.abandonedAt).toLocaleDateString(getLocale())}</small>
+          </div>
+          {table.disposition === 'pending' ? <button type="button" className="secondary-button identity-disposition-button" data-testid="choose-table-disposition" disabled={busy || !online} onClick={() => onDisposition(table)}>{t('Odloči se')}</button>
+            : <button type="button" className="icon-button identity-table-abandon" data-testid="delete-archived-table" aria-label={t('Izbriši mizo {room}', { room: table.roomId })} title={t('Izbriši')} disabled={busy || !online} onClick={() => onDeleteArchive(table)}><Trash2 size={17} aria-hidden="true" /></button>}
+        </li>)}</ul>
+      </section>}
     </>}
   </main>;
 }

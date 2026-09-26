@@ -1,6 +1,23 @@
 # IT13 deployment
 
-The current 2026-09-26 lobby and flag-selector release uses image
+The current 2026-09-26 table archive release uses image
+`tarokza2:table-archive-20260926` and `compose.it13.yaml`. Players can abandon a
+table from home, then independently archive or delete their own list entry.
+Pending choices survive offline sessions; archived entries appear at the bottom
+of My tables and can be deleted later. During play, the settings gear contains
+the language selector. Home and waiting screens retain the flag selector.
+
+Existing games load without migration. New abandonments persist a closure marker
+and private archive/delete choices; saved games remain retained. Back up the
+stopped volume before switching images and refresh browser tabs afterward.
+Keep `tarokza2:lobby-flags-20260926` for recovery, but it ignores these new markers
+and can expose abandoned/deleted entries again. After players use the new actions,
+prefer a compatible corrective release; review subsequent activity before any
+rollback or restoration of older data. See [the protocol](docs/passwordless.md).
+
+## Previous lobby and flag-selector release
+
+The 2026-09-26 lobby and flag-selector release uses image
 `tarokza2:lobby-flags-20260926` and `compose.it13.yaml`. It makes the table list
 more compact, moves new-table creation beside the heading, and makes each table
 row tappable with a status icon. The header uses local flag images for the native

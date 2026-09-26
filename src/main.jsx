@@ -23,6 +23,7 @@ import {
   Plus,
   Share2,
   ShieldCheck,
+  Settings,
   Sparkles,
   Trophy,
   Users,
@@ -134,6 +135,19 @@ function Avatar({ name, you = false, connected = true }) {
       <i className={connected ? "online" : "offline"} />
     </span>
   );
+}
+
+function LanguagePicker({ locale, compact = true }) {
+  const selected = languages.find(language => language.code === locale);
+  return <label className={compact ? 'language-picker' : 'settings-language'}>
+    <span className={compact ? 'sr-only' : 'settings-label'}>{t('Jezik')}</span>
+    <span className="language-control">
+      <img className="language-flag" src={`/flags/${selected.flag}.svg`} width="22" height="17" alt="" aria-hidden="true" />
+      <select aria-label={t('Jezik')} title={`${t('Jezik')}: ${selected.name}`} value={locale} onChange={event => setLocale(event.target.value)} data-testid="language-select">
+        {languages.map(language => <option key={language.code} value={language.code} lang={language.code}>{language.name}</option>)}
+      </select>
+    </span>
+  </label>;
 }
 
 function Modal({ title, children, onClose, wide = false, className = "" }) {
@@ -1054,7 +1068,6 @@ function Game({ state, busy, action, onScore, onRules }) {
 
 function App() {
   const locale = useSyncExternalStore(subscribeLocale, getLocale, getLocale);
-  const selectedLanguage = languages.find(language => language.code === locale);
   const selectedDeck = useSyncExternalStore(subscribeDeck, getDeck, getDeck);
   const [state, setState] = useState(null);
   useEffect(() => { registerCardCache(); }, []);
@@ -1072,6 +1085,29 @@ function App() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [modal, setModal] = useState(null);
+  const [tableToAbandon, setTableToAbandon] = useState(null);
+  const [dispositionRoomId, setDispositionRoomId] = useState(null);
+  const [dismissedDispositions, setDismissedDispositions] = useState(() => new Set());
+  const [tableToDelete, setTableToDelete] = useState(null);
+  const pendingDispositions = tables.filter(table => table.status === 'abandoned' && table.disposition === 'pending');
+  const decisionTable = modal === 'disposition' ? pendingDispositions.find(table => table.roomId === dispositionRoomId)
+    : !modal && !state && !link ? pendingDispositions.find(table => !dismissedDispositions.has(table.roomId)) : null;
+  useEffect(() => {
+    if (tableToAbandon && !tables.some(table => table.roomId === tableToAbandon.roomId && table.status !== 'abandoned')) {
+      setTableToAbandon(null);
+      setModal(current => current === 'abandon' ? null : current);
+    }
+  }, [tables, tableToAbandon]);
+  useEffect(() => {
+    if (modal === 'disposition' && !tables.some(table => table.roomId === dispositionRoomId && table.disposition === 'pending')) {
+      setDispositionRoomId(null);
+      setModal(null);
+    }
+    if (tableToDelete && !tables.some(table => table.roomId === tableToDelete.roomId && table.disposition === 'archived')) {
+      setTableToDelete(null);
+      setModal(current => current === 'delete-archive' ? null : current);
+    }
+  }, [tables, modal, dispositionRoomId, tableToDelete]);
   useEffect(() => {
     if (!state && modal !== 'deck') return;
     const visible = [...document.querySelectorAll('.playing-card img')].map(image => image.getAttribute('src'));
@@ -1202,10 +1238,20 @@ function App() {
           const roomId = new URLSearchParams(location.search).get('room');
           if (roomId && !hasPendingLink) await request('room:resume', { roomId });
         }
-      } catch (error) { setError(error.message); }
+      } catch (error) {
+        if (error.code === 'ROOM_ABANDONED') resetTableView();
+        setError(error.message);
+      }
       finally { setResuming(false); }
     });
     socket.on('tables', setTables);
+    socket.on('room:abandoned', ({ roomId }) => {
+      const currentRoomId = stateRef.current?.roomId || new URLSearchParams(location.search).get('room');
+      if (currentRoomId === roomId) {
+        resetTableView();
+        setError('Ta miza je opuščena.');
+      }
+    });
     socket.on('identity:revoked', () => {
       localStorage.removeItem(DEVICE); localStorage.removeItem(PENDING_DEVICE); credentialRef.current = null; userRef.current = null;
       setUser(null); setTables([]); setState(null); stateRef.current = null;
@@ -1328,6 +1374,30 @@ function App() {
   function createTable() { run(async () => { await ensureIdentity(); await migrate(); joined(await request('room:create')); }); }
   function joinTable() { run(async () => { await ensureIdentity(); await migrate(); joined(await request('room:join', { roomId: link.roomId, invitation: link.token })); }); }
   function resumeTable(roomId) { run(async () => { joined(await request('room:resume', { roomId })); }); }
+  function abandonTable() {
+    if (!tableToAbandon) return;
+    const roomId = tableToAbandon.roomId;
+    run(async () => {
+      const result = await request('room:abandon', { roomId });
+      setTables(result.tables);
+      setTableToAbandon(null);
+      setModal(null);
+    });
+  }
+  function saveTableDisposition(table, disposition) {
+    run(async () => {
+      const result = await request('room:disposition', { roomId: table.roomId, disposition });
+      setTables(result.tables);
+      setDispositionRoomId(null);
+      setTableToDelete(null);
+      setModal(current => current === 'disposition' || current === 'delete-archive' ? null : current);
+    });
+  }
+  function dismissDisposition(roomId) {
+    setDismissedDispositions(current => new Set(current).add(roomId));
+    setDispositionRoomId(null);
+    setModal(current => current === 'disposition' ? null : current);
+  }
   function redeemLink() { run(async () => {
     const credential = credentialRef.current || localStorage.getItem(PENDING_DEVICE) || newSecret();
     if (!credentialRef.current) localStorage.setItem(PENDING_DEVICE, credential);
@@ -1365,15 +1435,16 @@ function App() {
       return false;
     }
   }
+  function resetTableView() {
+    setState(null);
+    stateRef.current = null;
+    setModal(null);
+    history.replaceState({}, "", "/");
+    dismissLink();
+    setInvitation("");
+  }
   function leave() {
-    emit("room:leave", {}, () => {
-      setState(null);
-      stateRef.current = null;
-      setModal(null);
-      history.replaceState({}, "", "/");
-      dismissLink();
-      setInvitation("");
-    });
+    emit("room:leave", {}, resetTableView);
   }
   return (
     <>
@@ -1381,13 +1452,9 @@ function App() {
         <div className="header-inner">
           <Logo onClick={() => (state ? setModal("leave") : null)} />
           <div className="header-right">
-            <label className="language-picker">
-              <span className="sr-only">{t("Jezik")}</span>
-              <img className="language-flag" src={`/flags/${selectedLanguage.flag}.svg`} width="22" height="17" alt="" aria-hidden="true" />
-              <select aria-label={t("Jezik")} title={`${t("Jezik")}: ${selectedLanguage.name}`} value={locale} onChange={event => setLocale(event.target.value)} data-testid="language-select">
-                {languages.map(language => <option key={language.code} value={language.code} lang={language.code}>{language.name}</option>)}
-              </select>
-            </label>
+            {state?.game ? <button type="button" className="icon-button" data-testid="game-settings" aria-label={t('Nastavitve')} title={t('Nastavitve')} aria-haspopup="dialog" aria-expanded={modal === 'settings'} onClick={() => setModal('settings')}>
+              <Settings size={18} aria-hidden="true" />
+            </button> : <LanguagePicker locale={locale} />}
             <span
               className={`connection-status ${online ? "" : "disconnected"}`}
             >
@@ -1446,6 +1513,9 @@ function App() {
         <IdentityHome user={user} name={name} setName={setName} tables={tables} link={link}
           busy={busy} online={online} onCreate={createTable} onJoin={joinTable} onRedeem={redeemLink}
           onDismiss={dismissLink} onResume={resumeTable} onDevices={openDevices} legacy={legacy}
+          onAbandon={table => { setTableToAbandon(table); setModal('abandon'); }}
+          onDisposition={table => { setDispositionRoomId(table.roomId); setModal('disposition'); }}
+          onDeleteArchive={table => { setTableToDelete(table); setModal('delete-archive'); }}
           onClaim={seat => run(async () => { await ensureIdentity(); await request('identity:claim', seat); removeLegacy(seat); })} />
       )}
       {error && (
@@ -1457,6 +1527,33 @@ function App() {
           </button>
         </div>
       )}
+      {modal === 'settings' && state?.game && <Modal title={t('Nastavitve')} className="game-settings-modal" onClose={() => setModal(null)}>
+        <LanguagePicker locale={locale} compact={false} />
+      </Modal>}
+      {modal === 'abandon' && tableToAbandon && <Modal title={t('Opustiš mizo?')} className="abandon-table-modal" onClose={() => { setModal(null); setTableToAbandon(null); }}>
+        <p className="abandon-table-name">{tableToAbandon.opponent || t('Čakamo prijatelja')} · {tableToAbandon.roomId}</p>
+        <p className="leave-copy">{t('Miza {room} bo zaprta za oba igralca. Vsak se nato odloči, ali jo želi arhivirati ali izbrisati. Igre ne bo mogoče nadaljevati.', { room: tableToAbandon.roomId })}</p>
+        <div className="modal-actions">
+          <button className="secondary-button" onClick={() => { setModal(null); setTableToAbandon(null); }}>{t('Prekliči')}</button>
+          <button className="primary-button abandon-confirm" data-testid="confirm-abandon" disabled={busy || !online} onClick={abandonTable}>{t('Opusti mizo')}</button>
+        </div>
+      </Modal>}
+      {decisionTable && <Modal key={decisionTable.roomId} title={t('Arhiviraj ali izbriši?')} className="table-disposition-modal" onClose={() => dismissDisposition(decisionTable.roomId)}>
+        <p className="abandon-table-name">{decisionTable.opponent || t('Opuščena miza')} · {decisionTable.roomId}</p>
+        <p className="leave-copy">{t('Miza {room} je opuščena. Jo želiš shraniti v arhiv ali izbrisati iz svojega seznama?', { room: decisionTable.roomId })}</p>
+        <p className="disposition-note">{t('Tvoja izbira ne vpliva na seznam drugega igralca.')}</p>
+        <div className="modal-actions">
+          <button className="secondary-button" data-testid="delete-table" disabled={busy || !online} onClick={() => saveTableDisposition(decisionTable, 'deleted')}>{t('Izbriši')}</button>
+          <button className="primary-button" data-testid="archive-table" disabled={busy || !online} onClick={() => saveTableDisposition(decisionTable, 'archived')}>{t('Arhiviraj')}</button>
+        </div>
+      </Modal>}
+      {modal === 'delete-archive' && tableToDelete && <Modal title={t('Izbrišeš mizo iz arhiva?')} className="delete-archive-modal" onClose={() => { setModal(null); setTableToDelete(null); }}>
+        <p className="leave-copy">{t('Miza {room} bo odstranjena iz tvojega arhiva. Arhiv drugega igralca ostane nespremenjen.', { room: tableToDelete.roomId })}</p>
+        <div className="modal-actions">
+          <button className="secondary-button" onClick={() => { setModal(null); setTableToDelete(null); }}>{t('Prekliči')}</button>
+          <button className="primary-button abandon-confirm" data-testid="confirm-delete-archive" disabled={busy || !online} onClick={() => saveTableDisposition(tableToDelete, 'deleted')}>{t('Izbriši')}</button>
+        </div>
+      </Modal>}
       {modal === 'devices' && <Modal title={t("Naprave in obnovitev")} onClose={() => { setModal(null); setDeviceLink(null); }}>
         <DeviceSettings devices={devices} busy={busy} onRename={(id, name) => changeDevice('devices:rename', { id, name })}
           onRevoke={id => changeDevice('devices:revoke', { id })} onLink={() => makeDeviceLink('device')}

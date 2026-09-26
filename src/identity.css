@@ -18,9 +18,28 @@
 .identity-devices svg { flex-shrink: 0; }
 .identity-devices:hover { color: #234c3d; text-decoration: underline; text-underline-offset: 3px; }
 .identity-table-list { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
-.identity-table-card { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 96px; padding: 18px 20px; text-align: left; border: 1px solid #dfe4d9; border-radius: 14px; color: #253d35; background: #fffefa; transition: background .15s, border-color .15s; }
-.identity-table-card:hover:not(:disabled) { background: #f0f4eb; border-color: #9caf96; }
+.identity-table-row { display: flex; align-items: center; border: 1px solid #dfe4d9; border-radius: 14px; background: #fffefa; }
+.identity-table-card { display: flex; align-items: center; flex: 1; min-width: 0; gap: 16px; min-height: 96px; padding: 18px 20px; text-align: left; border-radius: 13px; color: #253d35; background: transparent; transition: background .15s; }
+.identity-table-card:hover:not(:disabled) { background: #f0f4eb; }
 .identity-table-card:disabled { opacity: .55; }
+.identity-table-row .identity-table-abandon { flex: 0 0 44px; width: 44px; height: 44px; margin-right: 8px; color: #887a69; }
+.identity-table-row .identity-table-abandon:hover:not(:disabled) { background: #f9ede6; color: #a34732; }
+.identity-table-abandon:disabled { opacity: .45; }
+.abandon-table-name { margin-bottom: 12px; font-weight: 600; overflow-wrap: anywhere; }
+.abandon-table-modal .leave-copy, .table-disposition-modal .leave-copy, .delete-archive-modal .leave-copy { color: #596d55; }
+.abandon-table-modal .abandon-confirm, .delete-archive-modal .abandon-confirm { background: #a34732; white-space: normal; }
+.abandon-table-modal .abandon-confirm:hover:not(:disabled), .delete-archive-modal .abandon-confirm:hover:not(:disabled) { background: #873723; }
+.disposition-note { margin-top: 12px; color: #596d55; font-size: 12px; line-height: 1.6; }
+.table-disposition-modal .modal-actions > button, .delete-archive-modal .modal-actions > button { white-space: normal; }
+.identity-archive { border-top: 1px solid #dfe4d9; margin-top: 28px; padding-top: 22px; }
+.identity-archive-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.identity-archive-heading h2 { font-size: 18px; letter-spacing: -.3px; }
+.identity-archive-heading > span { border-radius: 6px; background: #e9eee4; padding: 3px 7px; color: #596d55; font-size: 12px; }
+.identity-archive-row { min-height: 86px; padding: 14px; gap: 12px; background: #f6f7f0; }
+.identity-archive-row .identity-table-mark { background: #e9eee4; color: #718167; }
+.identity-archive-row .identity-table-info strong { font-size: 14px; }
+.identity-archive-row .identity-table-abandon { margin-right: 0; }
+.identity-archive-row .identity-disposition-button { flex-shrink: 0; min-height: 44px; max-width: 42%; padding: 10px 12px; font-size: 12px; white-space: normal; }
 .identity-table-mark { display: grid; place-items: center; flex: 0 0 44px; height: 44px; border-radius: 12px; background: #e8f0e5; color: #496e4b; }
 .identity-table-card[data-status="waiting"] .identity-table-mark { background: #f2f1e9; color: #7c8167; }
 .identity-table-card[data-status="finished"] .identity-table-mark { background: #f6ebda; color: #946832; }
@@ -51,7 +70,7 @@
   .identity-toolbar p { font-size: 13px; }
   .identity-panel { padding: 18px; }
   .identity-table-list { gap: 10px; }
-  .identity-table-card { gap: 12px; padding: 16px 14px; }
+  .identity-table-card { gap: 12px; padding: 16px 4px 16px 14px; }
   .identity-table-mark { flex-basis: 38px; height: 42px; border-radius: 10px; }
   .identity-table-info strong { font-size: 15px; }
   .identity-table-action > span { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -59,7 +78,8 @@
 @media(max-width: 360px) {
   .identity-home { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
   .identity-home h1 { font-size: 29px; }
-  .identity-table-card { gap: 10px; padding-inline: 12px; }
+  .identity-table-card { gap: 10px; padding-left: 12px; }
+  .identity-table-mark { display: none; }
 }
 @media(prefers-reduced-motion: reduce) { .identity-table-card { transition: none; } }
 /* Lists and QR instructions must scroll at readable size as their content grows. */

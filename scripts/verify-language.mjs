@@ -28,10 +28,28 @@ function fixture(options) {
 }
 
 const language = page => page.getByTestId('language-select');
+async function openSettings(page) {
+  await expect(page.getByTestId('game-settings')).toBeVisible();
+  await expect(page.locator('.site-header').getByTestId('language-select')).toHaveCount(0);
+  await page.getByTestId('game-settings').click();
+  await expect(page.getByRole('dialog').getByTestId('language-select')).toBeVisible();
+}
 async function choose(page, locale) {
+  const inGame = await page.locator('.game-page').isVisible();
+  if (inGame) await openSettings(page);
   await language(page).selectOption(locale);
   await expect(page.locator('html')).toHaveAttribute('lang', locale);
   await expect(language(page)).toHaveValue(locale);
+  if (inGame) {
+    await noOverflow(page, `${locale} game settings`);
+    await closeDialog(page);
+    await expect(page.getByTestId('game-settings')).toBeFocused();
+  }
+}
+async function expectGameLanguage(page, locale) {
+  await openSettings(page);
+  await expect(language(page)).toHaveValue(locale);
+  await closeDialog(page);
 }
 async function noOverflow(page, label) {
   const dimensions = await page.evaluate(() => ({ width: innerWidth, content: document.documentElement.scrollWidth }));
@@ -63,6 +81,7 @@ try {
     await configure?.(page);
     await page.goto(origin);
     await expect(language(page)).toBeVisible();
+    await expect(page.getByTestId('game-settings')).toHaveCount(0);
     return page;
   }
 
@@ -178,6 +197,8 @@ try {
   await a.getByTestId('player-name').fill('Ana');
   await a.getByTestId('create-room').click();
   await expect(a.getByTestId('room-code')).toBeVisible();
+  await expect(language(a)).toBeVisible();
+  await expect(a.getByTestId('game-settings')).toHaveCount(0);
   const roomId = (await a.getByTestId('room-code').textContent()).trim();
   const invitation = await a.locator('.invite-url').inputValue();
   await b.goto(invitation);
@@ -214,13 +235,22 @@ try {
   }
   assert.notEqual(kingLabels[0], kingLabels[1], 'Card accessibility labels must use each player’s language.');
   await a.setViewportSize({ width: 320, height: 844 });
+  await openSettings(a);
+  const gear = await a.getByTestId('game-settings').boundingBox();
+  assert.ok(gear.width >= 44 && gear.height >= 44, 'Game settings keeps a 44px touch target.');
+  await noOverflow(a, 'English game settings at 320px');
+  await a.screenshot({ path: path.join(artifacts, 'settings-en-320.png'), fullPage: true, animations: 'disabled' });
+  await a.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).click();
+  await expect(a.getByRole('dialog')).toHaveCount(0);
+  await expect(a.getByTestId('game-settings')).toBeFocused();
+  assert.deepEqual(await board(a), boardBefore, 'Opening and closing settings must preserve game state.');
   for (const locale of languages) {
     await choose(a, locale);
     await a.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await noOverflow(a, `${locale} live table at 320px`);
     assert.deepEqual(await board(a), boardBefore, `${locale}: language switching must preserve game state.`);
   }
-  await expect(language(b)).toHaveValue('es');
+  await expectGameLanguage(b, 'es');
   assert.equal(await readFile(savePath, 'utf8'), savedBefore, 'Language switching and reading dialogs must not mutate the saved game.');
   await choose(a, 'en');
   await b.setViewportSize({ width: 320, height: 844 });
@@ -230,6 +260,7 @@ try {
   }
   report.checks.push('Two players keep separate languages; card names, rules and saved score calculations translate without changing game state.');
   report.checks.push('All 12 languages fit the live table at 320px without changing game state.');
+  report.checks.push('Game language selection opens from a 44px settings button; all 12 languages fit settings at 320px and dismiss by Close or Escape with focus restored. Home and waiting screens retain the flag selector.');
 
   for (let count = 0; count < 2; count++) {
     const states = await Promise.all([a, b].map(board));
@@ -250,8 +281,8 @@ try {
   await choose(b, 'hu');
   assert.deepEqual(await board(b), playedBefore);
   await b.reload();
-  await expect(language(b)).toHaveValue('hu');
   await expect(b.locator('.game-page')).toHaveAttribute('data-trick-number', '2');
+  await expectGameLanguage(b, 'hu');
   assert.equal(await readFile(savePath, 'utf8'), playedSave, 'Changing the language and reconnecting must preserve cards and scores.');
   await choose(b, 'es');
   report.checks.push('Players can bid and play across languages; changing language during a round survives reload and preserves cards and scores.');
@@ -272,7 +303,7 @@ try {
   report.checks.push({ localizedServerError: { es: spanishError, en: englishError } });
   assert.deepEqual(report.browserErrors, []);
   report.passed = true;
-  console.log('Language browser checks passed: 12 languages, IP/browser defaults, explicit-choice races, lookup timeouts, persistence, mixed-language play, dialogs, accessible card names and server errors.');
+  console.log('Language browser checks passed: 12 languages, game settings, IP/browser defaults, explicit-choice races, lookup timeouts, persistence, mixed-language play, dialogs, accessible card names and server errors.');
 } finally {
   await writeFile(path.join(artifacts, 'report.json'), JSON.stringify(report, null, 2));
   await browser?.close();

@@ -111,7 +111,12 @@ export async function createTarokServer({
       if (![1, 2].includes(room.version) || room.id !== filename.slice(0, 6) ||
           !Array.isArray(room.players) || room.players.length < 1 || room.players.length > 2 ||
           room.players.some((player) => typeof player.id !== 'string' ||
-            typeof player.name !== 'string' || (player.userId && !identities.hasUser(player.userId)) || !(typeof player.userId === 'string' || /^[a-f0-9]{64}$/.test(player.tokenHash)))) {
+            typeof player.name !== 'string' || (player.userId && !identities.hasUser(player.userId)) || !(typeof player.userId === 'string' || /^[a-f0-9]{64}$/.test(player.tokenHash))) ||
+          (room.abandonedAt !== undefined && (typeof room.abandonedAt !== 'string' || !Number.isFinite(Date.parse(room.abandonedAt)) ||
+            !room.players.some(player => player.id === room.abandonedBy))) ||
+          (room.dispositions !== undefined && (!room.abandonedAt || !room.dispositions || typeof room.dispositions !== 'object' ||
+            Array.isArray(room.dispositions) || Object.entries(room.dispositions).some(([playerId, disposition]) =>
+              !room.players.some(player => player.id === playerId) || !['archived', 'deleted'].includes(disposition))))) {
         throw new Error('Invalid room record');
       }
       // Resume old preparation screens directly into play, retaining cards and scores.
@@ -244,10 +249,16 @@ export async function createTarokServer({
   }
 
   function tables(userId) {
-    return [...rooms.values()].filter(room => room.players.some(p => identities.owner(room.id, p) === userId))
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).map(room => ({ roomId: room.id, updatedAt: room.updatedAt,
+    return [...rooms.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).flatMap(room => {
+      const player = room.players.find(p => identities.owner(room.id, p) === userId);
+      if (!player) return [];
+      const disposition = Object.hasOwn(room.dispositions || {}, player.id) ? room.dispositions[player.id] : 'pending';
+      if (room.abandonedAt && disposition === 'deleted') return [];
+      return [{ roomId: room.id, updatedAt: room.updatedAt,
         opponent: room.players.find(p => identities.owner(room.id, p) !== userId)?.name || null,
-        status: room.game ? room.game.phase : 'waiting' }));
+        status: room.abandonedAt ? 'abandoned' : room.game ? room.game.phase : 'waiting',
+        ...(room.abandonedAt ? { disposition, abandonedAt: room.abandonedAt } : {}) }];
+    });
   }
   function emitTables() {
     for (const client of io.sockets.sockets.values()) {
@@ -256,7 +267,7 @@ export async function createTarokServer({
   }
   function emitState(roomId) {
     const room = rooms.get(roomId);
-    if (!room) return;
+    if (!room || room.abandonedAt) return;
     const players = room.players.map(({ id, name }) => ({ id, name, connected: isConnected(roomId, id) }));
     for (const player of room.players) {
       const state = {
@@ -292,6 +303,10 @@ export async function createTarokServer({
     const key = `${roomId}:${playerId}`;
     if (!connections.has(key)) connections.set(key, new Set());
     connections.get(key).add(socket.id);
+  }
+
+  function requireActiveRoom(room) {
+    if (room?.abandonedAt) throw new RequestError('Ta miza je opuščena.', 'ROOM_ABANDONED');
   }
 
   io.on('connection', (socket) => {
@@ -384,17 +399,21 @@ export async function createTarokServer({
     handle('identity:legacy', async ({ roomId: inputCode, token }) => {
       authenticate();
       const roomId = cleanCode(inputCode);
-      const seat = rooms.get(roomId)?.players.find(p => p.tokenHash && matchesToken(p, token));
+      const room = rooms.get(roomId);
+      const seat = room?.players.find(p => p.tokenHash && matchesToken(p, token));
       if (!seat) throw new IdentityError('Starega mesta ni mogoče obnoviti.', 'INVALID_CLAIM');
+      requireActiveRoom(room);
       return { name: seat.name, playerId: seat.id };
     });
     handle('identity:claim', async ({ roomId: inputCode, token }) => {
       authenticate();
       const roomId = cleanCode(inputCode);
       return withRoom(roomId, async () => {
+        authenticate();
         const room = rooms.get(roomId);
         const seat = room?.players.find(p => p.tokenHash && matchesToken(p, token));
         if (!seat) throw new IdentityError('Starega mesta ni mogoče obnoviti.', 'INVALID_CLAIM');
+        requireActiveRoom(room);
         await identities.claim(socket.data.credential, roomId, seat, room.players);
         emitTables();
         return {};
@@ -425,8 +444,10 @@ export async function createTarokServer({
       return withRoom(roomId, async () => {
         const user = authenticate();
         const current = rooms.get(roomId);
-        if (!current || !current.players.some(p => identities.owner(roomId, p) === user.id) || current.players.length !== 1)
+        if (!current || !current.players.some(p => identities.owner(roomId, p) === user.id))
           throw new RequestError('Povabila ni mogoče ustvariti.');
+        requireActiveRoom(current);
+        if (current.players.length !== 1) throw new RequestError('Povabila ni mogoče ustvariti.');
         const invitation = randomBytes(32).toString('base64url');
         const room = { ...current, invitationHash: hash(invitation) };
         await persist(room); rooms.set(roomId, room);
@@ -439,8 +460,8 @@ export async function createTarokServer({
         const user = authenticate();
         const current = rooms.get(roomId);
         const own = current?.players.find(p => identities.owner(roomId, p) === user.id);
-        if (own) { if (socket.connected) attach(socket, roomId, own.id); emitState(roomId); return { roomId, playerId: own.id }; }
-        if (!current || !validSecret(invitation) || current.invitationHash !== hash(invitation)) throw new RequestError('Povabilo ni veljavno ali je že uporabljeno.', 'INVALID_INVITE');
+        if (own) { requireActiveRoom(current); if (socket.connected) attach(socket, roomId, own.id); emitState(roomId); return { roomId, playerId: own.id }; }
+        if (!current || current.abandonedAt || !validSecret(invitation) || current.invitationHash !== hash(invitation)) throw new RequestError('Povabilo ni veljavno ali je že uporabljeno.', 'INVALID_INVITE');
         if (current.players.length >= 2) throw new RequestError('Miza je že polna.');
         const player = { id: randomUUID(), name: user.name, userId: user.id };
         const room = clone(current);
@@ -458,11 +479,65 @@ export async function createTarokServer({
       const roomId = cleanCode(inputCode);
       return withRoom(roomId, async () => {
         const user = authenticate();
-        const player = rooms.get(roomId)?.players.find(p => identities.owner(roomId, p) === user.id);
+        const room = rooms.get(roomId);
+        const player = room?.players.find(p => identities.owner(roomId, p) === user.id);
         if (!player) throw new RequestError('Ta miza ne pripada tvojemu igralcu.');
+        requireActiveRoom(room);
         if (socket.connected) attach(socket, roomId, player.id);
         emitState(roomId);
         return { roomId, playerId: player.id };
+      });
+    });
+
+    handle('room:abandon', async ({ roomId: inputCode }) => {
+      const roomId = cleanCode(inputCode);
+      return withRoom(roomId, async () => {
+        const user = authenticate();
+        const current = rooms.get(roomId);
+        const player = current?.players.find(p => identities.owner(roomId, p) === user.id);
+        if (!player) throw new RequestError('Ta miza ne pripada tvojemu igralcu.');
+        if (!current.abandonedAt) {
+          // Retain seats and the complete saved game; closing a table must never
+          // delete recoverable data or make its invitation code reusable.
+          const room = { ...current, abandonedAt: new Date(now()).toISOString(), abandonedBy: player.id,
+            updatedAt: new Date(now()).toISOString(), revision: (current.revision || 0) + 1 };
+          delete room.invitationHash;
+          await persist(room);
+          rooms.set(roomId, room);
+          const owners = new Set(current.players.map(seat => identities.owner(roomId, seat)).filter(Boolean));
+          for (const client of io.sockets.sockets.values()) {
+            if (client.data.roomId === roomId) detach(client);
+            try {
+              if (client.data.credential && owners.has(identities.user(client.data.credential).id))
+                client.emit('room:abandoned', { roomId });
+            } catch { /* Revoked sockets receive no private table notification. */ }
+          }
+        }
+        emitTables();
+        return { roomId, tables: tables(user.id) };
+      });
+    });
+
+    handle('room:disposition', async ({ roomId: inputCode, disposition }) => {
+      const roomId = cleanCode(inputCode);
+      return withRoom(roomId, async () => {
+        const user = authenticate();
+        const current = rooms.get(roomId);
+        const player = current?.players.find(p => identities.owner(roomId, p) === user.id);
+        if (!player) throw new RequestError('Ta miza ne pripada tvojemu igralcu.');
+        if (!['archived', 'deleted'].includes(disposition))
+          throw new RequestError('Izberi arhiviranje ali izbris mize.', 'INVALID_DISPOSITION');
+        if (!current.abandonedAt) throw new RequestError('Najprej opusti mizo.', 'ROOM_ACTIVE');
+        const previous = Object.hasOwn(current.dispositions || {}, player.id) ? current.dispositions[player.id] : undefined;
+        // A retry from another device must not restore a table already deleted.
+        // Preferences are private to a seat and do not change the shared game timestamp.
+        if (previous !== 'deleted' && previous !== disposition) {
+          const room = { ...current, dispositions: { ...current.dispositions, [player.id]: disposition } };
+          await persist(room);
+          rooms.set(roomId, room);
+        }
+        emitTables();
+        return { roomId, tables: tables(user.id) };
       });
     });
 
@@ -473,6 +548,7 @@ export async function createTarokServer({
       return withRoom(roomId, async () => {
         authenticate();
         const current = rooms.get(roomId);
+        requireActiveRoom(current);
         if (action.expectedRevision !== (current?.revision || 0)) {
           emitState(roomId);
           throw new RequestError('Igra se je spremenila. Preveri stanje in poskusi znova.', 'STALE_ACTION');

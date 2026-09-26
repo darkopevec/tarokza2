@@ -83,6 +83,8 @@ Each historical round identifies who announced the game. Open **Izračun runde**
 
 Your player owns all your tables, accessible from **Moje mize** on every linked browser. Refresh restores your current table; leaving returns home without losing your seat. No username, password, or email is required. In **Naprave in obnovitev**, generate a single-use, 15-minute link or QR code to add another browser, name devices, or remove a lost device. Each browser gets its own private credential; both can play the same seat. Save a separate private recovery link to restore access if all devices are lost. Generating a new recovery link invalidates the old one. Without that link or a connected browser, access cannot be restored. A browser belonging to another player cannot switch or merge identities; use a separate browser profile. Existing browser-held seat tokens migrate without resetting games. Old short invitations must be replaced by a new private invitation.
 
+Use the trash icon beside a table in **Moje mize** to **Opusti mizo**. After confirmation, the table closes for both players. Each player independently chooses **Arhiviraj** or **Izbriši**; an offline player gets the choice when they return. Archived tables appear in **Arhiv** at the bottom of the home screen and can be deleted later. Deleting removes the table only from your own list, across your linked devices. The other player's archive is unchanged. Abandoned tables cannot be resumed, and existing invitations stop working. Returning home with **Zapusti mizo** still keeps your seat. During play, open the **Nastavitve** gear in the header to change language; the home and waiting screens keep the flag selector.
+
 <details>
 <summary>🛡️ How the game handles plays from multiple tabs</summary>
 
@@ -246,6 +248,8 @@ The entire game uses all 54 scanned faces from one Slovenian tarok deck; see [ca
 </div>
 
 Run `npm run test:identity` for isolated browser checks of invitations, QR codes, linked devices, recovery, conflicts, and revocation. It creates and removes its own temporary data directory.
+
+Run `npm run test:table-management` after building to verify abandonment, independent archive/delete choices, later archive deletion, linked-device updates, offline choices, and phone layouts using disposable tables.
 
 Run `npm run test:waiting` after building to check mobile and desktop invitation sharing, copying, QR disclosure, reloads, replacement, and joining. It uses temporary local rooms and checks that sharing and reloading preserve the invitation.
 
