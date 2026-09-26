@@ -1,0 +1,1824 @@
+{
+  "deck": "Češki tarok · OTK",
+  "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+  "historySource": "https://www.hracikarty.cz/produkty/standardni-karty/taroky-1720/",
+  "attribution": "World Web Playing Card Museum, collection scans (WWPCM)",
+  "rights": "The source catalogue does not state a reuse licence. No blanket licence is inferred for these scans.",
+  "retrieved": "2026-09-26",
+  "artworkVersion": 1,
+  "sourceFaces": 38,
+  "note": "38 original face scans and the matching back are cropped and white-balanced. 16 missing pip cards are explicitly reconstructed from the pack’s own suit marks. The scan source identifies historical Kolín Taroky No.165; this is not a scan of the modern Hrací karty No.1720 edition.",
+  "cards": [
+    {
+      "id": "tarok-1",
+      "title": "Pagat",
+      "suffix": "01",
+      "kind": "trump",
+      "file": "tarok-1.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291101.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 163386,
+      "sha256": "4a53d294deb95245884f01eabac137f455c75017e9b1ece2ca7147a5216d4793",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291101.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 72408,
+        "sha256": "899664a3069f0d34e5d2f13b683171365b2536cfe13deee029b3c5f96c06502f"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-2",
+      "title": "Tarok II",
+      "suffix": "02",
+      "kind": "trump",
+      "file": "tarok-2.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291102.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 155563,
+      "sha256": "7d35c13fac5f73cd856798825137cfeeec5d3c534766f4b1692840742355cc32",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291102.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 68318,
+        "sha256": "b0381a6cadedccb7fcd864e52fa2a643d35bdcde8610ff1c97a564694d50cdce"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-3",
+      "title": "Tarok III",
+      "suffix": "03",
+      "kind": "trump",
+      "file": "tarok-3.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291103.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 157674,
+      "sha256": "47eb6f888ffe86c00155fe3f00e2a109a74007bf71f848e97883c22fcd682184",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291103.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 69581,
+        "sha256": "26c51f3338229e4819384370310b2fd94f8f11ced376831b952ccd4ab0475a6c"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-4",
+      "title": "Tarok IV",
+      "suffix": "04",
+      "kind": "trump",
+      "file": "tarok-4.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291104.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 162621,
+      "sha256": "9f3973359cfbc2e3150f430ee6f109cff275e6fe41b27e480ed0299f44b9c556",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291104.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 70949,
+        "sha256": "2aba028461e5c0e9e1627b5983b33694f0d384c8f31b864994bb9260225f0736"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          248
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-5",
+      "title": "Tarok V",
+      "suffix": "05",
+      "kind": "trump",
+      "file": "tarok-5.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291105.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 159906,
+      "sha256": "0da275248494334cfe4e6218268f8cc70c6a9890e524f60234b17e59277e201a",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291105.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 70277,
+        "sha256": "38702b57894413765b5bcf1df28407ad09ec06abc74b175007b5ee25083181c5"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          252
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-6",
+      "title": "Tarok VI",
+      "suffix": "06",
+      "kind": "trump",
+      "file": "tarok-6.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291106.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 169034,
+      "sha256": "c277a6331d584ca6382677e95e30171f765c571f4b1f05c2b838c41004e993a1",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291106.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 74358,
+        "sha256": "9d3ec97a777d2c51157de783ba0d588a2416b936b9a099fd9d65d28f34348f75"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-7",
+      "title": "Tarok VII",
+      "suffix": "07",
+      "kind": "trump",
+      "file": "tarok-7.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291107.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 166441,
+      "sha256": "d19e0fecdc3592b8ab87a754441ce0e88191b7ac310f918d9c098f2d628b833e",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291107.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 73381,
+        "sha256": "e8fc0893831699557e440a3bf3fa140226e7e0aa19c37afbb69a1f6766f30784"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-8",
+      "title": "Tarok VIII",
+      "suffix": "08",
+      "kind": "trump",
+      "file": "tarok-8.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291108.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 159191,
+      "sha256": "bbb1339c3a007ee2835adf436da735eaf2f545aad215ef4c0048e43aca3f65cd",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291108.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 70669,
+        "sha256": "e55d3d0bff6ab08f0fa8886d2f1bc3d590d11fe51f7f3929f48712b632e1aecc"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-9",
+      "title": "Tarok IX",
+      "suffix": "09",
+      "kind": "trump",
+      "file": "tarok-9.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291109.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 171601,
+      "sha256": "6ee5f0da825233d341309b47a10b20f6e0e7e06ebdbb6d43264c589654a11457",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291109.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 75432,
+        "sha256": "2853bd9af4827b7a7cb736600df63782d239d224a1d84ceebf6a3632a68099db"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-10",
+      "title": "Tarok X",
+      "suffix": "10",
+      "kind": "trump",
+      "file": "tarok-10.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291110.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 172952,
+      "sha256": "1ec762344008d47e6cc401d3761ed1c09fed7239a5fb382f87929aa0ca6542bd",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291110.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 75590,
+        "sha256": "f3430ac564ddaf93abcbaf0ad159d88a1630d97186cc956e77502760ee4e5872"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-11",
+      "title": "Tarok XI",
+      "suffix": "11",
+      "kind": "trump",
+      "file": "tarok-11.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291111.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 147722,
+      "sha256": "0b70ab1bbb637b61b15efbef83586ced58892cef3f14b83f468b9c398f0a9fb2",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291111.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 64565,
+        "sha256": "28570af3b07058a2e466f753392dcc07d657c1c14d49cc00f71c20a908f069a7"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-12",
+      "title": "Tarok XII",
+      "suffix": "12",
+      "kind": "trump",
+      "file": "tarok-12.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291112.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 153879,
+      "sha256": "06bb0ab2569c31d1dd4cb13012ab9a514a5d5b14e4d20486fd1f5a4f93a79e94",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291112.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 67955,
+        "sha256": "42339d4fe121a6e51caac5ae46c575c24a07a2b4722016ba8281617f01f8ba78"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-13",
+      "title": "Tarok XIII",
+      "suffix": "13",
+      "kind": "trump",
+      "file": "tarok-13.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291113.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 153383,
+      "sha256": "8f39a2cf1297904d9b58e2e441484795363a9422b51b215f7c426d427d6f6293",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291113.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 67094,
+        "sha256": "727d94dd95c3cc5c1d3ef185ec7aef319078cfd8df0d5805e299b146d8bba483"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-14",
+      "title": "Tarok XIV",
+      "suffix": "14",
+      "kind": "trump",
+      "file": "tarok-14.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291114.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 164268,
+      "sha256": "c894cf0a156383bde257e2dc23a2b71b2f1312db799d33b49cc61e0e68b166fb",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291114.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 72159,
+        "sha256": "7fa6e848e2cd88fa4b33eb2ddbda76d05b0293cbe86862674820936c9d3c6ebc"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-15",
+      "title": "Tarok XV",
+      "suffix": "15",
+      "kind": "trump",
+      "file": "tarok-15.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291115.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 162391,
+      "sha256": "379831c77e1a8c86dad991dac61eb9e1769bf3e4b6d27d448712c34fd3b2a47f",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291115.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 71805,
+        "sha256": "08854620707bf728d7ba7c0d68d8d9450532c40ac586ed0e8a9f9c87393fd036"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-16",
+      "title": "Tarok XVI",
+      "suffix": "16",
+      "kind": "trump",
+      "file": "tarok-16.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291116.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 156274,
+      "sha256": "a1aa9bd40841be24a677f3f8c75c911021758624a19076e52ac92ff248e2b7c0",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291116.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 68905,
+        "sha256": "cc28a687ff0b5895ee41486ea43f786ed2cf3d65e43239e261f0cbdc6398cf07"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-17",
+      "title": "Tarok XVII",
+      "suffix": "17",
+      "kind": "trump",
+      "file": "tarok-17.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291117.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 149487,
+      "sha256": "0eddf01da9f26d0847c673fdd48d7cbb1180308b073ca8ddd0d074bce1a0faf7",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291117.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 66487,
+        "sha256": "caf219d8213ccb1c340a3f6199bb3d5f7585b76f4d1a23f3a6cdc106824e0223"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-18",
+      "title": "Tarok XVIII",
+      "suffix": "18",
+      "kind": "trump",
+      "file": "tarok-18.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291118.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 149183,
+      "sha256": "c989ed3e367bd86024dfb82532a7466b5d1b1bb64017917f461b0aae670913bb",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291118.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 66508,
+        "sha256": "40baee23cd32903f0be2155622173bad2fa18c03f94e7e13655e39b420b634a1"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-19",
+      "title": "Tarok XIX",
+      "suffix": "19",
+      "kind": "trump",
+      "file": "tarok-19.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291119.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 166896,
+      "sha256": "ce4b4d609d456849ca245fba194cfc8eb2ff7953bbc314b70a78bc3ffe8b9d5b",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291119.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 73801,
+        "sha256": "93458686d814b55dd1e11ecd9b064f1c418107be7d740976b9b272cd9965e0b8"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          248
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-20",
+      "title": "Tarok XX",
+      "suffix": "20",
+      "kind": "trump",
+      "file": "tarok-20.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291120.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 152806,
+      "sha256": "56a3f7233a57e279daff21a6950dc234bfeb35f9145bb2f588dabd50c76ca12c",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291120.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 67477,
+        "sha256": "7394141fb93f9f4b6c2a46fe84d2e9566392a77b88c22edafd6e0973a3784904"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          254,
+          254,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-21",
+      "title": "Mond",
+      "suffix": "21",
+      "kind": "trump",
+      "file": "tarok-21.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d0291121.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 149357,
+      "sha256": "b991f522783e8336052000a4ffc548ed6808a1946671b3588ca0997c99a17c73",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d0291121.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 66686,
+        "sha256": "a6f0b6935f7800ddee4aaaad2a988578810fbd1c0dae7ba04cf1a6dd4e7a1c67"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          252
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "tarok-22",
+      "title": "Škis",
+      "suffix": "j01",
+      "kind": "trump",
+      "file": "tarok-22.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911j01.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 137777,
+      "sha256": "44d755e86b564430876188e1c27d468b37f62b315363e5b8f08cd88a69f2a4eb",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911j01.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 63677,
+        "sha256": "3084fc857dfe6992292cfbbe2be11bcb9e529e1cc3f61b99924703b40f163f95"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "clubs-5",
+      "title": "Fant križa",
+      "suffix": "cJ",
+      "kind": "court",
+      "file": "clubs-5.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cJ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 125731,
+      "sha256": "c5d20c11429ccdad8676f49214efed1a0292fb2f58279d9065f55bf697e55b33",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911cJ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 56510,
+        "sha256": "0c4a4c1a4037e5291fceade0395cd88f3c47f840e5701a38bc811ed53e8003e6"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "clubs-6",
+      "title": "Kaval križa",
+      "suffix": "cC",
+      "kind": "court",
+      "file": "clubs-6.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cC.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 149147,
+      "sha256": "98cdb6e37cb649b28db4bba02f9aeb9d805e7f5b1758f8eb6726f65b7fb27857",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911cC.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 66221,
+        "sha256": "8ee2689b84fd0ed76a08ecd6faf26c41606e564c43beea12c0cc11d8b612b7dc"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          248
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "clubs-7",
+      "title": "Dama križa",
+      "suffix": "cQ",
+      "kind": "court",
+      "file": "clubs-7.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cQ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 143611,
+      "sha256": "6ac4ddd89986043f256966dc6b7c3a155ede6a6ed69f22f7859a56a699886123",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911cQ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 64848,
+        "sha256": "1f0678bfe8dd5472ae76f8f53d0ec9d4f01e6e187c00e0500414fe27bd864a18"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "clubs-8",
+      "title": "Kralj križa",
+      "suffix": "cK",
+      "kind": "court",
+      "file": "clubs-8.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 138974,
+      "sha256": "ac81af1a5fc005712e56e4482c52b5b843d608e389015567cfff53f1da254b6b",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911cK.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 62407,
+        "sha256": "4d841bd8c3c441a3ebf67c319e018e7895aef60785253181c8176b64df610893"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "spades-5",
+      "title": "Fant pika",
+      "suffix": "sJ",
+      "kind": "court",
+      "file": "spades-5.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sJ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 143082,
+      "sha256": "30d134206a1a7107b1d24981b84ce9eb50bfd21b792b814cae224c4cc276a3e5",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911sJ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 64119,
+        "sha256": "b7fef16cb40bd4890c9c1773e1d93f1e1877fb49dc9aec11eeb37ba73a7883b5"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "spades-6",
+      "title": "Kaval pika",
+      "suffix": "sC",
+      "kind": "court",
+      "file": "spades-6.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sC.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 148312,
+      "sha256": "07c870223dc9a6b1b25a721b4e7bc4ad4cf4b89e5720ee07c6e29b8698bd7baf",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911sC.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 66090,
+        "sha256": "52a07440ec7e1bfb78a786dd5f45f364bdbe1db25286877fb4ca39e493e12a5e"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          242
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "spades-7",
+      "title": "Dama pika",
+      "suffix": "sQ",
+      "kind": "court",
+      "file": "spades-7.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sQ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 144963,
+      "sha256": "22a87a6109fb6d3b6e304162134af320c0fa2bdc4fb13f638a440d7b87c5da90",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911sQ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 65166,
+        "sha256": "ec60ac620f6a102c37a4831b222a3d73049b38be996ac230b2d8601ffb8dbced"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "spades-8",
+      "title": "Kralj pika",
+      "suffix": "sK",
+      "kind": "court",
+      "file": "spades-8.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 138426,
+      "sha256": "5743dca7e5b950ed79a8290cac083f32df16601db79a5d38612fecfabe3d3b7b",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911sK.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 61223,
+        "sha256": "6be546015fc56210749cd638c51caaceb139ed1a2890fedad48d25bcf56653f3"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          250
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "hearts-5",
+      "title": "Fant srca",
+      "suffix": "hJ",
+      "kind": "court",
+      "file": "hearts-5.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hJ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 141928,
+      "sha256": "84cc9233198d57f33f91b8c5519bd7d883aef527af5e220d48acc9b091dac4e1",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911hJ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 63858,
+        "sha256": "3ceb0d584f3d9bf5cf99177d22fc24bb07987ca5457c3c24c5040c5caa9471c5"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          248
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "hearts-6",
+      "title": "Kaval srca",
+      "suffix": "hC",
+      "kind": "court",
+      "file": "hearts-6.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hC.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 156076,
+      "sha256": "43d5abd26969fd311c7ceaacb822ac052279259b4f0e661031e06e79faa2e1bc",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911hC.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 69622,
+        "sha256": "7f7b9d757ededd3895ae87c8443199de6c0f8c78a9089629700221019b05303b"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          246
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "hearts-7",
+      "title": "Dama srca",
+      "suffix": "hQ",
+      "kind": "court",
+      "file": "hearts-7.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hQ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 147144,
+      "sha256": "cf10df555e593e5dd2e387aec5f27ea07396748d10d58a41661572d4684e369a",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911hQ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 65961,
+        "sha256": "1241bf7238112a715ec2528bb89b70c854d93852cc207ef7b2ced96a6c07fb5f"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          246
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "hearts-8",
+      "title": "Kralj srca",
+      "suffix": "hK",
+      "kind": "court",
+      "file": "hearts-8.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 136813,
+      "sha256": "8a6e8fcd109cf175bf3d86a4c69795cbb5460318a9208e8b3fc67f0e9c8287a5",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911hK.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 60670,
+        "sha256": "05c7d1c714afa5ffcf355ad1407b5eb3c72080b46387d266a40a47ce27dec1ef"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "diamonds-5",
+      "title": "Fant kare",
+      "suffix": "dJ",
+      "kind": "court",
+      "file": "diamonds-5.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dJ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 138526,
+      "sha256": "9bf4eba1ed7ef6d4995515ae214f4e1b8eb096cfa1a452270989049a3d5a8bce",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911dJ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 62454,
+        "sha256": "dcb3811f356219359cd4f07e5364fcdd0353590b92f58757f31449fd1f38141c"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "diamonds-6",
+      "title": "Kaval kare",
+      "suffix": "dC",
+      "kind": "court",
+      "file": "diamonds-6.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dC.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 143740,
+      "sha256": "8ec274feb92a99a5ce14f0cb01ad5822cbc7c7dad64acc6bead66986b7f128c8",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911dC.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 63963,
+        "sha256": "73d034df3c67d86b316e353ef80076e7fc77c890d9e1ade8a70781cccd83e1ac"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          254,
+          249
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "diamonds-7",
+      "title": "Dama kare",
+      "suffix": "dQ",
+      "kind": "court",
+      "file": "diamonds-7.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dQ.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 142214,
+      "sha256": "d511dd6ab81bf5b87c20493f7e44e1b3319e37b744f88246123b25c91adca500",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911dQ.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 63733,
+        "sha256": "44a55fc0817a463f20ec60ea68cec42fe92d6048230f3ef1e8550f563f036dc2"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "diamonds-8",
+      "title": "Kralj kare",
+      "suffix": "dK",
+      "kind": "court",
+      "file": "diamonds-8.jpg",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 139367,
+      "sha256": "82809b21b40937b37f9de993ea6091fdc856ca35fa5d30b8d0ee1ce12a9e28c2",
+      "adjusted": true,
+      "sourceScan": {
+        "file": "d02911dK.jpg",
+        "width": 392,
+        "height": 692,
+        "bytes": 62154,
+        "sha256": "27315f76a71f23f2c47325b1708a2e9f1a3d35ab8fe0ae993d06747eb74b6a75"
+      },
+      "correction": {
+        "script": "scripts/prepare-collection-decks.mjs",
+        "crop": [
+          31.9872,
+          33.908,
+          333.984,
+          629.028
+        ],
+        "paperWhite": [
+          255,
+          255,
+          251
+        ],
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+    },
+    {
+      "id": "clubs-1",
+      "title": "Sedmica križa",
+      "file": "clubs-1.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 7,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16273,
+      "sha256": "82a6488aa55e5c8563d575d7f66b0a7ad005aabbd663bb0488494d42f6bfadd4",
+      "symbolFile": "symbol-clubs.png",
+      "symbolCrop": [
+        42,
+        45,
+        103,
+        100
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "clubs-2",
+      "title": "Osmica križa",
+      "file": "clubs-2.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 8,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16378,
+      "sha256": "6238a392527fef3c4a81c83745bdb84bf879d4ed901ed89c04f5712fb741c5ad",
+      "symbolFile": "symbol-clubs.png",
+      "symbolCrop": [
+        42,
+        45,
+        103,
+        100
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "clubs-3",
+      "title": "Devetica križa",
+      "file": "clubs-3.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 9,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16449,
+      "sha256": "2051a369cc77262d0e2bc9437cd42d98ffbd24438fe87c9cbf132fa72dc031b0",
+      "symbolFile": "symbol-clubs.png",
+      "symbolCrop": [
+        42,
+        45,
+        103,
+        100
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "clubs-4",
+      "title": "Desetica križa",
+      "file": "clubs-4.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 10,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911cK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16550,
+      "sha256": "5405778a7ce1a0787560af132795336544847c1b3244905ff275039428d7bd71",
+      "symbolFile": "symbol-clubs.png",
+      "symbolCrop": [
+        42,
+        45,
+        103,
+        100
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "spades-1",
+      "title": "Sedmica pika",
+      "file": "spades-1.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 7,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16193,
+      "sha256": "ec51e151b53b713067a8100a0197b4706e97e2e86910f7acdc33c5a65e3e8009",
+      "symbolFile": "symbol-spades.png",
+      "symbolCrop": [
+        40,
+        48,
+        103,
+        104
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "spades-2",
+      "title": "Osmica pika",
+      "file": "spades-2.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 8,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16299,
+      "sha256": "11bfb43b6e146d8f18972ca7099d9d54796ebee69bf792938c8fa6db018637ac",
+      "symbolFile": "symbol-spades.png",
+      "symbolCrop": [
+        40,
+        48,
+        103,
+        104
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "spades-3",
+      "title": "Devetica pika",
+      "file": "spades-3.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 9,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16371,
+      "sha256": "598eb5543b514fc91a78eef1e76cf6e17baf567d85dbacb4667af02bae7b4736",
+      "symbolFile": "symbol-spades.png",
+      "symbolCrop": [
+        40,
+        48,
+        103,
+        104
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "spades-4",
+      "title": "Desetica pika",
+      "file": "spades-4.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 10,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911sK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 16473,
+      "sha256": "7a17033a455781f3c7c3e2d08790029f951703c47c0203b7fd2f30020a3cd0c5",
+      "symbolFile": "symbol-spades.png",
+      "symbolCrop": [
+        40,
+        48,
+        103,
+        104
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "hearts-1",
+      "title": "Štirica srca",
+      "file": "hearts-1.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 4,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 18733,
+      "sha256": "fc190fbf4d478649a413f26c659b2af6e0de4f054c4dfb7b7b100758becb56bc",
+      "symbolFile": "symbol-hearts.png",
+      "symbolCrop": [
+        37,
+        50,
+        109,
+        97
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "hearts-2",
+      "title": "Trojka srca",
+      "file": "hearts-2.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 3,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 18631,
+      "sha256": "6c6184f04f094ad394b3c63993a943e181292c0cf33d7d9cbe77b2c183bbef8e",
+      "symbolFile": "symbol-hearts.png",
+      "symbolCrop": [
+        37,
+        50,
+        109,
+        97
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "hearts-3",
+      "title": "Dvojka srca",
+      "file": "hearts-3.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 2,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 18561,
+      "sha256": "c5c97a1d0bb61c087805a4cb0fda5a57d8024b3985fc56d8ab10d88a18f8ae5b",
+      "symbolFile": "symbol-hearts.png",
+      "symbolCrop": [
+        37,
+        50,
+        109,
+        97
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "hearts-4",
+      "title": "Enka srca",
+      "file": "hearts-4.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 1,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911hK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 18459,
+      "sha256": "ec2cb93741c78c1b657b9072de1f1add7f6e48969fef81c1bb2774189189cb1c",
+      "symbolFile": "symbol-hearts.png",
+      "symbolCrop": [
+        37,
+        50,
+        109,
+        97
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "diamonds-1",
+      "title": "Štirica kare",
+      "file": "diamonds-1.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 4,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 14284,
+      "sha256": "3308b863de5dce4b541e7a6a70d8a40a8ee7cf5cc5d66cc77881e24ca4dfe88c",
+      "symbolFile": "symbol-diamonds.png",
+      "symbolCrop": [
+        37,
+        45,
+        104,
+        110
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "diamonds-2",
+      "title": "Trojka kare",
+      "file": "diamonds-2.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 3,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 14180,
+      "sha256": "0db99c543bcea2f32d543ad1b5b946b7a71343b45d304c69f9ee4715ae93f0e0",
+      "symbolFile": "symbol-diamonds.png",
+      "symbolCrop": [
+        37,
+        45,
+        104,
+        110
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "diamonds-3",
+      "title": "Dvojka kare",
+      "file": "diamonds-3.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 2,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 14108,
+      "sha256": "ebb2ac866983703a6b9be0e36ec24ed2fc647c8b49d7beef27108bdc953b33fa",
+      "symbolFile": "symbol-diamonds.png",
+      "symbolCrop": [
+        37,
+        45,
+        104,
+        110
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    },
+    {
+      "id": "diamonds-4",
+      "title": "Enka kare",
+      "file": "diamonds-4.svg",
+      "kind": "pip",
+      "generated": true,
+      "pipCount": 1,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911dK.jpg",
+      "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+      "width": 504,
+      "height": 904,
+      "bytes": 14004,
+      "sha256": "e06df182ca47539755b31313e94110b54bbba3cc217b9af0cc519f3182169620",
+      "symbolFile": "symbol-diamonds.png",
+      "symbolCrop": [
+        37,
+        45,
+        104,
+        110
+      ],
+      "treatment": "Reconstructed pip card using the original pack’s extracted suit mark, exact pip count and white background; not an original scan.",
+      "generator": "scripts/prepare-collection-decks.mjs"
+    }
+  ],
+  "back": {
+    "id": "back",
+    "title": "Hrbtna stran",
+    "suffix": "r01",
+    "kind": "back",
+    "file": "back.jpg",
+    "source": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911r01.jpg",
+    "description": "http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm",
+    "width": 504,
+    "height": 904,
+    "bytes": 175060,
+    "sha256": "461fd8428ad11c30fc4f635df5889f6ca4c891f3e2dd6ec8433d00b1a3221940",
+    "adjusted": true,
+    "sourceScan": {
+      "file": "d02911r01.jpg",
+      "width": 392,
+      "height": 692,
+      "bytes": 71997,
+      "sha256": "4e93db3f1a9b341bf47d6bb53e8307dcf1879bddad31e82f60138f1098aec259"
+    },
+    "correction": {
+      "script": "scripts/prepare-collection-decks.mjs",
+      "crop": [
+        43.12,
+        55.36,
+        306.93600000000004,
+        591.66
+      ],
+      "paperWhite": [
+        253,
+        252,
+        243
+      ],
+      "background": "#ffffff"
+    },
+    "treatment": "Conventional crop of the printed face, paper-reference white balance and resampling on a white canvas; original illustration retained."
+  }
+}

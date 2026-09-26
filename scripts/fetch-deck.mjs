@@ -1,21 +1,25 @@
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { setTimeout as delay } from 'node:timers/promises';
 import { createDeck } from '../shared/cards.mjs';
 
 // Import the complete, single-source Modiano Tarok Študentski servis Maribor pack.
-// Download Commons' existing thumbnails unchanged; do not redraw or crop the cards.
-const destination = new URL('../public/cards/deck/', import.meta.url);
+// Keep the full source photographs separate from the restored game assets.
+// Run restore-modiano-deck.mjs after importing to prepare the displayed cards.
+const destination = new URL('../artifacts/modiano-deck/originals/', import.meta.url);
+const headers = { 'User-Agent': 'Tarokza2DeckImporter/1.0 (https://github.com/darkopevec/tarokza2)' };
 const api = new URL('https://commons.wikimedia.org/w/api.php');
 const parameters = {
   action: 'query', format: 'json', generator: 'categorymembers',
   gcmtitle: 'Category:Industrie und Glück', gcmtype: 'file', gcmlimit: '200',
-  prop: 'imageinfo', iiprop: 'url', iiurlwidth: '330',
+  prop: 'imageinfo', iiprop: 'url|size|extmetadata', iiurlwidth: '330',
 };
 const pages = {};
 let continuation = {};
 do {
   api.search = new URLSearchParams({ ...parameters, ...continuation });
-  const response = await fetch(api);
+  const response = await fetch(api, { headers, signal: AbortSignal.timeout(30_000) });
   if (!response.ok) throw new Error(`Commons catalogue request failed: ${response.status}`);
   const batch = await response.json();
   assert.ok(batch.query?.pages, 'Commons returned no card catalogue.');
@@ -41,21 +45,39 @@ for (const page of Object.values(pages)) {
     id = `${suits[sourceSuit]}-${rank}`;
   }
   const info = page.imageinfo?.[0];
-  assert.ok(info?.thumburl, `Missing thumbnail for ${page.title}`);
+  assert.ok(info?.thumburl && info?.url, `Missing source photograph for ${page.title}`);
+  assert.equal(info.extmetadata?.LicenseShortName?.value, 'Public domain', `Review the changed source classification: ${page.title}`);
   sources.push({ id, file: `${id}.jpg`, title: page.title,
-    source: info.descriptionurl, thumbnail: info.thumburl.split('?')[0] });
+    source: info.descriptionurl, thumbnail: info.thumburl.split('?')[0],
+    original: info.url, width: info.width, height: info.height, sourceBytes: info.size,
+    license: info.extmetadata.LicenseShortName.value,
+    kind: id === 'back' ? 'back' : id.startsWith('tarok-') ? 'trump' : Number(id.split('-')[1]) >= 5 ? 'court' : 'pip',
+  });
 }
 const expected = [...createDeck().map(card => card.id), 'back'].sort();
 assert.deepEqual(sources.map(source => source.id).sort(), expected, 'Source pack must map exactly to all 54 cards and one back.');
 await mkdir(destination, { recursive: true });
-// Gentle sequential downloading avoids overwhelming the Commons thumbnail service.
+// Gentle sequential downloading avoids overwhelming Commons.
 for (const source of sources.sort((a, b) => a.id.localeCompare(b.id))) {
-  const image = await fetch(source.thumbnail);
-  if (!image.ok) throw new Error(`${source.id}: download failed (${image.status})`);
-  assert.match(image.headers.get('content-type') || '', /^image\/jpeg/);
-  const bytes = new Uint8Array(await image.arrayBuffer());
+  let bytes = await readFile(new URL(source.file, destination)).catch(() => null);
+  if (bytes?.length !== source.sourceBytes) {
+    await delay(2000);
+    let image;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      image = await fetch(source.original, { headers, signal: AbortSignal.timeout(30_000) });
+      if (image.status !== 429 && image.status !== 503) break;
+      const seconds = Math.max(30, Number(image.headers.get('retry-after')) || 0);
+      console.log(`${source.id}: source requested a ${seconds}s pause`);
+      await delay(seconds * 1000);
+    }
+    if (!image.ok) throw new Error(`${source.id}: download failed (${image.status})`);
+    assert.match(image.headers.get('content-type') || '', /^image\/jpeg/);
+    bytes = new Uint8Array(await image.arrayBuffer());
+  }
   assert.ok(bytes.length > 1000, `Suspiciously small image for ${source.id}`);
   await writeFile(new URL(source.file, destination), bytes);
+  source.bytes = bytes.length;
+  source.sha256 = createHash('sha256').update(bytes).digest('hex');
   console.log(`${source.id}: ${bytes.length} bytes`);
 }
 await writeFile(new URL('sources.json', destination), JSON.stringify({

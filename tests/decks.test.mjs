@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import { createDeck } from '../shared/cards.mjs';
 import { CARD_BACK_IMAGE, CARD_DECKS, cardBackImage, cardImage, cardImageUrls } from '../src/decks.mjs';
 
@@ -37,9 +38,10 @@ test('each deck maps the same 54 identities to unique local artwork without chan
       assert.ok(urls.includes(cardImage(card, id)));
       if (id === 'modiano') assert.equal(cardImage(card, id), card.image);
       else {
-        const reconstructed = card.suit !== 'tarok' && card.rank <= 4
-          && (id !== 'smrekar' || !['diamonds-4', 'clubs-1', 'spades-1'].includes(card.id));
-        assert.equal(cardImage(card, id), `/cards/${id}/${card.id}.${reconstructed ? 'svg' : 'jpg'}?v=${id === 'smrekar' ? 2 : 1}`);
+        const manifest = JSON.parse(readFileSync(new URL(`../public/cards/${id}/sources.json`, import.meta.url)));
+        const source = manifest.cards.find(source => source.id === card.id);
+        assert.ok(source, `${id}: every canonical card has documented artwork`);
+        assert.equal(cardImage(card, id), `/cards/${id}/${source.file}?v=${id === 'smrekar' ? 2 : 1}`);
       }
     }
   }
@@ -61,10 +63,11 @@ test('Smrekar uses its original back and the existing decks keep their shared ba
   assert.equal(cardBackImage('unknown'), CARD_BACK_IMAGE);
 });
 
-test('all Smrekar faces and its back use the corrected artwork revision', () => {
+test('restored faces use new artwork revisions while unchanged artwork keeps its cache', () => {
   assert.ok(cardImageUrls('smrekar').every(url => url.endsWith('?v=2')));
   assert.ok(cardImageUrls('slovenian').every(url => url.endsWith('?v=1')));
-  assert.ok(cardImageUrls('modiano').every(url => url.endsWith('?v=1')));
+  assert.ok(cardImageUrls('modiano').slice(1).every(url => url.endsWith('?v=2')));
+  assert.equal(cardBackImage('modiano'), '/cards/back-ornament.png?v=1');
 });
 
 test('Modiano remains the default and a chosen deck persists for this browser', async t => {

@@ -4,7 +4,7 @@
 // pip value, 1 (Enka), rather than an A. Full court names replace the previous
 // F = fant, C = cavalier/kaval, D = dama and K = kralj abbreviations.
 // Bump when replacing artwork so permanent browser caches receive the new edition.
-export const CARD_ART_VERSION = '1';
+export const CARD_ART_VERSION = '2';
 
 const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
 const courts = ['Fant', 'Kaval', 'Dama', 'Kralj'];

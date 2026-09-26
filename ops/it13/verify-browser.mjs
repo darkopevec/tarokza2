@@ -105,7 +105,7 @@ async function verifyDeckGallery(page, deck) {
   });
   assert.ok(decoded.every(image => image.loaded), `${deck}: every face must decode`);
   assert.equal(decoded.filter(image => image.path.endsWith('.svg')).length,
-    { modiano: 0, slovenian: 16, smrekar: 13 }[deck], `${deck}: expected reconstructed pip faces must decode`);
+    { modiano: 0, slovenian: 16, smrekar: 13, moser: 0, cego: 10, neumayer: 16 }[deck], `${deck}: expected reconstructed pip faces must decode`);
   for (const rank of [1, 21, 22]) {
     assert.ok(decoded.some(image => image.path === cardImage(`tarok-${rank}`, deck).split('?')[0]), 'The gallery trula must use the selected artwork');
   }
@@ -198,7 +198,7 @@ try {
       await expect(deckSelector).toHaveValue(id);
       await verifyDeckGallery(page, id);
     }
-    assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), 'smrekar');
+    assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), CARD_DECKS.at(-1).id);
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     await page.reload({ waitUntil: 'networkidle' });
     await verifyMobileHeader(page);
@@ -209,9 +209,9 @@ try {
     await expect(page).toHaveTitle(translatorFor(explicitLanguage)('TarokZa2 · Dobra družba. Dobre karte.'));
     await page.keyboard.press('Escape');
     await page.getByTestId('deck-gallery').click();
-    await expect(deckSelector).toHaveValue('smrekar');
+    await expect(deckSelector).toHaveValue(CARD_DECKS.at(-1).id);
     await expect(deckSelector.locator('option[value="modiano"]')).toHaveText('Modiano');
-    await verifyDeckGallery(page, 'smrekar');
+    await verifyDeckGallery(page, CARD_DECKS.at(-1).id);
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     assert.deepEqual(errors, []);
     const headers = response.headers();
@@ -219,7 +219,7 @@ try {
     assert.equal(headers['x-frame-options'], 'DENY');
     assert.equal(headers['strict-transport-security'], 'max-age=31536000');
     assert.equal(await page.evaluate(() => localStorage.getItem('tarokza2.device')), null);
-    console.log(`${host}: 320px guest header/status/touch targets, Cards-only selection, Modiano label, all three translated descriptions/histories and HTTPS sources, 12 languages, IP/browser default (${defaultLanguage}), ${Object.keys(expectedHashes).length} face/back hashes and image types (16 Slovenian + 13 Smrekar SVG), saved language/Smrekar choices, CSP and secure WebSocket checked`);
+    console.log(`${host}: 320px guest header/status/touch targets, Cards-only selection, Modiano label, all ${CARD_DECKS.length} translated descriptions/histories and HTTPS sources, 12 languages, IP/browser default (${defaultLanguage}), ${Object.keys(expectedHashes).length} face/back hashes and image types, saved language/deck choices, CSP and secure WebSocket checked`);
     await context.close();
   }
 } finally {

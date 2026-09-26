@@ -47,5 +47,38 @@ open only when chosen.
   Valley barrel striking (XII). The UI includes these documented motifs and
   omits identifications which the museum itself treats as uncertain.
 
+## Secesijski tarok · Ditha Moser
+
+- The [Merrill C. Berman Collection catalogue](https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf)
+  identifies the original 1906 deck and its Art Nouveau design, with toy-like
+  figures and motifs connected to the Moser family. It identifies Albert Berger
+  as printer and Josef Glanz as responsible for varnishing, cutting, collating
+  and packaging. The catalogue also reproduces all 54 faces.
+- [Lo Scarabeo's reproduction](https://www.loscarabeo.com/en/collections/tarot/products/wiener-secession-tarot-ed-limitata-2999-copie)
+  independently identifies Ditha Moser, Vienna, 1906 and 54 cards. Its modern
+  reproduction is a factual reference, not the source of the game's scans.
+
+## Adler-Cego · ASS
+
+- [ASS Altenburger's rules](https://www.spielkarten.com/spielregeln/cego/)
+  document 54 cards: 22 trumps, 16 courts and 16 pips. The highest unnumbered
+  Gstieß/Sküs corresponds to the game's Škis.
+- [Achim Laber's collection research](https://www.cego.de/kartenblaetter#badischestarock)
+  documents the animal pattern, attributes its present design to Lennhoff &
+  Heuser (Frankfurt, active 1879–1882), and records the Adler-Cego name until the
+  middle of the 1970s. The interface expressly attributes this history to the
+  collector's research rather than presenting an inferred artist/date.
+
+## Češki tarok · OTK
+
+- [Tarot Museum Belgium's collection](https://tarotmuseumbelgium.com/jeu-tarot/)
+  identifies an OTK Taroky pack, Obchodní Tiskárny as publisher and Josef Neumayer
+  as engraver. Its copy's 1961–1968 dating is **not** applied to the game's copy.
+- [Hrací karty 1884](https://www.hracikarty.cz/produkty/standardni-karty/taroky-1720/)
+  confirms the 54-card Czech Industrie & Glück pattern, everyday-life scenes
+  and Josef Neumayer attribution. No. 1720 is a product number, not a year.
+- The imported scans are WWPCM's historical Kolín No. 165 edition. The UI says
+  **OTK**, with no unsupported printing date, and does not call them No. 1720.
+
 Translations preserve the same facts. Source credits and the app's reconstructed
 or restored card faces are separate from these histories; see [cards.md](cards.md).

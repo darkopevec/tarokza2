@@ -1,6 +1,26 @@
 # IT13 deployment
 
-The current 2026-09-26 deck history release uses image
+The current 2026-09-26 collection-decks release uses image
+`tarokza2:collection-decks-20260926` and `compose.it13.yaml`. It adds Ditha
+Moser, Adler-Cego and historical Czech OTK artwork, bringing the Cards selector
+to six complete decks with sourced histories in all 12 languages. Modiano's
+54 faces are restored from higher-resolution photographs, with corrected
+frames, white backgrounds and face URL revision `v=2`.
+
+Moser includes nine lower-resolution original pip scans; Cego and OTK include
+10 and 16 reconstructed pip cards respectively. Chinesen and occupations
+Tarock remain pending complete artwork and are not selectable. Source manifests
+record the exact scans, adjustments and limitations.
+
+Saved games and identities require no migration. Back up the stopped volume
+before switching images and refresh browser tabs afterward. Retain
+`tarokza2:deck-history-20260926` for code rollback with the same data. Local
+validation passed 161 tests, 104 deck layouts and all 329 card/back images
+through the persistent offline cache.
+
+## Previous deck history release
+
+The 2026-09-26 deck history release uses image
 `tarokza2:deck-history-20260926` and `compose.it13.yaml`. The Cards icon contains
 deck selection and short, sourced histories and descriptions for all three decks
 in all 12 languages. The default deck is labelled Modiano; the specific Maribor

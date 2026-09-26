@@ -36,16 +36,20 @@ try {
   await expect(pages[0].getByTestId('room-code')).toBeVisible();
   await expect(pages[0].getByTestId('card-loading')).toHaveCount(0);
   const room = await pages[0].getByTestId('room-code').textContent();
-  const visible = await pages[0].locator('.playing-card img').evaluateAll(images => images.map(image => new URL(image.src).pathname));
-  await pages[0].waitForTimeout(200);
-  assert.ok(requests.length > 0);
-  assert.ok(requests.every(url => visible.includes(url)), 'Hidden artwork must wait behind displayed cards');
+  // The waiting page has no displayed cards, so its background workers may
+  // already have started downloads before the second player joins.
   const invitation = await pages[0].getByRole('textbox', { name: 'Povabilo za prijatelja', exact: true }).inputValue();
   await pages[1].goto(invitation);
   await pages[1].getByTestId('player-name').fill('Luka');
+  const waitingRequests = new Set(requests);
   await pages[1].getByTestId('join-room').click();
   await expect(pages[0].locator('.game-page')).toHaveAttribute('data-phase', 'bidding');
   await expect(pages[0].getByTestId('card-loading')).toHaveCount(0);
+  const visible = await pages[0].locator('.playing-card img').evaluateAll(images => images.map(image => new URL(image.src).pathname));
+  await pages[0].waitForTimeout(200);
+  const tableRequests = requests.filter(url => !waitingRequests.has(url));
+  assert.ok(visible.length > 0 && tableRequests.length > 0, 'The active table requests its displayed cards');
+  assert.ok(tableRequests.every(url => visible.includes(url)), 'Hidden artwork must wait behind displayed cards');
   // Gameplay UI is present even with all card downloads still delayed.
   release();
   await expect.poll(() => pages[0].evaluate(async () => (await (await caches.open('tarok-card-art-v1')).keys()).length), { timeout: 30000 }).toBe(cardImageUrls(DEFAULT_DECK).length);
@@ -73,7 +77,7 @@ try {
     });
     assert.ok(galleryImages.every(image => image.loaded));
     assert.equal(galleryImages.filter(image => image.path.endsWith('.svg')).length,
-      { slovenian: 16, smrekar: 13 }[id], `${id}: all reconstructed pip faces decode`);
+      { slovenian: 16, smrekar: 13, moser: 0, cego: 10, neumayer: 16 }[id], `${id}: all reconstructed pip faces decode`);
     const deckUrls = cardImageUrls(id);
     await expect.poll(() => pages[0].evaluate(async urls => {
       const cache = await caches.open('tarok-card-art-v1');
@@ -86,10 +90,11 @@ try {
     cards: [...game.querySelectorAll('[data-testid="play-card"]')].map(card => ({ id: card.dataset.cardId, disabled: card.disabled })),
   }));
   assert.deepEqual(boardAfter, boardBefore, 'Changing artwork preserves card identities, legal moves and the game state');
-  assert.ok(await pages[0].locator('.game-page .card-face-image').evaluateAll(images => images.every(image => new URL(image.src).pathname.startsWith('/cards/smrekar/'))));
+  const finalDeck = CARD_DECKS.at(-1).id;
+  assert.ok(await pages[0].locator('.game-page .card-face-image').evaluateAll((images, deck) => images.every(image => new URL(image.src).pathname.startsWith(`/cards/${deck}/`)), finalDeck));
   const backs = pages[0].locator('.game-page .card-back-image');
   assert.ok(await backs.count() > 0, 'The table displays hidden cards');
-  assert.ok(await backs.evaluateAll((images, url) => images.every(image => new URL(image.src).pathname === url), cardBackImage('smrekar').split('?')[0]), 'The matching Smrekar back is displayed');
+  assert.ok(await backs.evaluateAll((images, url) => images.every(image => new URL(image.src).pathname === url), cardBackImage(finalDeck).split('?')[0]), 'The matching deck back is displayed');
   assert.ok(await pages[1].locator('.game-page .card-face-image').evaluateAll(images => images.every(image => new URL(image.src).pathname.startsWith('/cards/deck/'))), 'The opponent keeps their own deck');
   assert.ok(await pages[1].locator('.game-page .card-back-image').evaluateAll((images, url) => images.every(image => new URL(image.src).pathname === url), cardBackImage(DEFAULT_DECK).split('?')[0]), 'The opponent keeps their own back');
   const allUrls = [...new Set(CARD_DECKS.flatMap(deck => cardImageUrls(deck.id)))];
@@ -100,8 +105,8 @@ try {
   const fresh = await contexts[0].newPage();
   await fresh.goto(`${origin}/?room=${room}`);
   await expect(fresh.locator('.game-page')).toBeVisible();
-  assert.ok(await fresh.locator('.game-page .card-face-image').evaluateAll(images => images.every(image => new URL(image.src).pathname.startsWith('/cards/smrekar/'))), 'The saved choice survives page closure');
-  assert.ok(await fresh.locator('.game-page .card-back-image').evaluateAll((images, url) => images.every(image => new URL(image.src).pathname === url), cardBackImage('smrekar').split('?')[0]), 'The matching back also survives page closure');
+  assert.ok(await fresh.locator('.game-page .card-face-image').evaluateAll((images, deck) => images.every(image => new URL(image.src).pathname.startsWith(`/cards/${deck}/`)), finalDeck), 'The saved choice survives page closure');
+  assert.ok(await fresh.locator('.game-page .card-back-image').evaluateAll((images, url) => images.every(image => new URL(image.src).pathname === url), cardBackImage(finalDeck).split('?')[0]), 'The matching back also survives page closure');
   await contexts[0].setOffline(true);
   const cached = await fresh.evaluate(async urls => {
     const results = [];
@@ -119,20 +124,22 @@ try {
     }
     return results;
   }, allUrls);
-  assert.ok(cached.every(Boolean), 'Every face and back in all three decks, including SVG pip cards, decodes after page closure with the network unavailable');
+  assert.ok(cached.every(Boolean), 'Every face and back in every deck, including SVG pip cards, decodes after page closure with the network unavailable');
   assert.equal(await fresh.evaluate(() => fetch('/health').then(() => true, () => false)), false, 'Private/app endpoints must not be cached by the artwork worker');
   await contexts[0].setOffline(false);
   const cacheKeys = await fresh.evaluate(async () => (await (await caches.open('tarok-card-art-v1')).keys()).map(request => new URL(request.url).pathname));
   assert.equal(cacheKeys.length, allUrls.length);
   assert.ok(cacheKeys.every(url => url.startsWith('/cards/')));
-  for (const deck of ['slovenian', 'smrekar']) {
-    const response = await fetch(`${origin}${cardImageUrls(deck).find(url => url.includes('.svg'))}`);
+  for (const { id } of CARD_DECKS) {
+    const svg = cardImageUrls(id).find(url => url.includes('.svg'));
+    if (!svg) continue;
+    const response = await fetch(`${origin}${svg}`);
     assert.match(response.headers.get('cache-control'), /max-age=31536000/);
     assert.match(response.headers.get('cache-control'), /immutable/);
     assert.match(response.headers.get('content-type'), /^image\/svg\+xml/);
   }
   assert.deepEqual(errors, []);
-  console.log(`PASS: immediate game entry with delayed artwork, visible-card priority, independent faces and backs, unchanged gameplay, saved Smrekar preference, ${allUrls.length} images from all three decks decoded offline in a fresh tab, and no caching of game endpoints.`);
+  console.log(`PASS: immediate game entry with delayed artwork, visible-card priority, independent faces and backs, unchanged gameplay, saved ${finalDeck} preference, ${allUrls.length} images from all ${CARD_DECKS.length} decks decoded offline in a fresh tab, and no caching of game endpoints.`);
 } finally {
   release();
   await browser.close();

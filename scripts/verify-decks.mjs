@@ -204,11 +204,11 @@ try {
   await a.keyboard.press('Escape');
   await a.reload();
   await a.getByTestId('deck-gallery').click();
-  await expect(a.getByTestId('deck-select')).toHaveValue('smrekar');
-  await verifyStory(a, 'smrekar');
+  await expect(a.getByTestId('deck-select')).toHaveValue(CARD_DECKS.at(-1).id);
+  await verifyStory(a, CARD_DECKS.at(-1).id);
   await a.keyboard.press('Escape');
   await a.setViewportSize({ width: 320, height: 844 });
-  report.checks.push('All three decks have distinct descriptions and histories through the Cards icon, before the gallery cards, with safe HTTPS source links and no source fetches; Settings contains no deck controls or stories.');
+  report.checks.push('All decks have distinct descriptions and histories through the Cards icon, before the gallery cards, with safe HTTPS source links and no source fetches; Settings contains no deck controls or stories.');
   report.checks.push('All 12 locales translate both story paragraphs and their labels; 320px/390px galleries scroll without horizontal overflow, and the selected deck survives reload.');
   await a.getByTestId('player-name').fill('Ana');
   await a.getByTestId('create-room').click();
@@ -245,7 +245,7 @@ try {
   const before = await Promise.all(pages.map(snapshot));
   const savedBefore = await readFile(savePath, 'utf8');
   assert.ok(before[0].state.trickCardIds, 'The table contains a played card');
-  for (const deck of ['modiano', 'slovenian', 'smrekar', 'modiano', 'smrekar']) {
+  for (const deck of [...CARD_DECKS.map(deck => deck.id), 'modiano', 'smrekar']) {
     await selectDeck(a, deck);
     assert.deepEqual(await Promise.all(pages.map(snapshot)), before, `${deck}: table, identities, legal cards and scores stay unchanged`);
     await verifyTableArtwork(a, deck);
@@ -261,7 +261,7 @@ try {
   await a.getByTestId('deck-gallery').click();
   await expect(a.getByTestId('deck-select')).toHaveValue('smrekar');
   await a.setViewportSize({ width: 1024, height: 900 });
-  for (const deck of ['slovenian', 'smrekar']) {
+  for (const { id: deck } of CARD_DECKS) {
     await a.getByTestId('deck-select').selectOption(deck);
     await verifyGallery(a, deck);
     await layout(a, `${deck} gallery at 1024px`);
@@ -269,14 +269,14 @@ try {
     await a.getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
     await layout(a, `${deck} live table at 1024px`);
     await screenshot(a, `table-${deck}-1024.png`);
-    if (deck === 'slovenian') await a.getByTestId('deck-gallery').click();
+    if (deck !== CARD_DECKS.at(-1).id) await a.getByTestId('deck-gallery').click();
   }
   assert.equal(await readFile(savePath, 'utf8'), savedBefore, 'Reload retains the identical game save');
-  report.checks.push('Modiano default, accessible three-deck selector, all 54 Slovenian and 54 Smrekar faces, production CSP, no horizontal overflow at 320px and 1024px.');
-  report.checks.push('Switching all three decks during the second trick updates faces and backs, retains played cards, legal moves, hand IDs, points, score display and the exact saved game; opponent faces and backs are independent and reload preserves Smrekar.');
+  report.checks.push('Modiano default, accessible deck selector, all 54 faces of every deck, production CSP, no horizontal overflow at 320px and 1024px.');
+  report.checks.push('Switching every deck during the second trick updates faces and backs, retains played cards, legal moves, hand IDs, points, score display and the exact saved game; opponent faces and backs are independent and reload preserves Smrekar.');
   assert.deepEqual(report.browserErrors, []);
   report.passed = true;
-  console.log('PASS: three sourced deck stories in 12 languages, mobile gallery layouts and focused Settings, loaded artwork under CSP, mid-round changes, independent artwork, unchanged saves and scores, reload persistence.');
+  console.log('PASS: all sourced deck stories in 12 languages, mobile gallery layouts and focused Settings, loaded artwork under CSP, mid-round changes, independent artwork, unchanged saves and scores, reload persistence.');
 } finally {
   await writeFile(path.join(artifacts, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();

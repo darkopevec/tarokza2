@@ -3,392 +3,3366 @@
   "photographer": "Martin Okrslar",
   "source": "Wikimedia Commons",
   "sourceClassification": "PD-old-100 / Public Domain Mark 1.0, as stated by Commons",
-  "retrieved": "2026-09-05",
+  "retrieved": "2026-09-26",
   "cards": [
     {
       "id": "back",
       "file": "back.jpg",
       "title": "File:SPKW-Q2171-IMG 8568-rueckseite.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8568-rueckseite.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/SPKW-Q2171-IMG_8568-rueckseite.jpg/330px-SPKW-Q2171-IMG_8568-rueckseite.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/SPKW-Q2171-IMG_8568-rueckseite.jpg/330px-SPKW-Q2171-IMG_8568-rueckseite.jpg",
+      "retrieved": "2026-09-05"
     },
     {
       "id": "clubs-1",
       "file": "clubs-1.jpg",
       "title": "File:SPKW-Q2171-IMG 8557-tarock-kreuz-7.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg/330px-SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg/330px-SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/1/15/SPKW-Q2171-IMG_8557-tarock-kreuz-7.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 532519,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 35172,
+      "sha256": "2cfe06bfa6cdaf7494710e44e12ab7814740d19760f10a0051b4fa935436c5dd",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1789,
+        "bytes": 532519,
+        "sha256": "16213aeae5feb7fc171eca249628fed60a3520246576b6ac8ccfb429b3a9039f"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.375,
+            26.834999999999997
+          ],
+          [
+            1028.625,
+            26.834999999999997
+          ],
+          [
+            1028.625,
+            1762.165
+          ],
+          [
+            26.375,
+            1762.165
+          ]
+        ],
+        "paperWhite": [
+          251,
+          248,
+          234
+        ],
+        "imageBounds": [
+          14,
+          40,
+          476,
+          824
+        ],
+        "dustComponentsRemoved": 32,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-2",
       "file": "clubs-2.jpg",
       "title": "File:SPKW-Q2171-IMG 8558-tarock-kreuz-8.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg/330px-SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg/330px-SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/0/06/SPKW-Q2171-IMG_8558-tarock-kreuz-8.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 542259,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 39402,
+      "sha256": "89a584b3dcb2333f6ee085b20049acda3262c27399c6b8dcc5539ce54117a8a4",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1056,
+        "height": 1796,
+        "bytes": 542259,
+        "sha256": "c38ea6ad8548f36a2d30c9a0beec12f13dfac9dbf2389d50b77469066d0ff9ad"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.400000000000002,
+            26.939999999999998
+          ],
+          [
+            1029.6,
+            26.939999999999998
+          ],
+          [
+            1029.6,
+            1769.06
+          ],
+          [
+            26.400000000000002,
+            1769.06
+          ]
+        ],
+        "paperWhite": [
+          251,
+          248,
+          233
+        ],
+        "imageBounds": [
+          14,
+          38,
+          476,
+          827
+        ],
+        "dustComponentsRemoved": 29,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-3",
       "file": "clubs-3.jpg",
       "title": "File:SPKW-Q2171-IMG 8559-tarock-kreuz-9.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg/330px-SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg/330px-SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/2/24/SPKW-Q2171-IMG_8559-tarock-kreuz-9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 531159,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 43527,
+      "sha256": "5a34c9bc3723c44713a05a207024d1bb07b90bd52d244ac77eee6208d70408cb",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1053,
+        "height": 1797,
+        "bytes": 531159,
+        "sha256": "72c3a3b737bd7f44c515cbafdb70b062db1d0d009a8bb7732cd1c11e2009ba72"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.325000000000003,
+            26.955
+          ],
+          [
+            1026.675,
+            26.955
+          ],
+          [
+            1026.675,
+            1770.045
+          ],
+          [
+            26.325000000000003,
+            1770.045
+          ]
+        ],
+        "paperWhite": [
+          252,
+          248,
+          233
+        ],
+        "imageBounds": [
+          14,
+          37,
+          476,
+          829
+        ],
+        "dustComponentsRemoved": 47,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-4",
       "file": "clubs-4.jpg",
       "title": "File:SPKW-Q2171-IMG 8564-tarock-kreuz-10.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg/330px-SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg/330px-SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/f/fa/SPKW-Q2171-IMG_8564-tarock-kreuz-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 551406,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 47293,
+      "sha256": "05c3ac03d308dd3b52070f61c5b1d37d9501ed618851739edc912b3e696ee0fa",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1056,
+        "height": 1784,
+        "bytes": 551406,
+        "sha256": "5976c11295334c8c5e7522bb55b6c09f416e41bc7136a3cda22429a15b88e6b5"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.400000000000002,
+            26.759999999999998
+          ],
+          [
+            1029.6,
+            26.759999999999998
+          ],
+          [
+            1029.6,
+            1757.24
+          ],
+          [
+            26.400000000000002,
+            1757.24
+          ]
+        ],
+        "paperWhite": [
+          250,
+          246,
+          232
+        ],
+        "imageBounds": [
+          14,
+          41,
+          476,
+          821
+        ],
+        "dustComponentsRemoved": 23,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-5",
       "file": "clubs-5.jpg",
       "title": "File:SPKW-Q2171-IMG 8560-tarock-kreuz-bube.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg/330px-SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg/330px-SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/3/36/SPKW-Q2171-IMG_8560-tarock-kreuz-bube.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 796836,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 159356,
+      "sha256": "92bd8e6f785732dc1980ab891e0d860a8d54e5a1e759fe0eecc8529a3e3fa5af",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1047,
+        "height": 1781,
+        "bytes": 796836,
+        "sha256": "f7f53d8a193bf62c276c529c806dbcacc0b416e9a17a0f6202308e70c8290392"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            67.9957058198024,
+            58.5965005159913
+          ],
+          [
+            994.2839632033138,
+            59.17466729526587
+          ],
+          [
+            983.370955186862,
+            1723.1598478944045
+          ],
+          [
+            47.95744236798522,
+            1711.125746802972
+          ]
+        ],
+        "paperWhite": [
+          254,
+          251,
+          232
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          848
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-6",
       "file": "clubs-6.jpg",
       "title": "File:SPKW-Q2171-IMG 8565-tarock-kreuz-cavall.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg/330px-SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg/330px-SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/8/89/SPKW-Q2171-IMG_8565-tarock-kreuz-cavall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 849603,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 171267,
+      "sha256": "c327ee51fd62fcc608cca2adb381adb1162944329abc6ce842d45fb068b2797e",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1051,
+        "height": 1774,
+        "bytes": 849603,
+        "sha256": "bf035fb07cfa664d2a9b270f8c5ed88f0a6ce70bf259a543cb24239c4e881ca0"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            70.6648386870137,
+            64.05730277765613
+          ],
+          [
+            1003.5043824419644,
+            68.18428483688017
+          ],
+          [
+            990.3652647408289,
+            1718.12630488376
+          ],
+          [
+            58.46481790313449,
+            1713.0173811051916
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          230
+        ],
+        "imageBounds": [
+          14,
+          31,
+          476,
+          842
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-7",
       "file": "clubs-7.jpg",
       "title": "File:SPKW-Q2171-IMG 8566-tarock-kreuz-dame.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg/330px-SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg/330px-SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/c/cf/SPKW-Q2171-IMG_8566-tarock-kreuz-dame.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 816595,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 162334,
+      "sha256": "3d6220d7e5ce2d37f4e6cea6d2eca3e77948e50b38699b177628563c39a44004",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1048,
+        "height": 1771,
+        "bytes": 816595,
+        "sha256": "8dd7ab26d2e31e97312f7b4d51a76275d3e28c704aea370bb9f02aea5280a11e"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            66.98992871422706,
+            54.725932078760344
+          ],
+          [
+            991.2858393904909,
+            61.52489712294675
+          ],
+          [
+            979.488394127423,
+            1712.0275383104363
+          ],
+          [
+            44.39584274586953,
+            1702.9843751686408
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          234
+        ],
+        "imageBounds": [
+          14,
+          30,
+          476,
+          844
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "clubs-8",
       "file": "clubs-8.jpg",
       "title": "File:SPKW-Q2171-IMG 8567-tarock-kreuz-koenig.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg/330px-SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg/330px-SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/f/f9/SPKW-Q2171-IMG_8567-tarock-kreuz-koenig.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 837550,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 169893,
+      "sha256": "bf4d435c11d4dc91dd053d672fa6896fd259046b27f1ae574224405ece31a176",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1036,
+        "height": 1762,
+        "bytes": 837550,
+        "sha256": "8375112dc95239246b6cb3ad15c5dee2f84df3d06809b39b9c4f8171c78d7baf"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            60.422698668894625,
+            57.46370932789025
+          ],
+          [
+            982.9797440196535,
+            58.33026934641574
+          ],
+          [
+            979.0514549617981,
+            1703.7516837923338
+          ],
+          [
+            40.94624028166639,
+            1693.8337966789552
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          230
+        ],
+        "imageBounds": [
+          14,
+          32,
+          476,
+          840
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-1",
       "file": "diamonds-1.jpg",
       "title": "File:SPKW-Q2171-IMG 8537-tarock-karo-4.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8537-tarock-karo-4.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/SPKW-Q2171-IMG_8537-tarock-karo-4.jpg/330px-SPKW-Q2171-IMG_8537-tarock-karo-4.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/SPKW-Q2171-IMG_8537-tarock-karo-4.jpg/330px-SPKW-Q2171-IMG_8537-tarock-karo-4.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/7/7d/SPKW-Q2171-IMG_8537-tarock-karo-4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 479063,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 17102,
+      "sha256": "8225c9c494e1141e5cc0b74eac9e3789162769f5d95582866de7b4a73e1cb1ed",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1790,
+        "bytes": 479063,
+        "sha256": "19e74894bcc81ab158e94b3b67595b06030a7822aacf3e2bd6c4bf3a97c3203f"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.375,
+            26.849999999999998
+          ],
+          [
+            1028.625,
+            26.849999999999998
+          ],
+          [
+            1028.625,
+            1763.1499999999999
+          ],
+          [
+            26.375,
+            1763.1499999999999
+          ]
+        ],
+        "paperWhite": [
+          247,
+          243,
+          226
+        ],
+        "imageBounds": [
+          14,
+          39,
+          476,
+          825
+        ],
+        "dustComponentsRemoved": 62,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-2",
       "file": "diamonds-2.jpg",
       "title": "File:SPKW-Q2171-IMG 8534-tarock-karo-3.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8534-tarock-karo-3.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/SPKW-Q2171-IMG_8534-tarock-karo-3.jpg/330px-SPKW-Q2171-IMG_8534-tarock-karo-3.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/SPKW-Q2171-IMG_8534-tarock-karo-3.jpg/330px-SPKW-Q2171-IMG_8534-tarock-karo-3.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/5/50/SPKW-Q2171-IMG_8534-tarock-karo-3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 495621,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 14371,
+      "sha256": "3eb33c62e48aae3e35719f560fefe25ee3b432b7255151542802eb2409d3ce36",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1056,
+        "height": 1795,
+        "bytes": 495621,
+        "sha256": "151cce7cb14e295fb1820213ab744f4dc2cda334f8c02d659c473c1af112bb38"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.400000000000002,
+            26.925
+          ],
+          [
+            1029.6,
+            26.925
+          ],
+          [
+            1029.6,
+            1768.075
+          ],
+          [
+            26.400000000000002,
+            1768.075
+          ]
+        ],
+        "paperWhite": [
+          245,
+          241,
+          224
+        ],
+        "imageBounds": [
+          14,
+          39,
+          476,
+          826
+        ],
+        "dustComponentsRemoved": 78,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-3",
       "file": "diamonds-3.jpg",
       "title": "File:SPKW-Q2171-IMG 8535-tarock-karo-2.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8535-tarock-karo-2.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/SPKW-Q2171-IMG_8535-tarock-karo-2.jpg/330px-SPKW-Q2171-IMG_8535-tarock-karo-2.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/SPKW-Q2171-IMG_8535-tarock-karo-2.jpg/330px-SPKW-Q2171-IMG_8535-tarock-karo-2.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/b/ba/SPKW-Q2171-IMG_8535-tarock-karo-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 496219,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 10653,
+      "sha256": "b6e969a75d67f9ae7f8dc3e0064fc52c130cb85627ade7b8d76ef85a3ca3c3dc",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1058,
+        "height": 1814,
+        "bytes": 496219,
+        "sha256": "d288f744fc17a3a46c343acf85a4995b3860e07ee9b92e87313f88363d046dda"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.450000000000003,
+            27.209999999999997
+          ],
+          [
+            1031.55,
+            27.209999999999997
+          ],
+          [
+            1031.55,
+            1786.79
+          ],
+          [
+            26.450000000000003,
+            1786.79
+          ]
+        ],
+        "paperWhite": [
+          245,
+          240,
+          223
+        ],
+        "imageBounds": [
+          14,
+          35,
+          476,
+          833
+        ],
+        "dustComponentsRemoved": 39,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-4",
       "file": "diamonds-4.jpg",
       "title": "File:SPKW-Q2171-IMG 8533-tarock-karo-1.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8533-tarock-karo-1.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8533-tarock-karo-1.jpg/330px-SPKW-Q2171-IMG_8533-tarock-karo-1.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8533-tarock-karo-1.jpg/330px-SPKW-Q2171-IMG_8533-tarock-karo-1.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/f/f4/SPKW-Q2171-IMG_8533-tarock-karo-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 486541,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 7444,
+      "sha256": "05f5dee5241ece235a69d22d56c8ce7701d859add1ec2d973b97427a7ed3c70c",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1058,
+        "height": 1799,
+        "bytes": 486541,
+        "sha256": "4ce4b32870418a12a99dd550797fdaab128439f77a00fb9dcadb1ad77ae0160c"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.450000000000003,
+            26.985
+          ],
+          [
+            1031.55,
+            26.985
+          ],
+          [
+            1031.55,
+            1772.0149999999999
+          ],
+          [
+            26.450000000000003,
+            1772.0149999999999
+          ]
+        ],
+        "paperWhite": [
+          244,
+          240,
+          224
+        ],
+        "imageBounds": [
+          14,
+          39,
+          476,
+          826
+        ],
+        "dustComponentsRemoved": 49,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-5",
       "file": "diamonds-5.jpg",
       "title": "File:SPKW-Q2171-IMG 8536-tarock-karo-bube.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg/330px-SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg/330px-SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/b/bf/SPKW-Q2171-IMG_8536-tarock-karo-bube.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 816939,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 158850,
+      "sha256": "86db3639acbda25a814401d968c4fd44dcfd6bb878ba635b9635591e75ecfb38",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1044,
+        "height": 1799,
+        "bytes": 816939,
+        "sha256": "e8686f3aab818862186a113f57d4f9c4e34eb3a249ddad80efa3995bf7f1fc01"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            63.54436930741397,
+            68.40076666293915
+          ],
+          [
+            998.0471654384702,
+            67.21006158895091
+          ],
+          [
+            982.4966956872839,
+            1736.0524080695636
+          ],
+          [
+            42.32323883802944,
+            1743.3655631051604
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          232
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          849
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-6",
       "file": "diamonds-6.jpg",
       "title": "File:SPKW-Q2171-IMG 8539-tarock-karo-cavall.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg/330px-SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg/330px-SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/2/20/SPKW-Q2171-IMG_8539-tarock-karo-cavall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 823542,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 166892,
+      "sha256": "758ca2f1cb8a5c117df9985d303575cb54bb955cd5a8afdcc12f9f79f2224cd5",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1044,
+        "height": 1796,
+        "bytes": 823542,
+        "sha256": "14a982a91a6f7491bd119967305ed23d776217e8c666687d60c44b4fa7da4745"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            66.30969533949732,
+            67.35352143150988
+          ],
+          [
+            995.0939487659961,
+            68.1098279829432
+          ],
+          [
+            982.4700910283143,
+            1736.9308249908042
+          ],
+          [
+            41.36317720405535,
+            1735.2821120773392
+          ]
+        ],
+        "paperWhite": [
+          253,
+          250,
+          229
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          849
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-7",
       "file": "diamonds-7.jpg",
       "title": "File:SPKW-Q2171-IMG 8538-tarock-karo-dame.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg/330px-SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg/330px-SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/b/bf/SPKW-Q2171-IMG_8538-tarock-karo-dame.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 829668,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 161678,
+      "sha256": "3444ac888b7cec29573cb0cd9fe8a1af1a6119b7155f0224f8858fb7bf6ce002",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1049,
+        "height": 1788,
+        "bytes": 829668,
+        "sha256": "08200dc1ee394fe8776db9735688d1c85f73d7d66f49487d7132952ea2afbb8e"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            58.61117604478031,
+            73.08876827410975
+          ],
+          [
+            990.1475408315017,
+            69.30476998106803
+          ],
+          [
+            974.146310540195,
+            1733.631296340155
+          ],
+          [
+            40.0732144362486,
+            1732.799300700853
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          232
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          848
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "diamonds-8",
       "file": "diamonds-8.jpg",
       "title": "File:SPKW-Q2171-IMG 8540-tarock-karo-koenig.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg/330px-SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg/330px-SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/7/70/SPKW-Q2171-IMG_8540-tarock-karo-koenig.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 845260,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 174581,
+      "sha256": "e704fd9ba4ead4d619fbc362adcff4f724ef7cb7a6893f135aa2e412b0dfbc38",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1051,
+        "height": 1788,
+        "bytes": 845260,
+        "sha256": "86aa641cad6dc5c16ce13d666de8d5b9b8684f4aaa9e2ba7bbb1e534bd5191ad"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            68.62461800494465,
+            69.15451992569245
+          ],
+          [
+            998.26485466617,
+            67.43481444574049
+          ],
+          [
+            979.6387914519865,
+            1730.6432615842784
+          ],
+          [
+            44.92179317678308,
+            1724.8823512684778
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          232
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          847
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-1",
       "file": "hearts-1.jpg",
       "title": "File:SPKW-Q2171-IMG 8545-tarock-herz-4.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8545-tarock-herz-4.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/SPKW-Q2171-IMG_8545-tarock-herz-4.jpg/330px-SPKW-Q2171-IMG_8545-tarock-herz-4.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/SPKW-Q2171-IMG_8545-tarock-herz-4.jpg/330px-SPKW-Q2171-IMG_8545-tarock-herz-4.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/9/9b/SPKW-Q2171-IMG_8545-tarock-herz-4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 491303,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 16867,
+      "sha256": "f6defdf66359b5e71a2db527835a55becada99d34579ccada323a2181a4c03c8",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1062,
+        "height": 1796,
+        "bytes": 491303,
+        "sha256": "d2594f3b6c5622e060cdf57a6e465457eb3a6aceec4cc3fcafb6443f0d762ffc"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.55,
+            26.939999999999998
+          ],
+          [
+            1035.45,
+            26.939999999999998
+          ],
+          [
+            1035.45,
+            1769.06
+          ],
+          [
+            26.55,
+            1769.06
+          ]
+        ],
+        "paperWhite": [
+          247,
+          243,
+          228
+        ],
+        "imageBounds": [
+          14,
+          41,
+          476,
+          822
+        ],
+        "dustComponentsRemoved": 66,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-2",
       "file": "hearts-2.jpg",
       "title": "File:SPKW-Q2171-IMG 8542-tarock-herz-3.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8542-tarock-herz-3.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/SPKW-Q2171-IMG_8542-tarock-herz-3.jpg/330px-SPKW-Q2171-IMG_8542-tarock-herz-3.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/SPKW-Q2171-IMG_8542-tarock-herz-3.jpg/330px-SPKW-Q2171-IMG_8542-tarock-herz-3.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/d/d7/SPKW-Q2171-IMG_8542-tarock-herz-3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 483780,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 14398,
+      "sha256": "cfbf30a6843d6b95c8b114f96fa9045fb58bd3ee5df917f4139d4d1606825771",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1788,
+        "bytes": 483780,
+        "sha256": "b178296680822bec37a8c5365ef1d0cfe6096af9f287364a9a4d6c5febabfab8"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.35,
+            26.82
+          ],
+          [
+            1027.6499999999999,
+            26.82
+          ],
+          [
+            1027.6499999999999,
+            1761.18
+          ],
+          [
+            26.35,
+            1761.18
+          ]
+        ],
+        "paperWhite": [
+          247,
+          244,
+          228
+        ],
+        "imageBounds": [
+          14,
+          40,
+          476,
+          824
+        ],
+        "dustComponentsRemoved": 55,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-3",
       "file": "hearts-3.jpg",
       "title": "File:SPKW-Q2171-IMG 8543-tarock-herz-2.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8543-tarock-herz-2.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/SPKW-Q2171-IMG_8543-tarock-herz-2.jpg/330px-SPKW-Q2171-IMG_8543-tarock-herz-2.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/SPKW-Q2171-IMG_8543-tarock-herz-2.jpg/330px-SPKW-Q2171-IMG_8543-tarock-herz-2.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/3/39/SPKW-Q2171-IMG_8543-tarock-herz-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 484364,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 10310,
+      "sha256": "70c48d3e9609cfe00cad5f425357fc625b7923b37ee7c966165589347c1752da",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1794,
+        "bytes": 484364,
+        "sha256": "3726267c3b66e326399e50dae6456b66ea45fe65c084963d70015134cd710bcd"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.375,
+            26.91
+          ],
+          [
+            1028.625,
+            26.91
+          ],
+          [
+            1028.625,
+            1767.09
+          ],
+          [
+            26.375,
+            1767.09
+          ]
+        ],
+        "paperWhite": [
+          246,
+          243,
+          227
+        ],
+        "imageBounds": [
+          14,
+          39,
+          476,
+          826
+        ],
+        "dustComponentsRemoved": 51,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-4",
       "file": "hearts-4.jpg",
       "title": "File:SPKW-Q2171-IMG 8541-tarock-herz-1.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8541-tarock-herz-1.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/SPKW-Q2171-IMG_8541-tarock-herz-1.jpg/330px-SPKW-Q2171-IMG_8541-tarock-herz-1.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/SPKW-Q2171-IMG_8541-tarock-herz-1.jpg/330px-SPKW-Q2171-IMG_8541-tarock-herz-1.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/b/b7/SPKW-Q2171-IMG_8541-tarock-herz-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 496344,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 19153,
+      "sha256": "c3c58d85e195bcce103b4f329c4c3ffad5c29b472be12a9520274c5638e12da7",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1056,
+        "height": 1783,
+        "bytes": 496344,
+        "sha256": "f234a3717bc0f50b8e21346040fc413d9d886dfbb26a305327b76a84b5bba434"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.400000000000002,
+            26.744999999999997
+          ],
+          [
+            1029.6,
+            26.744999999999997
+          ],
+          [
+            1029.6,
+            1756.2549999999999
+          ],
+          [
+            26.400000000000002,
+            1756.2549999999999
+          ]
+        ],
+        "paperWhite": [
+          246,
+          242,
+          226
+        ],
+        "imageBounds": [
+          14,
+          41,
+          476,
+          821
+        ],
+        "dustComponentsRemoved": 18,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-5",
       "file": "hearts-5.jpg",
       "title": "File:SPKW-Q2171-IMG 8547-tarock-herz-bube.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg/330px-SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg/330px-SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a6/SPKW-Q2171-IMG_8547-tarock-herz-bube.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 812151,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 161235,
+      "sha256": "76ee3b28234fc0aa3af4b128e1f97bd2086741c2e1bcdda5e9febdac710b2ba0",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1050,
+        "height": 1790,
+        "bytes": 812151,
+        "sha256": "cc1233e2f1e2d693228fd40e0b32bf0e4b1f4955c4cd2a07b77b32f847dc982f"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            73.24744824363005,
+            62.07335716377643
+          ],
+          [
+            1000.5144759221938,
+            65.8965284121215
+          ],
+          [
+            989.2516762277673,
+            1733.783182363534
+          ],
+          [
+            54.997524229539,
+            1727.0475685377771
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          231
+        ],
+        "imageBounds": [
+          14,
+          26,
+          476,
+          852
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-6",
       "file": "hearts-6.jpg",
       "title": "File:SPKW-Q2171-IMG 8544-tarock-herz-cavall.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg/330px-SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg/330px-SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/c/ca/SPKW-Q2171-IMG_8544-tarock-herz-cavall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 865350,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 176502,
+      "sha256": "b55ac4d1adf1248bb1f1d563a3b3409425b9009e7d0df878acf166c5ed02c9cc",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1052,
+        "height": 1784,
+        "bytes": 865350,
+        "sha256": "7604b3a3333dfdb66f0e31184ae4f2634ba74f20a3a828ac77a86db8a7a4c33f"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            67.97056901447684,
+            59.415247285415894
+          ],
+          [
+            997.9026720550954,
+            62.45103730844084
+          ],
+          [
+            986.6276293292362,
+            1725.073642855326
+          ],
+          [
+            51.73891320783971,
+            1720.0808873005383
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          230
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          848
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-7",
       "file": "hearts-7.jpg",
       "title": "File:SPKW-Q2171-IMG 8546-tarock-herz-dame.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg/330px-SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg/330px-SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/7/79/SPKW-Q2171-IMG_8546-tarock-herz-dame.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 829959,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 167072,
+      "sha256": "48700f7c6828e395fcd827a8229649dbf68fa181fa050a37f6732a5a0f705317",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1045,
+        "height": 1798,
+        "bytes": 829959,
+        "sha256": "cbbea5e1a66fc1e314d59224b73d86d517b7809d2bbeb07fc802af027d44ef03"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            62.07437159144868,
+            65.16793036145621
+          ],
+          [
+            990.5974343613125,
+            63.412019637219316
+          ],
+          [
+            976.3955686240423,
+            1738.1536800668541
+          ],
+          [
+            39.557554770893184,
+            1733.2586885154687
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          233
+        ],
+        "imageBounds": [
+          14,
+          25,
+          476,
+          853
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "hearts-8",
       "file": "hearts-8.jpg",
       "title": "File:SPKW-Q2171-IMG 8548-tarock-herz-koenig.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg/330px-SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg/330px-SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/3/3d/SPKW-Q2171-IMG_8548-tarock-herz-koenig.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 839039,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 171343,
+      "sha256": "9081bcfc463f1bdfb309d957d320f9278f42c5adda094192bfdda9db54db4599",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1047,
+        "height": 1789,
+        "bytes": 839039,
+        "sha256": "e22c280b53509cf1a46a4eee65293aa071105d7323acd6c5bae4342624ab57ec"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            79.6631791118037,
+            55.80489826990529
+          ],
+          [
+            1002.3933176191459,
+            60.294329448031775
+          ],
+          [
+            991.8725359199696,
+            1729.031090147986
+          ],
+          [
+            49.99979804797031,
+            1720.5746493736235
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          231
+        ],
+        "imageBounds": [
+          14,
+          26,
+          476,
+          851
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-1",
       "file": "spades-1.jpg",
       "title": "File:SPKW-Q2171-IMG 8550-tarock-pik-7.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8550-tarock-pik-7.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/SPKW-Q2171-IMG_8550-tarock-pik-7.jpg/330px-SPKW-Q2171-IMG_8550-tarock-pik-7.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/SPKW-Q2171-IMG_8550-tarock-pik-7.jpg/330px-SPKW-Q2171-IMG_8550-tarock-pik-7.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/e/ec/SPKW-Q2171-IMG_8550-tarock-pik-7.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 533018,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 34969,
+      "sha256": "4c66ecc8be897fede818bc0924ecea87f1c6a02a652d8d3a38ad2d495c1fc5c4",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1057,
+        "height": 1783,
+        "bytes": 533018,
+        "sha256": "b61a56377950c0b8c588300ed796ecbce81cc966ead6cc58cb38cdd95b4830f0"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.425,
+            26.744999999999997
+          ],
+          [
+            1030.575,
+            26.744999999999997
+          ],
+          [
+            1030.575,
+            1756.2549999999999
+          ],
+          [
+            26.425,
+            1756.2549999999999
+          ]
+        ],
+        "paperWhite": [
+          250,
+          247,
+          232
+        ],
+        "imageBounds": [
+          14,
+          42,
+          476,
+          820
+        ],
+        "dustComponentsRemoved": 30,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-2",
       "file": "spades-2.jpg",
       "title": "File:SPKW-Q2171-IMG 8552-tarock-pik-8.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8552-tarock-pik-8.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/SPKW-Q2171-IMG_8552-tarock-pik-8.jpg/330px-SPKW-Q2171-IMG_8552-tarock-pik-8.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/SPKW-Q2171-IMG_8552-tarock-pik-8.jpg/330px-SPKW-Q2171-IMG_8552-tarock-pik-8.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/1/10/SPKW-Q2171-IMG_8552-tarock-pik-8.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 543571,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 40009,
+      "sha256": "3757a5417f236a4feba2b47b31aac42a1c14bc3bd54eeebde96221cd3d656eca",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1790,
+        "bytes": 543571,
+        "sha256": "01c4054add0904d66c028e473004061c8168cd4dac5c51629233bc765f17a531"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.375,
+            26.849999999999998
+          ],
+          [
+            1028.625,
+            26.849999999999998
+          ],
+          [
+            1028.625,
+            1763.1499999999999
+          ],
+          [
+            26.375,
+            1763.1499999999999
+          ]
+        ],
+        "paperWhite": [
+          249,
+          245,
+          230
+        ],
+        "imageBounds": [
+          14,
+          39,
+          476,
+          825
+        ],
+        "dustComponentsRemoved": 29,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-3",
       "file": "spades-3.jpg",
       "title": "File:SPKW-Q2171-IMG 8551-tarock-pik-9.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8551-tarock-pik-9.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/SPKW-Q2171-IMG_8551-tarock-pik-9.jpg/330px-SPKW-Q2171-IMG_8551-tarock-pik-9.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/SPKW-Q2171-IMG_8551-tarock-pik-9.jpg/330px-SPKW-Q2171-IMG_8551-tarock-pik-9.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/e/e8/SPKW-Q2171-IMG_8551-tarock-pik-9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 544483,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 43117,
+      "sha256": "30e11077e5d103f74bf8c2bbf57c7875c3b6703139fe8c90189683d69711a67a",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1785,
+        "bytes": 544483,
+        "sha256": "7f010347789174e8423a146cefc951e1e368dbb2c643e31a87abfc55f3d7f307"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.35,
+            26.775
+          ],
+          [
+            1027.6499999999999,
+            26.775
+          ],
+          [
+            1027.6499999999999,
+            1758.225
+          ],
+          [
+            26.35,
+            1758.225
+          ]
+        ],
+        "paperWhite": [
+          250,
+          246,
+          228
+        ],
+        "imageBounds": [
+          14,
+          40,
+          476,
+          823
+        ],
+        "dustComponentsRemoved": 13,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-4",
       "file": "spades-4.jpg",
       "title": "File:SPKW-Q2171-IMG 8554-tarock-pik-10.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8554-tarock-pik-10.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/SPKW-Q2171-IMG_8554-tarock-pik-10.jpg/330px-SPKW-Q2171-IMG_8554-tarock-pik-10.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/SPKW-Q2171-IMG_8554-tarock-pik-10.jpg/330px-SPKW-Q2171-IMG_8554-tarock-pik-10.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/c/cb/SPKW-Q2171-IMG_8554-tarock-pik-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 561263,
+      "license": "Public domain",
+      "kind": "pip",
+      "bytes": 48174,
+      "sha256": "d5979524b5e64be7bf43588c5f01c7abf3b9a9c5c535393a22a772aa60a1e393",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1060,
+        "height": 1795,
+        "bytes": 561263,
+        "sha256": "8b3a50bdb7643e22341ad9add3b742fea962fdbe6ffdd665c35399f293d92d4a"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            26.5,
+            26.925
+          ],
+          [
+            1033.5,
+            26.925
+          ],
+          [
+            1033.5,
+            1768.075
+          ],
+          [
+            26.5,
+            1768.075
+          ]
+        ],
+        "paperWhite": [
+          250,
+          247,
+          232
+        ],
+        "imageBounds": [
+          14,
+          40,
+          476,
+          823
+        ],
+        "dustComponentsRemoved": 25,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-5",
       "file": "spades-5.jpg",
       "title": "File:SPKW-Q2171-IMG 8556-tarock-pik-bube.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg/330px-SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg/330px-SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/c/cc/SPKW-Q2171-IMG_8556-tarock-pik-bube.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 808295,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 163773,
+      "sha256": "5912f32cba3a7e4d530d7d9d0aedb1a81d21a1c64103bcc29e39a0283be7eefc",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1765,
+        "bytes": 808295,
+        "sha256": "6692495542e90575485d9348fd915a6c1fc5b2204e8c6c5ca0d7285042f018ed"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            83.44399447816126,
+            55.18368581137818
+          ],
+          [
+            1010.5049328814049,
+            58.94732588886146
+          ],
+          [
+            989.7199973626233,
+            1709.8233452113852
+          ],
+          [
+            55.11173679343759,
+            1699.8585457897975
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          233
+        ],
+        "imageBounds": [
+          14,
+          30,
+          476,
+          843
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-6",
       "file": "spades-6.jpg",
       "title": "File:SPKW-Q2171-IMG 8553-tarock-pik-cavall.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg/330px-SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg/330px-SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/c/ca/SPKW-Q2171-IMG_8553-tarock-pik-cavall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 825792,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 172823,
+      "sha256": "ef32f7e91555652cf0436a47196e38faf0d77804f701d492c5083a2b4e1007b4",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1050,
+        "height": 1775,
+        "bytes": 825792,
+        "sha256": "3e16c66adda3ef46b251223dbe6b66d30c8e785102ed633e1982592348b3c9c3"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            77.70637608934037,
+            55.402668031270785
+          ],
+          [
+            996.7457004051264,
+            58.05287228605486
+          ],
+          [
+            995.4700921584935,
+            1711.340289759335
+          ],
+          [
+            54.06581575466504,
+            1709.9900828133805
+          ]
+        ],
+        "paperWhite": [
+          253,
+          252,
+          233
+        ],
+        "imageBounds": [
+          14,
+          29,
+          476,
+          846
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-7",
       "file": "spades-7.jpg",
       "title": "File:SPKW-Q2171-IMG 8555-tarock-pik-dame.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg/330px-SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg/330px-SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/0/0f/SPKW-Q2171-IMG_8555-tarock-pik-dame.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 796244,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 159331,
+      "sha256": "758dda2a46b4dd0edfed4707b9f49fa2897357ad15baea91607b293107cf05e3",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1050,
+        "height": 1788,
+        "bytes": 796244,
+        "sha256": "4967c2bda8168b5b4152f98bf2d13123d468137e0257bede42c40116a8215e16"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            68.10865544862168,
+            53.07232623667061
+          ],
+          [
+            992.5208115434049,
+            56.793797557747716
+          ],
+          [
+            994.5580396775205,
+            1719.5958499655023
+          ],
+          [
+            57.49759831927968,
+            1717.7414351671612
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          233
+        ],
+        "imageBounds": [
+          14,
+          26,
+          476,
+          851
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "spades-8",
       "file": "spades-8.jpg",
       "title": "File:SPKW-Q2171-IMG 8549-tarock-pik-koenig.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg/330px-SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg/330px-SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/6/60/SPKW-Q2171-IMG_8549-tarock-pik-koenig.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 802646,
+      "license": "Public domain",
+      "kind": "court",
+      "bytes": 159163,
+      "sha256": "4746de23c2e89b1582298a94f7f7720ce14d37f1edd4a9db7dcfeecf120f84e0",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1774,
+        "bytes": 802646,
+        "sha256": "f6ae1f1a049be75d82b4b64e148437eb93f2037a81b54e613dc70d3e02feb807"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            62.3824234604115,
+            67.50628453241299
+          ],
+          [
+            993.160705453868,
+            73.8824057600325
+          ],
+          [
+            977.2941617947687,
+            1731.0947613446883
+          ],
+          [
+            46.25050322361252,
+            1723.4857880386269
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          231
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          847
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-1",
       "file": "tarok-1.jpg",
       "title": "File:SPKW-Q2171-IMG 8529-tarock-1.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8529-tarock-1.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/SPKW-Q2171-IMG_8529-tarock-1.jpg/330px-SPKW-Q2171-IMG_8529-tarock-1.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/SPKW-Q2171-IMG_8529-tarock-1.jpg/330px-SPKW-Q2171-IMG_8529-tarock-1.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a8/SPKW-Q2171-IMG_8529-tarock-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 914706,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 197381,
+      "sha256": "0837385c2bbdd8dc6de825b42446fae9da8722102793ed9f4619e2ce563aa1bb",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1049,
+        "height": 1769,
+        "bytes": 914706,
+        "sha256": "c266b05b4d13f039c9d8f4fec8cc601c2cea8e1218cf23b2ce1b178501c91b19"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            64.39664317269491,
+            62.33693213131071
+          ],
+          [
+            994.764025920448,
+            64.49151680546413
+          ],
+          [
+            987.4897999196784,
+            1716.4036523160776
+          ],
+          [
+            53.28113246878839,
+            1711.6481517864572
+          ]
+        ],
+        "paperWhite": [
+          253,
+          252,
+          231
+        ],
+        "imageBounds": [
+          14,
+          30,
+          476,
+          843
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-10",
       "file": "tarok-10.jpg",
       "title": "File:SPKW-Q2171-IMG 8522-tarock-10.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8522-tarock-10.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/SPKW-Q2171-IMG_8522-tarock-10.jpg/330px-SPKW-Q2171-IMG_8522-tarock-10.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/SPKW-Q2171-IMG_8522-tarock-10.jpg/330px-SPKW-Q2171-IMG_8522-tarock-10.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/0/0a/SPKW-Q2171-IMG_8522-tarock-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 968337,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 218424,
+      "sha256": "189fde1f89cfbcff339b3f1951094c5a175bfb7dbf8832c3ab557d50fdf5a368",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1048,
+        "height": 1792,
+        "bytes": 968337,
+        "sha256": "d4703f53de973e133c5c5c80dd6f1094438ea4c5609d5ea4b00d9edf804d844d"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            60.49586827982543,
+            63.30674957916859
+          ],
+          [
+            990.3257280486844,
+            64.1940575497207
+          ],
+          [
+            983.9254397345655,
+            1735.5163830211368
+          ],
+          [
+            54.85087016589574,
+            1736.5130057699796
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          24,
+          476,
+          856
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-11",
       "file": "tarok-11.jpg",
       "title": "File:SPKW-Q2171-IMG 8523-tarock-11.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8523-tarock-11.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/SPKW-Q2171-IMG_8523-tarock-11.jpg/330px-SPKW-Q2171-IMG_8523-tarock-11.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/SPKW-Q2171-IMG_8523-tarock-11.jpg/330px-SPKW-Q2171-IMG_8523-tarock-11.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a3/SPKW-Q2171-IMG_8523-tarock-11.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 958962,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 213746,
+      "sha256": "a256cbfac9b873e7516da045f58e50e0ba6867071456c3cacaf0a676cdc0340c",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1782,
+        "bytes": 958962,
+        "sha256": "b31652d306c739e868eb3fc87e5a8d7625696c356d0a2d56acebc02931916c44"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            78.96904473236263,
+            57.86525129428189
+          ],
+          [
+            999.8855329461184,
+            69.03115773916784
+          ],
+          [
+            1000.6297216438288,
+            1726.4176888932573
+          ],
+          [
+            58.78280505138497,
+            1711.692543935859
+          ]
+        ],
+        "paperWhite": [
+          254,
+          254,
+          233
+        ],
+        "imageBounds": [
+          14,
+          29,
+          476,
+          846
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-12",
       "file": "tarok-12.jpg",
       "title": "File:SPKW-Q2171-IMG 8520-tarock-12.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8520-tarock-12.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/SPKW-Q2171-IMG_8520-tarock-12.jpg/330px-SPKW-Q2171-IMG_8520-tarock-12.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/SPKW-Q2171-IMG_8520-tarock-12.jpg/330px-SPKW-Q2171-IMG_8520-tarock-12.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/0/0b/SPKW-Q2171-IMG_8520-tarock-12.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 965077,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 217089,
+      "sha256": "0042321f0cf775795e34e3381199ca8fd0a08639eaafb7ff7c47842eb321f3bf",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1047,
+        "height": 1786,
+        "bytes": 965077,
+        "sha256": "6e46d9c49f3f2c25b6048f05fd9ddea458caf23d994f7133653c660c80fae803"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            73.75051278873228,
+            59.37386213235272
+          ],
+          [
+            997.6497618748085,
+            63.997980914633956
+          ],
+          [
+            985.5765801152929,
+            1725.170007930551
+          ],
+          [
+            51.52852742037499,
+            1719.349304723583
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          26,
+          476,
+          851
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-13",
       "file": "tarok-13.jpg",
       "title": "File:SPKW-Q2171-IMG 8521-tarock-13.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8521-tarock-13.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/SPKW-Q2171-IMG_8521-tarock-13.jpg/330px-SPKW-Q2171-IMG_8521-tarock-13.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/SPKW-Q2171-IMG_8521-tarock-13.jpg/330px-SPKW-Q2171-IMG_8521-tarock-13.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/7/7a/SPKW-Q2171-IMG_8521-tarock-13.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 966021,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 216843,
+      "sha256": "fc6d407dd4c60de59fb57854e52ded3a1ca5e02f77bc6bc97e52c565395cdbc9",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1050,
+        "height": 1778,
+        "bytes": 966021,
+        "sha256": "656be0ff6b2c817d99663c59ebca73b13e828f7f5fd0cd18a53d36025955e4c2"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            69.97751869179201,
+            58.24397686779429
+          ],
+          [
+            995.3457905606062,
+            62.74150567101134
+          ],
+          [
+            992.2996047085494,
+            1716.6413189373636
+          ],
+          [
+            57.85079642518563,
+            1713.0583595991645
+          ]
+        ],
+        "paperWhite": [
+          254,
+          254,
+          233
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          847
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-14",
       "file": "tarok-14.jpg",
       "title": "File:SPKW-Q2171-IMG 8518-tarock-14.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8518-tarock-14.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/SPKW-Q2171-IMG_8518-tarock-14.jpg/330px-SPKW-Q2171-IMG_8518-tarock-14.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/SPKW-Q2171-IMG_8518-tarock-14.jpg/330px-SPKW-Q2171-IMG_8518-tarock-14.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/e/e5/SPKW-Q2171-IMG_8518-tarock-14.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 963993,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 216999,
+      "sha256": "a39d1cd8d64b34cb782ded199d9fc5f1ee09001bf8e95b9fbe5a25cdab4036a7",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1046,
+        "height": 1791,
+        "bytes": 963993,
+        "sha256": "d5de2cfdf688bc4acbf3e125a5241f035eca5b34e8bf22a6f9164a1285f01553"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            66.77248815928205,
+            60.19787706738808
+          ],
+          [
+            986.9369142981265,
+            62.556867648560726
+          ],
+          [
+            995.0549359793367,
+            1726.6367517701499
+          ],
+          [
+            54.104204834998335,
+            1725.5404604854136
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          26,
+          476,
+          852
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-15",
       "file": "tarok-15.jpg",
       "title": "File:SPKW-Q2171-IMG 8519-tarock-15.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8519-tarock-15.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/SPKW-Q2171-IMG_8519-tarock-15.jpg/330px-SPKW-Q2171-IMG_8519-tarock-15.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/SPKW-Q2171-IMG_8519-tarock-15.jpg/330px-SPKW-Q2171-IMG_8519-tarock-15.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a4/SPKW-Q2171-IMG_8519-tarock-15.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 980067,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 222086,
+      "sha256": "63c188f95755ae47e21c276aac052a1ee7221013e6e92cd2cf23ef56ba745ff5",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1059,
+        "height": 1796,
+        "bytes": 980067,
+        "sha256": "0ea61a96b92a5ced4cd5fb805a327a3de6f4834724f0dc0eefbf2db9b8b75da3"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            77.06554032993618,
+            54.22761143841173
+          ],
+          [
+            1002.8584705344668,
+            59.6413847987295
+          ],
+          [
+            996.557067194142,
+            1730.8086462307078
+          ],
+          [
+            59.764175847790945,
+            1731.244153448956
+          ]
+        ],
+        "paperWhite": [
+          254,
+          254,
+          233
+        ],
+        "imageBounds": [
+          14,
+          24,
+          476,
+          856
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-16",
       "file": "tarok-16.jpg",
       "title": "File:SPKW-Q2171-IMG 8516-tarock-16.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8516-tarock-16.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/SPKW-Q2171-IMG_8516-tarock-16.jpg/330px-SPKW-Q2171-IMG_8516-tarock-16.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/SPKW-Q2171-IMG_8516-tarock-16.jpg/330px-SPKW-Q2171-IMG_8516-tarock-16.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/4/4e/SPKW-Q2171-IMG_8516-tarock-16.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 982165,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 221497,
+      "sha256": "bbd9be88815a8b9623043643ec2be74c12dbf7819582a87811ad5f495649e5d7",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1057,
+        "height": 1785,
+        "bytes": 982165,
+        "sha256": "513a3218234421d8ded4f5ea426b0263d89761b873a268fc1ed0a89365a069b4"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            76.8714232442558,
+            55.64034966164122
+          ],
+          [
+            1002.7058602046852,
+            60.87244779305845
+          ],
+          [
+            998.6784290343616,
+            1722.4464446875584
+          ],
+          [
+            59.13378145730875,
+            1721.70210827231
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          849
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-17",
       "file": "tarok-17.jpg",
       "title": "File:SPKW-Q2171-IMG 8517-tarock-17.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8517-tarock-17.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/SPKW-Q2171-IMG_8517-tarock-17.jpg/330px-SPKW-Q2171-IMG_8517-tarock-17.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/SPKW-Q2171-IMG_8517-tarock-17.jpg/330px-SPKW-Q2171-IMG_8517-tarock-17.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/b/bc/SPKW-Q2171-IMG_8517-tarock-17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 960550,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 216607,
+      "sha256": "e86ad4b4eecbd05e42f09c4d72ab54686b091c2e1859e9044acea577638a559d",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1786,
+        "bytes": 960550,
+        "sha256": "c895a8c51bf6a91b5f534589a4e5a67c8b722b83cb3a4d1e8e0653081486a77f"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            69.81045276833039,
+            69.41715731390373
+          ],
+          [
+            990.2530527632497,
+            64.70405921198193
+          ],
+          [
+            1000.1722800479879,
+            1733.0140574182706
+          ],
+          [
+            58.66089987352386,
+            1725.3359799975742
+          ]
+        ],
+        "paperWhite": [
+          254,
+          254,
+          233
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          850
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-18",
       "file": "tarok-18.jpg",
       "title": "File:SPKW-Q2171-IMG 8514-tarock-18.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8514-tarock-18.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/SPKW-Q2171-IMG_8514-tarock-18.jpg/330px-SPKW-Q2171-IMG_8514-tarock-18.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/SPKW-Q2171-IMG_8514-tarock-18.jpg/330px-SPKW-Q2171-IMG_8514-tarock-18.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/5/5a/SPKW-Q2171-IMG_8514-tarock-18.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 913921,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 206061,
+      "sha256": "98509731e65eade5a970ace1fbd101819105c080a19236b66f2ad6aed3759d1a",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1045,
+        "height": 1779,
+        "bytes": 913921,
+        "sha256": "e1938c256430b6182fd606adf48a8f82ec85728dede1b374274a3036ebb26185"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            56.75363065546654,
+            70.53140857669442
+          ],
+          [
+            985.0831622710278,
+            69.22616304518155
+          ],
+          [
+            984.5841132873907,
+            1730.4858272369204
+          ],
+          [
+            53.32282090974705,
+            1722.5498006549742
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          848
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-19",
       "file": "tarok-19.jpg",
       "title": "File:SPKW-Q2171-IMG 8515-tarock-19.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8515-tarock-19.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/SPKW-Q2171-IMG_8515-tarock-19.jpg/330px-SPKW-Q2171-IMG_8515-tarock-19.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/SPKW-Q2171-IMG_8515-tarock-19.jpg/330px-SPKW-Q2171-IMG_8515-tarock-19.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a1/SPKW-Q2171-IMG_8515-tarock-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 926930,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 207068,
+      "sha256": "eea8b35d1d9f5ec8ccc36b0946ffb4470785372ca4eaeb6c779b07de9f90f50c",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1043,
+        "height": 1780,
+        "bytes": 926930,
+        "sha256": "5c863b49734eddfdd7344a08abfbf5b9cd36a3757f5b6e8eed8b39bbb66074b0"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            65.4069790848623,
+            63.631179896060175
+          ],
+          [
+            992.7721778803322,
+            63.49858208331912
+          ],
+          [
+            989.7189370512866,
+            1714.516020275464
+          ],
+          [
+            56.40301796273002,
+            1713.167748228437
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          30,
+          476,
+          844
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-2",
       "file": "tarok-2.jpg",
       "title": "File:SPKW-Q2171-IMG 8530-tarock-2.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8530-tarock-2.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8530-tarock-2.jpg/330px-SPKW-Q2171-IMG_8530-tarock-2.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8530-tarock-2.jpg/330px-SPKW-Q2171-IMG_8530-tarock-2.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/f/f4/SPKW-Q2171-IMG_8530-tarock-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 946315,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 208923,
+      "sha256": "155ce98c012ebaf3a17d1b95960e3c91c811ace061c58846222f37a0c03d7f4e",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1792,
+        "bytes": 946315,
+        "sha256": "e90af81a84020180f3e8bbdecaca7f75380ea70a097690b7670bc62e3dd43b21"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            72.10616072782973,
+            64.81260735213912
+          ],
+          [
+            993.8359018974934,
+            58.351397928957994
+          ],
+          [
+            994.213470504704,
+            1731.6233648831433
+          ],
+          [
+            50.9253909316102,
+            1718.4117298329943
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          232
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          849
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-20",
       "file": "tarok-20.jpg",
       "title": "File:SPKW-Q2171-IMG 8562-tarock-20.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8562-tarock-20.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/SPKW-Q2171-IMG_8562-tarock-20.jpg/330px-SPKW-Q2171-IMG_8562-tarock-20.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/SPKW-Q2171-IMG_8562-tarock-20.jpg/330px-SPKW-Q2171-IMG_8562-tarock-20.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/7/70/SPKW-Q2171-IMG_8562-tarock-20.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 939557,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 210813,
+      "sha256": "0789489d1da2574521fc85468f7ad6cea5d3007b5e3f8ed809a47aabc9d06882",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1055,
+        "height": 1776,
+        "bytes": 939557,
+        "sha256": "ffee7b251e0869563f0b46c42674685706a4ad6c9b55fb8a1d6b10250843fcb9"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            71.10872265413123,
+            53.21143371094751
+          ],
+          [
+            1004.937300441941,
+            56.96227876851104
+          ],
+          [
+            989.3897499021039,
+            1717.6259894492277
+          ],
+          [
+            60.97786499603935,
+            1717.2895182447326
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          850
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-21",
       "file": "tarok-21.jpg",
       "title": "File:SPKW-Q2171-IMG 8563-tarock-21.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8563-tarock-21.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/SPKW-Q2171-IMG_8563-tarock-21.jpg/330px-SPKW-Q2171-IMG_8563-tarock-21.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/SPKW-Q2171-IMG_8563-tarock-21.jpg/330px-SPKW-Q2171-IMG_8563-tarock-21.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/2/26/SPKW-Q2171-IMG_8563-tarock-21.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 950004,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 209097,
+      "sha256": "fc0286e7d324595d870b694e216f32e162076316159cbff76169cb6b062c75be",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1051,
+        "height": 1796,
+        "bytes": 950004,
+        "sha256": "e199e9d7ccba00ce614b46866d2fa97bba932d5451bc9346e7102f49d83d1533"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            67.03825221022161,
+            60.89355334349234
+          ],
+          [
+            994.0376210964149,
+            64.97657570907712
+          ],
+          [
+            989.5893113483946,
+            1738.3101124253096
+          ],
+          [
+            54.53032282589218,
+            1730.8344399209632
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          232
+        ],
+        "imageBounds": [
+          14,
+          24,
+          476,
+          855
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-22",
       "file": "tarok-22.jpg",
       "title": "File:SPKW-Q2171-IMG 8561-tarock-skus.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8561-tarock-skus.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/SPKW-Q2171-IMG_8561-tarock-skus.jpg/330px-SPKW-Q2171-IMG_8561-tarock-skus.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/SPKW-Q2171-IMG_8561-tarock-skus.jpg/330px-SPKW-Q2171-IMG_8561-tarock-skus.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a4/SPKW-Q2171-IMG_8561-tarock-skus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 806185,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 158027,
+      "sha256": "8643d8a5327c5e080806d45004ad1d334a046c4527108eb417c803d9fe0236e9",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1779,
+        "bytes": 806185,
+        "sha256": "e7307c9b7a2e28246140970d0bd93b2f4c004c3e2c929d4eb09e59fabb0a35a3"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            69.33216572645718,
+            59.75079236582552
+          ],
+          [
+            1000.3163304009219,
+            65.67670637749518
+          ],
+          [
+            988.1112938500224,
+            1723.396954688652
+          ],
+          [
+            54.14956457904982,
+            1713.462534662195
+          ]
+        ],
+        "paperWhite": [
+          253,
+          251,
+          232
+        ],
+        "imageBounds": [
+          14,
+          29,
+          476,
+          845
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-3",
       "file": "tarok-3.jpg",
       "title": "File:SPKW-Q2171-IMG 8531-tarock-3.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8531-tarock-3.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/SPKW-Q2171-IMG_8531-tarock-3.jpg/330px-SPKW-Q2171-IMG_8531-tarock-3.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/SPKW-Q2171-IMG_8531-tarock-3.jpg/330px-SPKW-Q2171-IMG_8531-tarock-3.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/7/74/SPKW-Q2171-IMG_8531-tarock-3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 995638,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 217642,
+      "sha256": "72e48c077fa2d23a167abc4d9901af351d24e5b7009f09c24171fd81a15851ae",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1060,
+        "height": 1786,
+        "bytes": 995638,
+        "sha256": "aa59e6ddcd42e8d5bc3d754bbea32f4281282134b763c9c120cb0c0c90c0a8a8"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            67.28093909876691,
+            63.17516462671042
+          ],
+          [
+            1000.3112880811611,
+            66.74505744784804
+          ],
+          [
+            994.8598787572654,
+            1727.344891827434
+          ],
+          [
+            60.70434105451728,
+            1724.5339675247005
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          229
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          847
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-4",
       "file": "tarok-4.jpg",
       "title": "File:SPKW-Q2171-IMG 8532-tarock-4.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8532-tarock-4.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/SPKW-Q2171-IMG_8532-tarock-4.jpg/330px-SPKW-Q2171-IMG_8532-tarock-4.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/SPKW-Q2171-IMG_8532-tarock-4.jpg/330px-SPKW-Q2171-IMG_8532-tarock-4.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/ae/SPKW-Q2171-IMG_8532-tarock-4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 964567,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 209574,
+      "sha256": "ba2f6141c8e38b04f009bd605cf1042a06d5bcc08c76eb56fec5e08299db33a8",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1059,
+        "height": 1792,
+        "bytes": 964567,
+        "sha256": "12c7acc9d4d43fba9c309c6843fc9375b43fcf5b735c45e56392314a33c8b1d5"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            70.09049643468416,
+            62.87139325693292
+          ],
+          [
+            1001.5338038246969,
+            62.568909003959554
+          ],
+          [
+            991.34907237762,
+            1731.4992365044063
+          ],
+          [
+            54.724577570834526,
+            1726.579326259979
+          ]
+        ],
+        "paperWhite": [
+          254,
+          252,
+          230
+        ],
+        "imageBounds": [
+          14,
+          27,
+          476,
+          849
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-5",
       "file": "tarok-5.jpg",
       "title": "File:SPKW-Q2171-IMG 8528-tarock-5.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8528-tarock-5.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/SPKW-Q2171-IMG_8528-tarock-5.jpg/330px-SPKW-Q2171-IMG_8528-tarock-5.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/SPKW-Q2171-IMG_8528-tarock-5.jpg/330px-SPKW-Q2171-IMG_8528-tarock-5.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/e/ee/SPKW-Q2171-IMG_8528-tarock-5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 970440,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 218253,
+      "sha256": "b470e086d5c2ab7a32946513852e793cae9e88e58693dc16e161ed60fe225649",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1054,
+        "height": 1780,
+        "bytes": 970440,
+        "sha256": "64ed54805c20aa282418060e35613ee6f725e547d8ccba63e27542a1d9f19414"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            65.2681068316665,
+            64.482091231296
+          ],
+          [
+            995.784965150834,
+            67.95126483823778
+          ],
+          [
+            987.350902289623,
+            1726.909223464214
+          ],
+          [
+            55.59649637335716,
+            1721.2840973429295
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          232
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          848
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-6",
       "file": "tarok-6.jpg",
       "title": "File:SPKW-Q2171-IMG 8526-tarock-6.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8526-tarock-6.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8526-tarock-6.jpg/330px-SPKW-Q2171-IMG_8526-tarock-6.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/SPKW-Q2171-IMG_8526-tarock-6.jpg/330px-SPKW-Q2171-IMG_8526-tarock-6.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/f/f4/SPKW-Q2171-IMG_8526-tarock-6.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 964877,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 214520,
+      "sha256": "0d5f1bdad4febaaae3f578b5ca1b180fa0012e240b4bcb1cad66558c9c43fc31",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1062,
+        "height": 1778,
+        "bytes": 964877,
+        "sha256": "cf1f1db98d820664c3ae07a809e0dbe057e9b940c362ee7a27b13ddce92ef5d6"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            77.27236091530942,
+            65.5280259541509
+          ],
+          [
+            1001.6802695280188,
+            69.41869782374702
+          ],
+          [
+            995.0931971903844,
+            1731.2681487581904
+          ],
+          [
+            57.255525910967705,
+            1720.8670556256595
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          232
+        ],
+        "imageBounds": [
+          14,
+          28,
+          476,
+          848
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-7",
       "file": "tarok-7.jpg",
       "title": "File:SPKW-Q2171-IMG 8527-tarock-7.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8527-tarock-7.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/SPKW-Q2171-IMG_8527-tarock-7.jpg/330px-SPKW-Q2171-IMG_8527-tarock-7.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/SPKW-Q2171-IMG_8527-tarock-7.jpg/330px-SPKW-Q2171-IMG_8527-tarock-7.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/8/80/SPKW-Q2171-IMG_8527-tarock-7.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 947731,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 215123,
+      "sha256": "8e2f7647dd8f3ba8f3d733f6bd0f60c0320fb29438f811acfadb8e91cd6905dd",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1053,
+        "height": 1791,
+        "bytes": 947731,
+        "sha256": "5ae0069cd9f1a9a19f27badab1449e19af6d206d644e224caad27c4b9ec905da"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            66.73053202960794,
+            64.37176179852526
+          ],
+          [
+            992.182566064073,
+            70.02742061304994
+          ],
+          [
+            989.6149165236283,
+            1735.710118641789
+          ],
+          [
+            53.85510612019776,
+            1730.93918904814
+          ]
+        ],
+        "paperWhite": [
+          254,
+          254,
+          233
+        ],
+        "imageBounds": [
+          14,
+          26,
+          476,
+          852
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-8",
       "file": "tarok-8.jpg",
       "title": "File:SPKW-Q2171-IMG 8524-tarock-8.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8524-tarock-8.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/SPKW-Q2171-IMG_8524-tarock-8.jpg/330px-SPKW-Q2171-IMG_8524-tarock-8.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/SPKW-Q2171-IMG_8524-tarock-8.jpg/330px-SPKW-Q2171-IMG_8524-tarock-8.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/0/07/SPKW-Q2171-IMG_8524-tarock-8.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 992482,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 223510,
+      "sha256": "4bf0721ceb0f4afc746445e5e845eb765428487bc9d1c1c9cbd348349ba7ce76",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1058,
+        "height": 1802,
+        "bytes": 992482,
+        "sha256": "667fdf69a09a554d8b88f643006d1998acd3a916b62ee2f14ba05135137c5a4c"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            74.84141539201931,
+            56.82506530476221
+          ],
+          [
+            999.853076276919,
+            58.958094981108324
+          ],
+          [
+            997.2521289465232,
+            1737.8970275773615
+          ],
+          [
+            60.7746535900804,
+            1732.014943567582
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          23,
+          476,
+          858
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     },
     {
       "id": "tarok-9",
       "file": "tarok-9.jpg",
       "title": "File:SPKW-Q2171-IMG 8525-tarock-9.jpg",
       "source": "https://commons.wikimedia.org/wiki/File:SPKW-Q2171-IMG_8525-tarock-9.jpg",
-      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/SPKW-Q2171-IMG_8525-tarock-9.jpg/330px-SPKW-Q2171-IMG_8525-tarock-9.jpg"
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/SPKW-Q2171-IMG_8525-tarock-9.jpg/330px-SPKW-Q2171-IMG_8525-tarock-9.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/3/37/SPKW-Q2171-IMG_8525-tarock-9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 504,
+      "height": 904,
+      "sourceBytes": 976528,
+      "license": "Public domain",
+      "kind": "trump",
+      "bytes": 218578,
+      "sha256": "21e629367de87bce049c4a591418e56490683177d34d8ac16b51388eb706ae24",
+      "adjusted": true,
+      "sourceScan": {
+        "width": 1059,
+        "height": 1774,
+        "bytes": 976528,
+        "sha256": "ee511053452fa264821c3db4b6b80c5b063e273cc5b525d89fe36aeaecc4b9eb"
+      },
+      "correction": {
+        "script": "scripts/restore-modiano-deck.mjs",
+        "width": 504,
+        "height": 904,
+        "margin": 14,
+        "blackPoint": 9,
+        "jpegQuality": 0.92,
+        "quad": [
+          [
+            77.00379088832804,
+            53.49043200790162
+          ],
+          [
+            1007.593879518716,
+            55.156732469828015
+          ],
+          [
+            996.2860644702581,
+            1687.3505909159749
+          ],
+          [
+            62.689119271350414,
+            1715.5073814678967
+          ]
+        ],
+        "paperWhite": [
+          254,
+          253,
+          233
+        ],
+        "imageBounds": [
+          14,
+          31,
+          476,
+          841
+        ],
+        "dustComponentsRemoved": 0,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional frame rectification and paper-reference white balance from full-resolution source photographs; original artwork and physical pip counts retained inside white margins."
     }
-  ]
+  ],
+  "artworkVersion": 2,
+  "restored": "2026-09-26",
+  "note": "All 54 faces are conventionally restored from full-resolution photographs, with white margins and clean pip backgrounds. The unused original back is retained separately without alteration."
 }

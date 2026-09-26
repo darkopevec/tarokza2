@@ -1,0 +1,1668 @@
+{
+  "deck": "Tarock No. 1 — Ditha Moser (1906)",
+  "artist": "Ditha Moser",
+  "artworkDate": "1906",
+  "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101.htm",
+  "sourceCollection": "WWPCM and the Merrill C. Berman Collection",
+  "retrieved": "2026-09-26",
+  "artworkVersion": 1,
+  "rights": "WWPCM provides no per-image reuse licence on the inspected source page. The Berman catalogue carries © 2024 The Merrill C. Berman Collection. These statements are recorded as published; no public-domain or open-licence claim is made.",
+  "note": "All 54 faces reproduce real scans of the same 1906 design: 45 from WWPCM and nine lower-resolution pip scans from the Berman catalogue. The WWPCM back is included. The original narrow proportions and patterned pips are preserved.",
+  "cards": [
+    {
+      "id": "tarok-1",
+      "file": "tarok-1.jpg",
+      "title": "Pagat",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210101.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 156011,
+      "sourceSha256": "cd6e9974808b4d0d7da65cdd9b83bd7dcfa643cd3a5e0c0a0c61d81ff88658fb",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 717,
+      "bytes": 220729,
+      "sha256": "ae06d3c0489501f3845f5c767d736582fb1745caf152e4eed111f4c612dbca13",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          252,
+          241,
+          209
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-2",
+      "file": "tarok-2.jpg",
+      "title": "Tarok II",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210102.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 153003,
+      "sourceSha256": "a94a447a2617b42b588b77666b583f45f46998d3f3df5aefa2702340cc10881b",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 722,
+      "bytes": 217776,
+      "sha256": "861b546a44d30052d10c375c1f40eac3b4073b140c89e8f2e9f05d5f9f230f18",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          252,
+          241,
+          212
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-3",
+      "file": "tarok-3.jpg",
+      "title": "Tarok III",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210103.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 153001,
+      "sourceSha256": "b371ce45740f2cab94b277c73747a77136970773ede0b418638a588818d2cef1",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 716,
+      "bytes": 217113,
+      "sha256": "d62fb21518dbffcc81f9a7be216228ff6e8f60cf09a831c10ff9f790e9be19ba",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          253,
+          242,
+          214
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-4",
+      "file": "tarok-4.jpg",
+      "title": "Tarok IV",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210104.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 181115,
+      "sourceSha256": "42a73abdfaf1e7adabe59ef4ac8b054c04361436c99379fbb180685de8c04146",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 720,
+      "bytes": 245672,
+      "sha256": "856353b6de8873db0979c49976635ca8a1eb3777a7c56a013a43135f430c0884",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          244,
+          214
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-5",
+      "file": "tarok-5.jpg",
+      "title": "Tarok V",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210105.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 157863,
+      "sourceSha256": "d218f38aa75f8a7d3911a10ecaf21c886132fff3abf00e8b921583b3a40e5703",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 720,
+      "bytes": 219560,
+      "sha256": "29e8a3290e7ff5e1105bba4ebbb7f9df79b784fb0aeeee3e97b4b9a4cae79a5c",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          252,
+          243,
+          213
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-6",
+      "file": "tarok-6.jpg",
+      "title": "Tarok VI",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210106.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 169598,
+      "sourceSha256": "3406d411b53402de989806f0611169dad0fa66bfb1d4819d66a748c3b24686a2",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 737,
+      "bytes": 224600,
+      "sha256": "85491d54d0efdc2869538099eb1722ce0194eda296e7b5a1d011b37c90951735",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          248,
+          239,
+          211
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-7",
+      "file": "tarok-7.jpg",
+      "title": "Tarok VII",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210107.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 172989,
+      "sourceSha256": "82c9f2d2113a366bdcf5985d2a919e6cd2ed2f5c81c741aa004089d44e5788a7",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 720,
+      "bytes": 239657,
+      "sha256": "063dad5c8a00e5809a192ef7a92982d476f8aeb07a6f26c17954edcd5c951145",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          248,
+          216
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-8",
+      "file": "tarok-8.jpg",
+      "title": "Tarok VIII",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210108.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 180064,
+      "sourceSha256": "030ba2f22cf26586a7f0b71373291a875eaf5b2a3c25c76da9806e3851769896",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 718,
+      "bytes": 247972,
+      "sha256": "0b800e63622cb79d428b2f6e72982e261b087ff2e634713d7c42c0fb59bac604",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          248,
+          218
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-9",
+      "file": "tarok-9.jpg",
+      "title": "Tarok IX",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210109.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 173818,
+      "sourceSha256": "e80c1646cd722b8ffd96218fef947f19d9841ab98fd4f1120ae1ea5496fa9e3d",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 712,
+      "bytes": 236469,
+      "sha256": "02f8ed4b443421315dc952e07d58eee8b8de4a4cb553c41b6a2ce479d2846341",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          248,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-10",
+      "file": "tarok-10.jpg",
+      "title": "Tarok X",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210110.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 166811,
+      "sourceSha256": "4eb909a83ceff64c1cc8d2d9812acc32021c018e5067b6712391164b85627fa7",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 712,
+      "bytes": 231991,
+      "sha256": "d19984e953618d8a96e71c3307f6d984ed006eb2284b389a8f20971005820c8c",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          248,
+          222
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-11",
+      "file": "tarok-11.jpg",
+      "title": "Tarok XI",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210111.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 171707,
+      "sourceSha256": "d89cac023982f8d9ab26610252b0a239e1f303040df5896cfdda7792234117e3",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 715,
+      "bytes": 235615,
+      "sha256": "338f6e89b2b0f1cc94237ca53c181f11819670029c9bdeefd6bc95e67e5fdb7b",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          248,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-12",
+      "file": "tarok-12.jpg",
+      "title": "Tarok XII",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210112.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 173208,
+      "sourceSha256": "42fe4a64ac3e0443ecb4997931984ccf5ab9e53e6a70e3026a5cea793a5db820",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 744,
+      "bytes": 228004,
+      "sha256": "44869be82aa2c9d661f171e8e72577c72526e7d74faed14d1b57bcc0c7d5b96a",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          252,
+          242,
+          211
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-13",
+      "file": "tarok-13.jpg",
+      "title": "Tarok XIII",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210113.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 159084,
+      "sourceSha256": "2a92b4666c2b8640e14924da54590422429c67fb5ea5035fc698a547878de6d5",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 712,
+      "bytes": 226771,
+      "sha256": "348ea8cd1ec7ad7d4f217ccfccd790c2b3079ca7659f4ccc63c6947b8f93fdff",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          246,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-14",
+      "file": "tarok-14.jpg",
+      "title": "Tarok XIV",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210114.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 166931,
+      "sourceSha256": "afed71c21204766a1be2d61cf791423b2c2cf77f2c9aab782960a17656781812",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 719,
+      "bytes": 229772,
+      "sha256": "95e68ed4a80858f7432127041ec705bb3b8933df26b6c946b2c47afbdfee6481",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          248,
+          216
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-15",
+      "file": "tarok-15.jpg",
+      "title": "Tarok XV",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210115.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 167018,
+      "sourceSha256": "a377703a0455c0bc90046e67f57cce3c1aed0978ee5fb02bc8676846f467c0f3",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 711,
+      "bytes": 233253,
+      "sha256": "025aea10fa1ef71c495dff86955b9eb9a1af67bac14b8d64bee6770f6a0615c0",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          246,
+          221
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-16",
+      "file": "tarok-16.jpg",
+      "title": "Tarok XVI",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210116.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 181807,
+      "sourceSha256": "fb792ea0e6b4ddadd9d0656f9c9c64956a7cf628bca9a8dbdf51c20e9f940636",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 719,
+      "bytes": 244449,
+      "sha256": "548f4ea503f34f7a9df83a2db6c986f4755daa8eae83aad4e8099ad12d41bef9",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          251,
+          225
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-17",
+      "file": "tarok-17.jpg",
+      "title": "Tarok XVII",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210117.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 150281,
+      "sourceSha256": "064fbb4122a33ea6f75b615fb8a093542a984d702adeda8f64c91c02b5ef42ff",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 705,
+      "bytes": 212770,
+      "sha256": "ee7b8ff79ac0cd433d46834dfd7790886c6d9c9d1d9df0de83c18927445d443c",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          248,
+          218
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-18",
+      "file": "tarok-18.jpg",
+      "title": "Tarok XVIII",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210118.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 169069,
+      "sourceSha256": "daaff4ee20924457d519050023f1b09d58988e0f1cb9e7275d6c59fb6a6d34c5",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 729,
+      "bytes": 227081,
+      "sha256": "114f62dd30a7cd5c57ace0cd69451567f93439eeb01f19316b06bdb77f4adfd7",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          245,
+          211
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-19",
+      "file": "tarok-19.jpg",
+      "title": "Tarok XIX",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210119.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 151165,
+      "sourceSha256": "4c632d8865910c060410856236ee2abda9c36d57040df55ccc7492bfd3d41ace",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 723,
+      "bytes": 211213,
+      "sha256": "b05c92dca055662e6c2c84486c057a94b96e62237f728989922727a9a2f1d25f",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          247,
+          212
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-20",
+      "file": "tarok-20.jpg",
+      "title": "Tarok XX",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210120.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 156271,
+      "sourceSha256": "11e77158063404baf49dcfe3c490d5d990df2d5b84a2de5d85d7c8ec060cd58a",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 706,
+      "bytes": 223311,
+      "sha256": "6d4464e6f3bc2938d7e80191dc0d8f4b0caf4725c43378c009c407c4e910320f",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          253,
+          244,
+          214
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-21",
+      "file": "tarok-21.jpg",
+      "title": "Mond",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d0210121.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 173872,
+      "sourceSha256": "1326b2b764235741035a67ace82d50f14e77456fe02792274866f4a6072e5637",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 719,
+      "bytes": 242517,
+      "sha256": "0a6c610b778933428dd49eb31039e39c1d1b10505e8e80afc3bb70036cd25a37",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          237,
+          207
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "tarok-22",
+      "file": "tarok-22.jpg",
+      "title": "Škis",
+      "kind": "trump",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101j01.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 176218,
+      "sourceSha256": "b81d80232097f06dfac070b0065fc87bc46b4fea5d92d80a73ee24444712c8ff",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 716,
+      "bytes": 233409,
+      "sha256": "9afe9bc836d0116e38436aadf4cce7b0061f89348884242539a663993213fdbc",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          255,
+          234
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-1",
+      "file": "clubs-1.jpg",
+      "title": "Sedmica križa",
+      "kind": "pip",
+      "pipCount": 7,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 47,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 23331,
+      "sourceSha256": "99a89d71ef0def70783cf331fd3847e7b7a068c110d0bd7284b1fe83ca385443",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 261,
+      "bytes": 145556,
+      "sha256": "9c388bf5292e0e68c9e85262cc6beb7d6f7627a0cf8088e4f4c5bbef6ca871e4",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          246,
+          220
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          36,
+          226.583,
+          59.625,
+          125.0214
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-2",
+      "file": "clubs-2.jpg",
+      "title": "Osmica križa",
+      "kind": "pip",
+      "pipCount": 8,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101c8.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 164827,
+      "sourceSha256": "5d5c6e6a18b85883b938c758fb3d0562dd851e77c87725722da50106be934edc",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 742,
+      "bytes": 210066,
+      "sha256": "ebf80bf80673837d337903ab86ad28ed1af9c67caade09085814641e808126ce",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          244,
+          231,
+          181
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-3",
+      "file": "clubs-3.jpg",
+      "title": "Devetica križa",
+      "kind": "pip",
+      "pipCount": 9,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 49,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 22729,
+      "sourceSha256": "e99e8de0189f79c31b29b9dc5a7291c12deafed03034696165bc12dfe4f6272a",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 260,
+      "bytes": 133772,
+      "sha256": "fe01a3c06c341c54da6d673e836d38ef8b59adc6f7915e9ed48c42d4329b0816",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          244,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          173.25,
+          226.7267,
+          59.625,
+          124.7341
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-4",
+      "file": "clubs-4.jpg",
+      "title": "Desetica križa",
+      "kind": "pip",
+      "pipCount": 10,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101c10.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 175294,
+      "sourceSha256": "8368e283f4bbcdf18af384c2c3bf1c8afa6d12925f776527c5afeaea02df37b2",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 718,
+      "bytes": 236398,
+      "sha256": "22a0c3673e12c8362a61a01ac98933beb9821208ccc3517b3b3f3ecd51bc4010",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          248,
+          210
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-5",
+      "file": "clubs-5.jpg",
+      "title": "Fant križa",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101cJ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 166525,
+      "sourceSha256": "8780676b1722dafb7a972b305020ab4e258ad35048d2553b0095eac44b0840b6",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 714,
+      "bytes": 228922,
+      "sha256": "e24d3846be021b66bb04f39647d14bdbd45d2c3d9de4cea305fd6c12cc14dbe9",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          247,
+          212
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-6",
+      "file": "clubs-6.jpg",
+      "title": "Kaval križa",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101cC.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 176903,
+      "sourceSha256": "5172329ba59934ad9e091a85f1dcb6ffb58d7709acb74ab1d1392f3e60abf91d",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 719,
+      "bytes": 243510,
+      "sha256": "8a6346409b71cef31c1912a328da190453e30ad92fe4b7bec2e7942783f494c3",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          243,
+          213
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-7",
+      "file": "clubs-7.jpg",
+      "title": "Dama križa",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101cQ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 169354,
+      "sourceSha256": "f5982e7f7cb1c1a30779246ad3bd1a6d2aad56850260de709ddf76fed17791b5",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 720,
+      "bytes": 232395,
+      "sha256": "9e057d6ab750810af82a3a3a937e738fc3d884b004900cfdcca1ffed44d6d5d7",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          243,
+          207
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "clubs-8",
+      "file": "clubs-8.jpg",
+      "title": "Kralj križa",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101cK.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 168119,
+      "sourceSha256": "24f71ea147cb34b8d9dc12c8d712acfb855ac305dce2c859262256acdbf1d148",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 712,
+      "bytes": 231719,
+      "sha256": "af449c51a514b08ea6bceec1926f07714d8d4ecba9da804eed5a7ee904b794ea",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          253,
+          241,
+          204
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-1",
+      "file": "spades-1.jpg",
+      "title": "Sedmica pika",
+      "kind": "pip",
+      "pipCount": 7,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101s7.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 179399,
+      "sourceSha256": "ef028676b19a9897aa9c062dfcb67cb00526464218f77f277f11a31c8d940f75",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 745,
+      "bytes": 215330,
+      "sha256": "46f67a56d4bd7c7d8b6cf124902b5d9b5cdbc46dfe365f0ddf24a5f40e0c6e3c",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          249,
+          237,
+          188
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-2",
+      "file": "spades-2.jpg",
+      "title": "Osmica pika",
+      "kind": "pip",
+      "pipCount": 8,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 34,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 23136,
+      "sourceSha256": "abdda0a0a1cdcfbd7471171f7a80ae40be08acedf07303087f6e629d1f9c7bc1",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 261,
+      "bytes": 140133,
+      "sha256": "1286f9b7627af8fad5811a1ab332bf84b6c5007b561dcaf37042c6e15e000402",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          245,
+          218
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          104.625,
+          560.6848,
+          59.625,
+          125.0679
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-3",
+      "file": "spades-3.jpg",
+      "title": "Devetica pika",
+      "kind": "pip",
+      "pipCount": 9,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 35,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 22795,
+      "sourceSha256": "0e3e23dda2af97d9c48cad7ab6b455283086f0257590d1571c42e2e2f5975e04",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 258,
+      "bytes": 139696,
+      "sha256": "2dc58d5178308a02ec69446e88203960a7a6501c4fa7c055860551a89d6b8eb2",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          245,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          173.25,
+          561.3745,
+          59.625,
+          123.6885
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-4",
+      "file": "spades-4.jpg",
+      "title": "Desetica pika",
+      "kind": "pip",
+      "pipCount": 10,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101s10.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 176160,
+      "sourceSha256": "ccf638051a33c914dd88ed33b77f8ae957bea58e582b685bc65c5eb5456e26d6",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 731,
+      "bytes": 237220,
+      "sha256": "48780f2559b5d4649303da63dd04d0d5a7a4e89afd9ed14735316b46d017e884",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          249,
+          212
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-5",
+      "file": "spades-5.jpg",
+      "title": "Fant pika",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101sJ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 164094,
+      "sourceSha256": "71024887e5d074e9a9ed47ab2afe37dbb1bb1d6e5394f5877e2c4109cd720317",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 715,
+      "bytes": 224774,
+      "sha256": "73a9b9cbf7025afd9c76c6e624cb7a34e1ad963834f32fc77100c6355332ee6f",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          251,
+          222
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-6",
+      "file": "spades-6.jpg",
+      "title": "Kaval pika",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101sC.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 163836,
+      "sourceSha256": "ed7da82403d8930750a28ebb11c23c8471281b877e1993841e0b2ce90044b8c8",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 717,
+      "bytes": 228158,
+      "sha256": "671d13c82d0f2307b1a8bce41389202512a23038feff64ecc21925411f70d8ff",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          250,
+          240,
+          208
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-7",
+      "file": "spades-7.jpg",
+      "title": "Dama pika",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101sQ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 172419,
+      "sourceSha256": "8385b739b1b9a1b75e46b8c2b145dc1b7982a4f32f8b23c71318c30a8621c20d",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 715,
+      "bytes": 236975,
+      "sha256": "70794e6d6739e17c97a62ddafc4c9c63003aefc435c91f514abc5b0ef6442352",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          243,
+          212
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "spades-8",
+      "file": "spades-8.jpg",
+      "title": "Kralj pika",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101sK.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 167751,
+      "sourceSha256": "abc4abd987d17a66659364a709d368f2f8c065c2854f0e73a4a3bc68cfb6ad61",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 709,
+      "bytes": 232552,
+      "sha256": "1bc44d57dd47593193aa2e088e2bf145daca4e9b6b17ec5288a1f473b00eb5d7",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          243,
+          210
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-1",
+      "file": "hearts-1.jpg",
+      "title": "Štirica srca",
+      "kind": "pip",
+      "pipCount": 4,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 42,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 23268,
+      "sourceSha256": "8387bfa95240463d60c02b0e06a06afeeac6f6bbb056b033725938e00ada6de1",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 258,
+      "bytes": 149487,
+      "sha256": "fac8cf5b2b1a0dc20203ceef8d52094b45e914c78b2959e53161d7fe4edb03e9",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          245,
+          218
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          241.875,
+          60.2852,
+          59.625,
+          123.4921
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-2",
+      "file": "hearts-2.jpg",
+      "title": "Trojka srca",
+      "kind": "pip",
+      "pipCount": 3,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 53,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 22434,
+      "sourceSha256": "ce9cdb74f9930282904995cec3d2dff342a6788415030ada5b336e684e66a8b6",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 259,
+      "bytes": 149106,
+      "sha256": "656fd281c0fec90c349ae9c4aa9eec49ffa61e3d3cf5f93f4d77bccbacd9878c",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          245,
+          219
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          173.25,
+          59.9754,
+          59.625,
+          124.1118
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-3",
+      "file": "hearts-3.jpg",
+      "title": "Dvojka srca",
+      "kind": "pip",
+      "pipCount": 2,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 52,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 23579,
+      "sourceSha256": "b989388fda40491849f3ae695ee5018afbf8a52be1cdced7b73d9bcbec6bb46b",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 258,
+      "bytes": 148009,
+      "sha256": "dc037d900be71c2348d52d596c93bb0ba1a5b9e5ecfac7a0f0b2b75b2e1a7ecf",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          244,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          104.625,
+          60.2052,
+          59.625,
+          123.6521
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-4",
+      "file": "hearts-4.jpg",
+      "title": "Enka srca",
+      "kind": "pip",
+      "pipCount": 1,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101hA.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 170052,
+      "sourceSha256": "283172e12b681c3a3db5b69d8b21aca915e6c679b281a4d4d0d498e2bce5e24b",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 721,
+      "bytes": 233650,
+      "sha256": "825a213bb33bc9dea889d7f54743c0b322b389f4a313619179174469e962b42c",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          243,
+          205
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-5",
+      "file": "hearts-5.jpg",
+      "title": "Fant srca",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101hJ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 149757,
+      "sourceSha256": "fe17fc18b2976b9625274ef7f7d9a781cdb6f9724347f962a943261ab0ca0116",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 705,
+      "bytes": 218170,
+      "sha256": "880ab062854c961d47cc8753c1d54a9c5c1fb789d2347f42d2a1271ba49bef11",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          252,
+          241,
+          207
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-6",
+      "file": "hearts-6.jpg",
+      "title": "Kaval srca",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101hC.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 168949,
+      "sourceSha256": "3575215fff4788e77e35cffb5dcbd977b6a1aec876b36b27a622243c0cfc651c",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 712,
+      "bytes": 235022,
+      "sha256": "99d21b8cbee53946a25285e4f4189ededb6617abc55489cf7faf40e073be2e23",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          253,
+          241,
+          209
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-7",
+      "file": "hearts-7.jpg",
+      "title": "Dama srca",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101hQ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 165968,
+      "sourceSha256": "52257ecc0d7c175a5d1715695a988e5bf9ad9da211d22b23ec1d63c2617cd989",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 711,
+      "bytes": 226355,
+      "sha256": "990215d6fd673306df2d28d82d6fbfe614eedc89fa3c428ec3cd8b63947f1830",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          243,
+          213
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "hearts-8",
+      "file": "hearts-8.jpg",
+      "title": "Kralj srca",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101hK.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 158675,
+      "sourceSha256": "5d064b64aa6badcd73be7fb120712f75e417953449ad496236a09d3f0a64767b",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 714,
+      "bytes": 222156,
+      "sha256": "76b5f3cf2a37b09babd59d74cf0c28c78ac2a97ac061cf9e3545a28cb79eed10",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          252,
+          238,
+          204
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-1",
+      "file": "diamonds-1.jpg",
+      "title": "Štirica kare",
+      "kind": "pip",
+      "pipCount": 4,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 58,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 23775,
+      "sourceSha256": "8ffd58aabe8089a9ff207d5c68b9112e8708bd5e0f9fad8b41caf5824f2832cc",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 260,
+      "bytes": 151554,
+      "sha256": "a0101212d35d1c2bd2cf040c678cacc926547c32757ded7ec04cd8a522675938",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          245,
+          218
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          241.875,
+          393.8387,
+          59.625,
+          124.6351
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-2",
+      "file": "diamonds-2.jpg",
+      "title": "Trojka kare",
+      "kind": "pip",
+      "pipCount": 3,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101d3.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 285915,
+      "sourceSha256": "29b34ab764a4c623b4592d42fd23c4bd3dc0708ba59a75441cc7124b1d4beae2",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 746,
+      "bytes": 230823,
+      "sha256": "728172922d2056003bc3a7f10f1968532d59c5a5228e51639d388263d16feaeb",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          242,
+          228,
+          180
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-3",
+      "file": "diamonds-3.jpg",
+      "title": "Dvojka kare",
+      "kind": "pip",
+      "pipCount": 2,
+      "source": "https://static1.squarespace.com/static/5e68e6f8d34bcf00a52fd5a6/t/65b01721fab15431760bad07/1706039073712/MCB%2BDitha%2BMoser%2BTarock.pdf",
+      "sourceCollection": "Merrill C. Berman Collection, 1906 deck; 2024 illustrated catalogue, page 3",
+      "sourceObject": 56,
+      "sourcePage": 3,
+      "sourcePdfSha256": "e636500050761fa8eeded69538f3fdf7ec9a9e9d6164a9c08a3e94305187846e",
+      "quality": "Original 125-pixel-wide embedded scan; lower resolution than the other faces.",
+      "sourceBytes": 23950,
+      "sourceSha256": "1efd6c36505a7132209109b148f6456f31c48f2e6356313229b0c1170dbbbe96",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 125,
+      "originalHeight": 260,
+      "bytes": 144641,
+      "sha256": "7af3785756cec0855f2f7ec8758cc206d2d27b6e8423af754343b7bc1654ce0d",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          253,
+          244,
+          217
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff",
+        "pdfColorManagement": "Ghostscript png16m at 300dpi",
+        "pdfImageRect": [
+          104.625,
+          393.7589,
+          59.625,
+          124.795
+        ]
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-4",
+      "file": "diamonds-4.jpg",
+      "title": "Enka kare",
+      "kind": "pip",
+      "pipCount": 1,
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101dA.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 187197,
+      "sourceSha256": "e971e732b44286669134c34cc2b11854e026615d2dd91978612bc3b6afc27f61",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 720,
+      "bytes": 250528,
+      "sha256": "1f75389ce6c7f3eba5fb1b72bd977f30fd0c32277b61f8abd5494139a8a863bb",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          251,
+          215
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-5",
+      "file": "diamonds-5.jpg",
+      "title": "Fant kare",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101dJ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 160444,
+      "sourceSha256": "35f767a67d059d8b134e6c17bca9efc8d60c5d071fcea809138df513d2dd08eb",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 728,
+      "bytes": 220207,
+      "sha256": "3da2ee7104de65db8ef2372499a4cd7573286210b905f903e5975b142cf9e55a",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          248,
+          216
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-6",
+      "file": "diamonds-6.jpg",
+      "title": "Kaval kare",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101dC.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 180649,
+      "sourceSha256": "3bff708076482040f4ddab1725b8d7a462cd07d4f8fe7b4df20c4c332e5526da",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 716,
+      "bytes": 246208,
+      "sha256": "dbe02bb53354c5eff4a4a8c61177e4fba5a6a50672780477ef7e6305cc99838f",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          243,
+          209
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-7",
+      "file": "diamonds-7.jpg",
+      "title": "Dama kare",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101dQ.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 166355,
+      "sourceSha256": "67b6b16fe4faabc22a908509d75a48f6fc71888e2a4f79fd43824dfaf16c3ac6",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 719,
+      "bytes": 236179,
+      "sha256": "bb6979354e3fc34736ad848d8a6487fe9b15ee223e3211f357bba8e4206cd65b",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          255,
+          239,
+          202
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    },
+    {
+      "id": "diamonds-8",
+      "file": "diamonds-8.jpg",
+      "title": "Kralj kare",
+      "kind": "court",
+      "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101dK.jpg",
+      "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+      "sourceBytes": 175172,
+      "sourceSha256": "79ade1c101e983ccf103c4c145a0f8b032879cbf359bdbf14e68edeb1d8ca5cb",
+      "width": 504,
+      "height": 904,
+      "originalWidth": 354,
+      "originalHeight": 731,
+      "bytes": 240016,
+      "sha256": "a64d24bb8df831aa655ea092ca957526336b5e85d6c508bb1f6eb0ea7d884c6f",
+      "adjusted": true,
+      "correction": {
+        "paperWhite": [
+          254,
+          242,
+          206
+        ],
+        "blackPoint": 5,
+        "aspectRatioPreserved": true,
+        "background": "#ffffff"
+      },
+      "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+    }
+  ],
+  "back": {
+    "id": "back",
+    "file": "back.jpg",
+    "title": "Hrbtna stran",
+    "kind": "back",
+    "source": "http://a.trionfi.eu/WWPCM/decks05/d02101/d02101r01.jpg",
+    "sourceCollection": "World Web Playing Card Museum — WWPCM02101/01, Tarock No. 1 (1906)",
+    "sourceBytes": 195783,
+    "sourceSha256": "308f6f053b73e0068eb599575585dfd49a409ce57cc899a42dbd447d78790ca8",
+    "width": 504,
+    "height": 904,
+    "originalWidth": 354,
+    "originalHeight": 711,
+    "bytes": 267493,
+    "sha256": "d14251091ec9ffb08d9f44fe8ac7bbc7937908d766bdca8a9363a7440fdc92d2",
+    "adjusted": true,
+    "correction": {
+      "paperWhite": [
+        255,
+        250,
+        220
+      ],
+      "blackPoint": 5,
+      "aspectRatioPreserved": true,
+      "background": "#ffffff"
+    },
+    "treatment": "Conventional paper white balance and proportional placement on a white canvas. All original artwork retained; no generated illustration or pip reconstruction."
+  }
+}

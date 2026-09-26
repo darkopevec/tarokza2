@@ -263,6 +263,11 @@ function Modal({ title, children, onClose, wide = false, className = "" }) {
 
 function DeckGallery({ onClose, selectedDeck }) {
   const deck = createDeck();
+  const additionalCredit = {
+    moser: { copy: '54 izvirnih podob kart; devet platlcev je iz manjše reprodukcije.', collection: 'World Web Playing Cards Museum; The Merrill C. Berman Collection' },
+    cego: { copy: '44 izvirnih kart in hrbet; 10 platlcev je sestavljenih iz znakov barv tega kompleta.', collection: 'World Web Playing Cards Museum' },
+    neumayer: { copy: '38 izvirnih kart in hrbet; 16 platlcev je sestavljenih iz znakov barv tega kompleta.', collection: 'World Web Playing Cards Museum' },
+  }[selectedDeck];
   return <Modal title={t("Prave tarok karte")} onClose={onClose} className="deck-modal">
     <div className="deck-intro">
       <label className="deck-picker">
@@ -283,7 +288,9 @@ function DeckGallery({ onClose, selectedDeck }) {
         <Card card={card}/><span>{cardName(card)}</span>
       </div>)}</div>
     </section>)}
-    {selectedDeck === 'smrekar'
+    {additionalCredit
+      ? <p className="deck-credit">{t(additionalCredit.copy)} {additionalCredit.collection}. <a href={`/cards/${selectedDeck}/sources.json`} target="_blank" rel="noreferrer">{t("Viri kart")}</a>.</p>
+      : selectedDeck === 'smrekar'
       ? <p className="deck-credit">Hinko Smrekar (1910–1912). {t("41 izvirnih kart in hrbet; 13 platlcev je rekonstruiranih iz znakov barv na izvirnih kartah.")} <a href="https://commons.wikimedia.org/wiki/Category:Smrekar%27s_Tarot" target="_blank" rel="noreferrer">Wikimedia Commons</a>. <a href="/cards/smrekar/sources.json" target="_blank" rel="noreferrer">{t("Viri kart")}</a>.</p>
       : selectedDeck === 'slovenian'
       ? <p className="deck-credit">{t("Slovenski tarok · Piatnik")}. {t("Taroki in figure: slovenski-tarok.si. Preostale karte so sestavljene iz znakov barv na izvirnih kartah.")} <a href="https://slovenski-tarok.si" target="_blank" rel="noreferrer">slovenski-tarok.si</a>. <a href="/cards/slovenian/sources.json" target="_blank" rel="noreferrer">{t("Viri kart")}</a>.</p>
