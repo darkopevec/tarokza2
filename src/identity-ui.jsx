@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { Archive, Check, ChevronDown, ChevronRight, Copy, Layers3, Link, MonitorSmartphone, Plus, QrCode, Share2, Trash2, Trophy, Users } from 'lucide-react';
-import { getLocale, t } from './i18n.mjs';
+import { getLocale, t, translateMessage } from './i18n.mjs';
 
 export const DEVICE = 'tarokza2.device';
 export const PENDING_DEVICE = 'tarokza2.pending-device';
@@ -143,6 +143,53 @@ export function IdentityHome({ user, name, setName, tables, link, busy, online, 
     </>}
   </main>;
 }
+export function PlayerNameSettings({ user, online, busy, onSave }) {
+  const inputId = useId();
+  const inputRef = useRef(null);
+  const previousName = useRef(user.name);
+  const [draft, setDraft] = useState(user.name);
+  const [saving, setSaving] = useState(false);
+  const [savedName, setSavedName] = useState(null);
+  const [error, setError] = useState('');
+  const normalized = draft.trim().replace(/\s+/gu, ' ');
+  useEffect(() => {
+    const previous = previousName.current;
+    previousName.current = user.name;
+    setDraft(current => current === previous ? user.name : current);
+    setSavedName(current => current === user.name ? current : null);
+  }, [user.name]);
+  async function save(event) {
+    event.preventDefault();
+    if (saving || busy || !online || normalized === user.name) return;
+    setError('');
+    setSavedName(null);
+    if (!normalized || [...normalized].length > 24 || /[\p{Cc}\p{Cf}]/u.test(normalized)) {
+      setError('Ime naj vsebuje od 1 do 24 znakov.');
+      inputRef.current?.focus();
+      return;
+    }
+    setSaving(true);
+    try {
+      const updated = await onSave(normalized);
+      setDraft(updated.name);
+      setSavedName(updated.name);
+    } catch (error) { setError(error.message); }
+    finally { setSaving(false); }
+  }
+  return <form className="settings-name" onSubmit={save} noValidate aria-busy={saving}>
+    <label className="settings-label" htmlFor={inputId}>{t('Ime igralca')}</label>
+    <input ref={inputRef} id={inputId} data-testid="settings-player-name" autoComplete="nickname" value={draft}
+      required disabled={saving} aria-invalid={!!error} aria-describedby={`${inputId}-help${error ? ` ${inputId}-error` : ''}`}
+      onChange={event => { setDraft(event.target.value); setError(''); setSavedName(null); }} />
+    <p className="settings-note" id={`${inputId}-help`}>{t('Ime bo prikazano pri vseh tvojih mizah.')}</p>
+    {error && <p className="settings-error" id={`${inputId}-error`} data-testid="name-save-error" role="alert">{translateMessage(error)}</p>}
+    <button type="submit" className="primary-button" data-testid="save-player-name" disabled={saving || busy || !online || normalized === user.name}>{t('Shrani ime')}</button>
+    <p className="settings-save-status" data-testid="name-save-status" role="status" aria-live="polite">
+      {!online ? t('Povezava s strežnikom je prekinjena. Poskušamo znova …') : savedName === user.name ? t('Ime je shranjeno.') : ''}
+    </p>
+  </form>;
+}
+
 export function DeviceSettings({ devices, onRename, onRevoke, onLink, onRecovery, url, kind, expiresAt, onCopy, busy }) {
   return <div className="identity-settings">
     <p>{t('Vsak brskalnik ima svoj dostop do vseh tvojih miz.')}</p>

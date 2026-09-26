@@ -8,7 +8,7 @@ Changing language updates visible text, accessible labels, card names, rules, sa
 
 The home and waiting headers show the selected language as a compact flag with
 a 44px touch target. During play, the gear opens **Settings**, which contains
-the language selector. The native menus retain full language names and keyboard navigation.
+the language selector and player-name editor. The native menus retain full language names and keyboard navigation.
 Flags are local SVGs from flag-icons; their attribution and MIT license are in
 [`public/flags/`](../public/flags/README.md).
 

@@ -27,6 +27,15 @@
 .settings-language select { width: 100%; min-height: 48px; border: 1px solid #cbd5c4; border-radius: 9px; padding: 12px 34px 12px 48px; background: #fffefa; color: #253d35; font: inherit; font-size: 16px; cursor: pointer; }
 .settings-language select:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 .game-settings-modal { max-width: 420px; }
+.settings-name { display: flex; flex-direction: column; gap: 10px; padding: 4px 0 20px; margin-bottom: 20px; border-bottom: 1px solid var(--line, #dedbd2); }
+.settings-name input { width: 100%; min-width: 0; min-height: 48px; padding: 12px 14px; border: 1px solid #cbd5c4; border-radius: 9px; background: #fffefa; color: #253d35; font: inherit; font-size: 16px; }
+.settings-name input:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.settings-name input[aria-invalid="true"] { border-color: #a44836; }
+.settings-name .primary-button { align-self: flex-start; min-height: 44px; margin-top: 4px; }
+.settings-note, .settings-error, .settings-save-status { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.settings-note { color: #596b5f; }
+.settings-error { color: #a44836; }
+.settings-save-status { min-height: 1.5em; color: #365b46; }
 .language-picker::after {
   content: "";
   position: absolute;

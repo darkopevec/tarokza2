@@ -8,6 +8,7 @@ All operations below use Socket.IO acknowledgements: `{ok:true, ...result}` or `
 | --- | --- | --- |
 | `identity:create` | `name, credential` | Creates a player and first device; returns `user, tables`. Retrying the same credential is idempotent. |
 | `identity:resume` | `credential` | Authenticates the socket; returns `user, tables`. |
+| `identity:rename` | `name` | Changes the authenticated player's display name on all their devices and tables; returns `user`. |
 | `tables:list` | — | Returns the authenticated player's `tables`, most recently updated first. |
 | `devices:list` | — | Returns `devices` with ID, name, creation time, and current-device marker. |
 | `devices:rename` | `id, name` | Renames an owned device. |
@@ -27,6 +28,16 @@ All operations below use Socket.IO acknowledgements: `{ok:true, ...result}` or `
 | `game:action` | Existing action plus `expectedRevision` | Rejects actions from an outdated displayed room revision. Plays also retain the existing `expectedPlay` context check. |
 
 The server emits `tables` after membership/game changes, private `state` projections including `revision`, and `identity:revoked` before disconnecting a revoked device. Missing or revoked authentication returns `AUTH_REQUIRED`; malformed/expired/consumed links return `INVALID_LINK`; occupied identity conflicts return `IDENTITY_CONFLICT`; stale game mutations return `STALE_ACTION` (or the existing `STALE_PLAY` for invalid play context).
+
+Changing a player's name uses the same normalization and 1–24 character limit
+as creating a player. The server persists the registry atomically before
+broadcasting `identity:updated {user: {id, name}}` to that player's authenticated
+devices and refreshing table lists and affected room states. Names in room and
+game projections come from the registry; room files, seat IDs, cards, scores,
+revisions and timestamps remain unchanged. Active, waiting and archived tables
+show the new name, including after a restart. Legacy claimed seats retain their
+old names until the player explicitly renames themselves, after which the new
+name also applies to those seats. Device names are separate.
 
 Shared links use fragments: `/#invite=SECRET&room=ROOM`, `/#device=SECRET`, and `/#recovery=SECRET`. The client captures the fragment in tab storage and removes it from the address bar. Redemption requires a button press. QR generation runs locally. Device-link redemption records a hash receipt on the new device so the same destination credential can safely retry after a lost acknowledgement; a different credential cannot replay it.
 

@@ -254,8 +254,9 @@ export async function createTarokServer({
       if (!player) return [];
       const disposition = Object.hasOwn(room.dispositions || {}, player.id) ? room.dispositions[player.id] : 'pending';
       if (room.abandonedAt && disposition === 'deleted') return [];
+      const opponent = room.players.find(p => identities.owner(room.id, p) !== userId);
       return [{ roomId: room.id, updatedAt: room.updatedAt,
-        opponent: room.players.find(p => identities.owner(room.id, p) !== userId)?.name || null,
+        opponent: opponent ? identities.displayName(room.id, opponent) : null,
         status: room.abandonedAt ? 'abandoned' : room.game ? room.game.phase : 'waiting',
         ...(room.abandonedAt ? { disposition, abandonedAt: room.abandonedAt } : {}) }];
     });
@@ -268,14 +269,18 @@ export async function createTarokServer({
   function emitState(roomId) {
     const room = rooms.get(roomId);
     if (!room || room.abandonedAt) return;
-    const players = room.players.map(({ id, name }) => ({ id, name, connected: isConnected(roomId, id) }));
+    const players = room.players.map(player => ({ id: player.id, name: identities.displayName(roomId, player), connected: isConnected(roomId, player.id) }));
+    const names = new Map(players.map(player => [player.id, player.name]));
     for (const player of room.players) {
+      const view = room.game ? engine.viewFor(room.game, player.id) : null;
       const state = {
         roomId,
         revision: room.revision || 0,
         you: player.id,
         players,
-        game: room.game ? engine.viewFor(room.game, player.id) : null,
+        // Names are presentation data from the registry. Keep the saved game,
+        // cards, scores and revision intact when a player renames themselves.
+        game: view ? { ...view, players: view.players.map(p => ({ ...p, name: names.get(p.id) ?? p.name })) } : null,
       };
       for (const socketId of connections.get(`${roomId}:${player.id}`) || []) {
         io.to(socketId).emit('state', state);
@@ -370,6 +375,21 @@ export async function createTarokServer({
         throw new IdentityError('Brskalnik že pripada drugemu igralcu.', 'IDENTITY_CONFLICT');
       return signedIn(credential);
     });
+    handle('identity:rename', async ({ name }) => {
+      authenticate();
+      const user = publicUser(await identities.renameUser(socket.data.credential, cleanName(name)));
+      for (const client of io.sockets.sockets.values()) {
+        try {
+          if (client.data.credential && identities.user(client.data.credential).id === user.id)
+            client.emit('identity:updated', { user });
+        } catch { /* Revoked devices receive no identity updates. */ }
+      }
+      for (const room of rooms.values()) {
+        if (room.players.some(player => identities.owner(room.id, player) === user.id)) emitState(room.id);
+      }
+      emitTables();
+      return { user };
+    });
     handle('tables:list', async () => ({ tables: tables(authenticate().id) }));
     handle('devices:list', async () => ({ devices: identities.list(socket.data.credential) }));
     handle('devices:rename', async ({ id, name }) => { await identities.rename(socket.data.credential, id, cleanName(name)); return {}; });
@@ -415,19 +435,19 @@ export async function createTarokServer({
         if (!seat) throw new IdentityError('Starega mesta ni mogoče obnoviti.', 'INVALID_CLAIM');
         requireActiveRoom(room);
         await identities.claim(socket.data.credential, roomId, seat, room.players);
-        emitTables();
+        emitState(roomId); emitTables();
         return {};
       });
     });
     handle('room:create', async () => {
       const allowance = creationLimiter.consume(creationKey);
       if (!allowance.allowed) throw new RequestError('Preveč novih miz. Poskusi pozneje.', 'ROOM_CREATE_LIMIT', allowance.retryAfterMs);
-      const user = authenticate();
+      authenticate();
       let roomId;
       do { roomId = Array.from({ length: 6 }, () => CODE_ALPHABET[randomInt(CODE_ALPHABET.length)]).join(''); }
       while (rooms.has(roomId) || queues.has(roomId) || unrestoredRoomIds.has(roomId));
       return withRoom(roomId, async () => {
-        authenticate();
+        const user = authenticate();
         const player = { id: randomUUID(), name: user.name, userId: user.id };
         const invitation = randomBytes(32).toString('base64url');
         const room = { version: 2, id: roomId, revision: 0, createdAt: new Date(now()).toISOString(),
@@ -466,7 +486,7 @@ export async function createTarokServer({
         const player = { id: randomUUID(), name: user.name, userId: user.id };
         const room = clone(current);
         room.players.push(player); delete room.invitationHash;
-        room.game = engine.createGame({ playerIds: room.players.map(p => p.id), names: room.players.map(p => p.name) });
+        room.game = engine.createGame({ playerIds: room.players.map(p => p.id), names: room.players.map(p => identities.displayName(roomId, p)) });
         room.revision = (room.revision || 0) + 1;
         room.updatedAt = new Date(now()).toISOString();
         await persist(room); rooms.set(roomId, room);

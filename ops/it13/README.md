@@ -1,6 +1,21 @@
 # IT13 deployment
 
-The current 2026-09-26 table archive release uses image
+The current 2026-09-26 player-name release uses image
+`tarokza2:player-name-20260926` and `compose.it13.yaml`. Settings now includes
+the player name and an explicit Save name button. Changes are saved in the
+identity registry and appear across linked devices and existing/future tables,
+including opponent lists and score headings. Cards, scores, turns, room files
+and revisions remain unchanged. All 12 languages include the new controls.
+
+Back up the stopped volume before switching images and refresh browser tabs
+afterward. Existing saves need no migration. Retain
+`tarokza2:table-archive-20260926` for recovery; it can load the updated registry,
+but existing table labels will use their saved pre-rename names. Keep the current
+registry when rolling back code so renamed identities remain recoverable.
+
+## Previous table archive release
+
+The 2026-09-26 table archive release uses image
 `tarokza2:table-archive-20260926` and `compose.it13.yaml`. Players can abandon a
 table from home, then independently archive or delete their own list entry.
 Pending choices survive offline sessions; archived entries appear at the bottom

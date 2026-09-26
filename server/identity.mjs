@@ -14,7 +14,7 @@ export async function openIdentities(dataDir, now = Date.now) {
   try {
     const saved = JSON.parse(await readFile(filename, 'utf8'));
     if (saved.version !== 1 || ['users', 'devices', 'links', 'claims'].some(key => !saved[key] || typeof saved[key] !== 'object' || Array.isArray(saved[key]))) throw Error();
-    for (const [id, user] of Object.entries(saved.users)) if (user.id !== id || typeof user.name !== 'string' || (user.recoveryHash !== undefined && !/^[a-f0-9]{64}$/.test(user.recoveryHash))) throw Error();
+    for (const [id, user] of Object.entries(saved.users)) if (user.id !== id || typeof user.name !== 'string' || (user.nameUpdatedAt !== undefined && !Number.isFinite(user.nameUpdatedAt)) || (user.recoveryHash !== undefined && !/^[a-f0-9]{64}$/.test(user.recoveryHash))) throw Error();
     for (const [key, device] of Object.entries(saved.devices)) if (!/^[a-f0-9]{64}$/.test(key) || !saved.users[device.userId] || typeof device.id !== 'string') throw Error();
     for (const link of Object.values(saved.links)) if (!saved.users[link.userId] || !Number.isFinite(link.expiresAt)) throw Error();
     for (const userId of Object.values(saved.claims)) if (!saved.users[userId]) throw Error();
@@ -57,6 +57,12 @@ export async function openIdentities(dataDir, now = Date.now) {
     hasUser: userId => Object.hasOwn(data.users, userId),
     user: secret => data.users[device(secret).userId],
     owner: (roomId, seat) => seat.userId || data.claims[`${roomId}:${seat.id}`],
+    displayName(roomId, seat) {
+      const user = data.users[seat.userId || data.claims[`${roomId}:${seat.id}`]];
+      // Claiming an old seat retains its historical name until the player
+      // explicitly changes their name for all tables.
+      return user && (seat.userId || user.nameUpdatedAt !== undefined) ? user.name : seat.name;
+    },
     async create(name, secret) {
       return mutate(next => {
         if (!validSecret(secret)) fail('Neveljaven ključ naprave.');
@@ -69,6 +75,14 @@ export async function openIdentities(dataDir, now = Date.now) {
       });
     },
     list(secret) { const current = device(secret); return Object.values(data.devices).filter(d => d.userId === current.userId).map(d => ({ id: d.id, name: d.name, createdAt: d.createdAt, current: d.id === current.id })); },
+    async renameUser(secret, name) { return mutate(next => {
+      // Revalidate inside the registry queue, including revocations that were
+      // queued before this change.
+      const user = next.users[device(secret).userId];
+      user.name = name;
+      user.nameUpdatedAt = now();
+      return user;
+    }); },
     async rename(secret, id, name) { return mutate(next => { const current = device(secret); const target = Object.values(next.devices).find(d => d.id === id && d.userId === current.userId); if (!target) fail('Naprave ni.'); target.name = name; }); },
     async revoke(secret, id) { return mutate(next => { const current = device(secret); if (current.id === id) fail('Trenutne naprave ni mogoče odstraniti.'); for (const [key, d] of Object.entries(next.devices)) if (d.id === id && d.userId === current.userId) delete next.devices[key]; }); },
     async link(secret, token) { return mutate(next => { const current = device(secret); for (const [key, link] of Object.entries(next.links)) if (link.expiresAt <= now() || link.userId === current.userId) delete next.links[key]; const expiresAt = now() + 15 * 60_000; next.links[hash(token)] = { userId: current.userId, expiresAt }; return { expiresAt }; }); },

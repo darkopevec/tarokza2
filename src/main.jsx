@@ -31,7 +31,7 @@ import {
   WifiOff,
   X,
 } from "lucide-react";
-import { DEVICE, PENDING_DEVICE, newSecret, captureLink, sharedLink, LinkCard, IdentityHome, DeviceSettings } from './identity-ui.jsx';
+import { DEVICE, PENDING_DEVICE, newSecret, captureLink, sharedLink, LinkCard, IdentityHome, PlayerNameSettings, DeviceSettings } from './identity-ui.jsx';
 import './identity.css';
 import "./styles.css";
 import "./responsive.css";
@@ -1245,6 +1245,9 @@ function App() {
       finally { setResuming(false); }
     });
     socket.on('tables', setTables);
+    socket.on('identity:updated', ({ user: updated }) => {
+      if (updated?.id === userRef.current?.id) updateUser(updated);
+    });
     socket.on('room:abandoned', ({ roomId }) => {
       const currentRoomId = stateRef.current?.roomId || new URLSearchParams(location.search).get('room');
       if (currentRoomId === roomId) {
@@ -1318,11 +1321,22 @@ function App() {
     if (!result?.ok) throw Object.assign(new Error(result?.error || 'Zahteva ni uspela.'), { code: result?.code });
     return result;
   }
+  function updateUser(updated) {
+    userRef.current = updated;
+    setUser(updated);
+    setName(updated.name);
+    try { localStorage.setItem(NAME, JSON.stringify(updated.name)); } catch { /* The server retains the name. */ }
+  }
   function acceptIdentity(result, credential) {
     localStorage.setItem(DEVICE, credential);
     localStorage.removeItem(PENDING_DEVICE);
-    credentialRef.current = credential; userRef.current = result.user;
-    setUser(result.user); setName(result.user.name); setTables(result.tables);
+    credentialRef.current = credential;
+    updateUser(result.user); setTables(result.tables);
+  }
+  async function renamePlayer(name) {
+    if (!socketRef.current?.connected) throw new Error('Povezava s strežnikom je prekinjena. Poskušamo znova …');
+    const result = await request('identity:rename', { name });
+    return result.user;
   }
   async function ensureIdentity() {
     const ensure = async () => {
@@ -1334,7 +1348,6 @@ function App() {
       localStorage.setItem(PENDING_DEVICE, credential);
       const result = await request('identity:create', { name: name.trim() || readSaved(NAME) || t("Igralec"), credential });
       acceptIdentity(result, credential);
-      localStorage.setItem(NAME, JSON.stringify(result.user.name));
     };
     if (navigator.locks) await navigator.locks.request('tarokza2.identity', ensure);
     else await ensure();
@@ -1528,6 +1541,7 @@ function App() {
         </div>
       )}
       {modal === 'settings' && state?.game && <Modal title={t('Nastavitve')} className="game-settings-modal" onClose={() => setModal(null)}>
+        {user && <PlayerNameSettings user={user} online={online} busy={busy} onSave={renamePlayer} />}
         <LanguagePicker locale={locale} compact={false} />
       </Modal>}
       {modal === 'abandon' && tableToAbandon && <Modal title={t('Opustiš mizo?')} className="abandon-table-modal" onClose={() => { setModal(null); setTableToAbandon(null); }}>
