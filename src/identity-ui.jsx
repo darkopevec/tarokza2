@@ -176,7 +176,7 @@ export function PlayerNameSettings({ user, online, busy, onSave }) {
     } catch (error) { setError(error.message); }
     finally { setSaving(false); }
   }
-  return <form className="settings-name" onSubmit={save} noValidate aria-busy={saving}>
+  return <form className="settings-name settings-section" onSubmit={save} noValidate aria-busy={saving}>
     <label className="settings-label" htmlFor={inputId}>{t('Ime igralca')}</label>
     <input ref={inputRef} id={inputId} data-testid="settings-player-name" autoComplete="nickname" value={draft}
       required disabled={saving} aria-invalid={!!error} aria-describedby={`${inputId}-help${error ? ` ${inputId}-error` : ''}`}
@@ -194,7 +194,7 @@ export function DeviceSettings({ devices, onRename, onRevoke, onLink, onRecovery
   return <div className="identity-settings">
     <p>{t('Vsak brskalnik ima svoj dostop do vseh tvojih miz.')}</p>
     {devices.map(device => <div className="identity-table" key={device.id}>
-      <label>{device.current ? t('Ime naprave (ta brskalnik)') : t('Ime naprave')}<input aria-label={t('Ime naprave {name}', { name: device.name })} defaultValue={device.name} maxLength={24} onBlur={e => { if (e.target.value.trim() && e.target.value.trim() !== device.name) onRename(device.id, e.target.value); }} /></label>
+      <label>{device.current ? t('Ime naprave (ta brskalnik)') : t('Ime naprave')}<input aria-label={t('Ime naprave {name}', { name: device.name })} defaultValue={device.name} maxLength={24} disabled={busy} onBlur={e => { if (!busy && e.target.value.trim() && e.target.value.trim() !== device.name) onRename(device.id, e.target.value); }} /></label>
       <small>{t('Povezana {date}', { date: new Date(device.createdAt).toLocaleString(getLocale()) })}</small>
       {!device.current && <button className="text-button" disabled={busy} onClick={() => onRevoke(device.id)}>{t('Odstrani')}</button>}
     </div>)}

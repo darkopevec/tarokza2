@@ -98,6 +98,7 @@ try {
     assert.ok(cacheControl.includes('private') && cacheControl.includes('no-store'));
     const preferred = await page.evaluate(() => navigator.languages);
     const defaultLanguage = detectLanguage(null, preferred, detected.country);
+    await page.getByTestId('game-settings').click();
     const selector = page.getByTestId('language-select');
     await expect(selector).toBeVisible();
     assert.deepEqual(await selector.locator('option').evaluateAll(options => options.map(option => option.value)), languageCodes);
@@ -114,6 +115,7 @@ try {
     await selector.selectOption(explicitLanguage);
     assert.equal(await page.evaluate(key => localStorage.getItem(key), LANGUAGE_STORAGE_KEY), explicitLanguage);
     assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), null);
+    await page.keyboard.press('Escape');
     await page.getByTestId('deck-gallery').click();
     const deckSelector = page.getByTestId('deck-select');
     await expect(deckSelector).toHaveValue('modiano');
@@ -127,9 +129,11 @@ try {
     assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), 'smrekar');
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     await page.reload({ waitUntil: 'networkidle' });
+    await page.getByTestId('game-settings').click();
     await expect(selector).toHaveValue(explicitLanguage);
     await expect(page.locator('html')).toHaveAttribute('lang', explicitLanguage);
     await expect(page).toHaveTitle(translatorFor(explicitLanguage)('TarokZa2 · Dobra družba. Dobre karte.'));
+    await page.keyboard.press('Escape');
     await page.getByTestId('deck-gallery').click();
     await expect(deckSelector).toHaveValue('smrekar');
     await verifyDeckGallery(page, 'smrekar');

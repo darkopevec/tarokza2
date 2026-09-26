@@ -85,7 +85,7 @@ Your player owns all your tables, accessible from **Moje mize** on every linked 
 
 Use the trash icon beside a table in **Moje mize** to **Opusti mizo**. After confirmation, the table closes for both players. Each player independently chooses **Arhiviraj** or **Izbriši**; an offline player gets the choice when they return. Archived tables appear in **Arhiv** at the bottom of the home screen and can be deleted later. Deleting removes the table only from your own list, across your linked devices. The other player's archive is unchanged. Abandoned tables cannot be resumed, and existing invitations stop working. Returning home with **Zapusti mizo** still keeps your seat.
 
-During play, open the **Nastavitve** gear in the header to change language or your player name. Enter a name of 1–24 characters and select **Shrani ime**. The saved name appears across your tables and linked devices, including for opponents, without changing your cards, turn, or scores. The home and waiting screens keep the flag selector.
+Open the **Nastavitve** gear on the home, waiting, or play screen. Settings appear in this order: **card deck**, **player name**, **language**, then **devices and recovery**. Guests can choose their cards and language before joining. Card artwork and language are saved for this browser. To rename your player, enter 1–24 characters and select **Shrani ime**; the name updates across your tables and linked devices, including for opponents, without changing your cards, turn, or scores. The devices panel has a back button that returns to Settings and preserves an unsaved name. The connection indicator sits beside the logo; cards and rules retain their header shortcuts.
 
 <details>
 <summary>🛡️ How the game handles plays from multiple tabs</summary>
@@ -252,6 +252,8 @@ The entire game uses all 54 scanned faces from one Slovenian tarok deck; see [ca
 Run `npm run test:identity` for isolated browser checks of invitations, QR codes, linked devices, recovery, conflicts, and revocation. It creates and removes its own temporary data directory.
 
 Run `npm run test:name-change` after building to check the Settings name editor, validation, linked-device and opponent updates, persistence, and unchanged gameplay using disposable tables.
+
+Run `npm run test:home-settings` after building to check Settings on every screen, card-first ordering and saved artwork, device navigation, the status beside the logo, and all 12 languages on phone and desktop layouts using disposable players.
 
 Run `npm run test:table-management` after building to verify abandonment, independent archive/delete choices, later archive deletion, linked-device updates, offline choices, and phone layouts using disposable tables.
 

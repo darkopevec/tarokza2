@@ -128,7 +128,6 @@
   .site-header:has(+ .game-page) { height: calc(48px + env(safe-area-inset-top)); }
   .header-inner { padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
   .header-right { gap: 2px; }
-  .header-right .connection-status { margin-right: 4px; }
   .header-cards span { display: none; }
   .header-cards, .header-rules { justify-content: center; padding: 0; }
   .logo { font-size: 22px; gap: 7px; min-height: 44px; }
@@ -226,7 +225,6 @@
   .site-header:has(+ .game-page) { height: calc(44px + env(safe-area-inset-top)); }
   .header-inner { padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
   .header-right { gap: 8px; }
-  .connection-status { display: none; }
   .logo { font-size: 22px; min-height: 44px; }
   .logo-mark { width: 26px; height: 30px; }
   .game-page { padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
@@ -294,7 +292,7 @@
 
 /* Small landscape screens share one top bar so the whole table still fits. */
 @media (min-width: 561px) and (max-width: 700px) and (max-height: 600px) and (orientation: landscape) {
-  .site-header:has(+ .game-page) .logo { display: none; }
+  .site-header:has(+ .game-page) .header-brand { display: none; }
   .site-header:has(+ .game-page) .header-inner { justify-content: flex-end; }
   .header-cards span, .header-rules span { display: none; }
   .header-cards, .header-rules { justify-content: center; }

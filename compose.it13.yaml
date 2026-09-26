@@ -1,7 +1,7 @@
 name: tarokza2
 services:
   tarokza2:
-    image: tarokza2:player-name-20260926
+    image: tarokza2:shared-settings-20260926
     container_name: tarokza2
     init: true
     read_only: true

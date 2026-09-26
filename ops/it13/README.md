@@ -1,6 +1,20 @@
 # IT13 deployment
 
-The current 2026-09-26 player-name release uses image
+The current 2026-09-26 shared Settings release uses image
+`tarokza2:shared-settings-20260926` and `compose.it13.yaml`. The settings gear
+is available on home, waiting, and play screens. Card preferences come first,
+followed by player name, language, and devices and recovery. Guests see card
+preferences and language. The devices panel returns to Settings without losing
+an unsaved name; offline device changes are disabled. Connection status sits
+beside the logo, and cards/rules retain their header shortcuts.
+
+Saved games and identities require no migration. Back up the stopped volume
+before switching images and refresh browser tabs afterward. Retain
+`tarokza2:player-name-20260926` for code rollback with the same data.
+
+## Previous player-name release
+
+The 2026-09-26 player-name release uses image
 `tarokza2:player-name-20260926` and `compose.it13.yaml`. Settings now includes
 the player name and an explicit Save name button. Changes are saved in the
 identity registry and appear across linked devices and existing/future tables,

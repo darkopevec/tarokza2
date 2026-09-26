@@ -20,6 +20,7 @@
     "test:score-history": "node scripts/verify-score-history.mjs",
     "test:identity": "node scripts/verify-identity.mjs",
     "test:name-change": "node scripts/verify-name-change.mjs",
+    "test:home-settings": "node scripts/verify-home-settings.mjs",
     "test:table-management": "node scripts/verify-table-management.mjs",
     "test:waiting": "node scripts/verify-waiting.mjs",
     "test:language": "node scripts/verify-language.mjs",

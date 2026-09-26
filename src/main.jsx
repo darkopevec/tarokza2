@@ -12,6 +12,7 @@ import {
   ArrowDownToLine,
   Check,
   ChevronLeft,
+  ChevronRight,
   CircleHelp,
   Copy,
   Diamond,
@@ -20,6 +21,7 @@ import {
   Link,
   LoaderCircle,
   LogOut,
+  MonitorSmartphone,
   Plus,
   Share2,
   ShieldCheck,
@@ -137,10 +139,10 @@ function Avatar({ name, you = false, connected = true }) {
   );
 }
 
-function LanguagePicker({ locale, compact = true }) {
+function LanguagePicker({ locale }) {
   const selected = languages.find(language => language.code === locale);
-  return <label className={compact ? 'language-picker' : 'settings-language'}>
-    <span className={compact ? 'sr-only' : 'settings-label'}>{t('Jezik')}</span>
+  return <label className="settings-language settings-section">
+    <span className="settings-label">{t('Jezik')}</span>
     <span className="language-control">
       <img className="language-flag" src={`/flags/${selected.flag}.svg`} width="22" height="17" alt="" aria-hidden="true" />
       <select aria-label={t('Jezik')} title={`${t('Jezik')}: ${selected.name}`} value={locale} onChange={event => setLocale(event.target.value)} data-testid="language-select">
@@ -148,6 +150,47 @@ function LanguagePicker({ locale, compact = true }) {
       </select>
     </span>
   </label>;
+}
+
+function SettingsDialog({ user, locale, selectedDeck, online, busy, onSaveName, onLoadDevices, deviceSettings, onError, onClose }) {
+  const [showDevices, setShowDevices] = useState(false);
+  const [loadingDevices, setLoadingDevices] = useState(false);
+  const devicesButton = useRef(null);
+  const backButton = useRef(null);
+  const wasShowingDevices = useRef(false);
+  useLayoutEffect(() => {
+    if (showDevices) backButton.current?.focus();
+    else if (wasShowingDevices.current) devicesButton.current?.focus();
+    wasShowingDevices.current = showDevices;
+  }, [showDevices]);
+  async function openDevices() {
+    setLoadingDevices(true);
+    try { await onLoadDevices(); setShowDevices(true); }
+    catch (error) { onError(error.message); }
+    finally { setLoadingDevices(false); }
+  }
+  return <Modal title={t(showDevices ? 'Naprave in obnovitev' : 'Nastavitve')} className="game-settings-modal" onClose={onClose}>
+    <div hidden={showDevices}>
+      <div className="settings-deck settings-section">
+        <label className="settings-label" htmlFor="settings-deck">{t('Komplet kart')}</label>
+        <select id="settings-deck" data-testid="settings-deck-select" value={selectedDeck} onChange={event => setDeck(event.target.value)}>
+          {CARD_DECKS.map(deck => <option key={deck.id} value={deck.id}>{t(deck.name)}</option>)}
+        </select>
+        <p className="settings-note">{t('Izbrani komplet velja samo v tem brskalniku.')}</p>
+      </div>
+      {user && <PlayerNameSettings user={user} online={online} busy={busy || loadingDevices} onSave={onSaveName} />}
+      <LanguagePicker locale={locale} />
+      {user && <div className="settings-links">
+        <button ref={devicesButton} type="button" className="settings-link" data-testid="settings-devices" disabled={busy || loadingDevices || !online} aria-busy={loadingDevices} onClick={openDevices}>
+          <MonitorSmartphone size={19} aria-hidden="true" /><span>{t('Naprave in obnovitev')}</span><ChevronRight size={18} aria-hidden="true" />
+        </button>
+      </div>}
+    </div>
+    {showDevices && <>
+      <button ref={backButton} type="button" className="text-button settings-back" data-testid="settings-back" onClick={() => setShowDevices(false)}><ChevronLeft size={18} aria-hidden="true" />{t('Nastavitve')}</button>
+      <DeviceSettings {...deviceSettings} />
+    </>}
+  </Modal>;
 }
 
 function Modal({ title, children, onClose, wide = false, className = "" }) {
@@ -1418,7 +1461,8 @@ function App() {
     acceptIdentity(result, credential); dismissLink(); await migrate();
     if (result.alreadyConnected) setError('Ta brskalnik je že povezan s tem igralcem.');
   }); }
-  function openDevices() { run(async () => { setDevices((await request('devices:list')).devices); setDeviceLink(null); setModal('devices'); }); }
+  async function loadDevices() { setDevices((await request('devices:list')).devices); setDeviceLink(null); }
+  function openDevices() { run(async () => { await loadDevices(); setModal('devices'); }); }
   function changeDevice(event, payload) { run(async () => { await request(event, payload); setDevices((await request('devices:list')).devices); }); }
   function makeDeviceLink(kind) { run(async () => {
     const result = await request(kind === 'device' ? 'devices:link' : 'recovery:create');
@@ -1463,28 +1507,23 @@ function App() {
     <>
       <header className="site-header">
         <div className="header-inner">
-          <Logo onClick={() => (state ? setModal("leave") : null)} />
-          <div className="header-right">
-            {state?.game ? <button type="button" className="icon-button" data-testid="game-settings" aria-label={t('Nastavitve')} title={t('Nastavitve')} aria-haspopup="dialog" aria-expanded={modal === 'settings'} onClick={() => setModal('settings')}>
-              <Settings size={18} aria-hidden="true" />
-            </button> : <LanguagePicker locale={locale} />}
-            <span
-              className={`connection-status ${online ? "" : "disconnected"}`}
-            >
-              {online ? (
-                <>
-                  <span className="status-dot" /> {t("Pripravljeno na igro")} </>
-              ) : (
-                <>
-                  <WifiOff size={14} /> {t("Povezovanje …")} </>
-              )}
+          <div className="header-brand">
+            <Logo onClick={() => (state ? setModal("leave") : null)} />
+            <span className={`connection-status ${online ? '' : 'disconnected'}`} role="status" title={t(online ? 'Pripravljeno na igro' : 'Povezovanje …')}>
+              {online ? <span className="status-dot" aria-hidden="true" /> : <WifiOff size={14} aria-hidden="true" />}
+              <span className="sr-only">{t(online ? 'Pripravljeno na igro' : 'Povezovanje …')}</span>
             </span>
+          </div>
+          <div className="header-right">
             <button className="header-cards" data-testid="deck-gallery" aria-label={t("Karte")} onClick={() => setModal("deck")}>
               <Layers3 size={17}/><span>{t("Karte")}</span>
             </button>
             <button className="header-rules" aria-label={t("Kako igrati")} onClick={() => setModal("rules")}>
               <CircleHelp size={17} />
               <span>{t("Kako igrati")}</span>
+            </button>
+            <button type="button" className="icon-button" data-testid="game-settings" aria-label={t('Nastavitve')} title={t('Nastavitve')} aria-haspopup="dialog" aria-expanded={modal === 'settings'} onClick={() => setModal('settings')}>
+              <Settings size={18} aria-hidden="true" />
             </button>
             {state && (
               <button
@@ -1540,10 +1579,11 @@ function App() {
           </button>
         </div>
       )}
-      {modal === 'settings' && state?.game && <Modal title={t('Nastavitve')} className="game-settings-modal" onClose={() => setModal(null)}>
-        {user && <PlayerNameSettings user={user} online={online} busy={busy} onSave={renamePlayer} />}
-        <LanguagePicker locale={locale} compact={false} />
-      </Modal>}
+      {modal === 'settings' && <SettingsDialog user={user} locale={locale} selectedDeck={selectedDeck} online={online} busy={busy} onSaveName={renamePlayer} onLoadDevices={loadDevices} onError={setError}
+        onClose={() => { setModal(null); setDeviceLink(null); }}
+        deviceSettings={{ devices, busy: busy || !online, onRename: (id, name) => changeDevice('devices:rename', { id, name }),
+          onRevoke: id => changeDevice('devices:revoke', { id }), onLink: () => makeDeviceLink('device'),
+          onRecovery: () => makeDeviceLink('recovery'), onCopy: copy, ...(deviceLink || {}) }} />}
       {modal === 'abandon' && tableToAbandon && <Modal title={t('Opustiš mizo?')} className="abandon-table-modal" onClose={() => { setModal(null); setTableToAbandon(null); }}>
         <p className="abandon-table-name">{tableToAbandon.opponent || t('Čakamo prijatelja')} · {tableToAbandon.roomId}</p>
         <p className="leave-copy">{t('Miza {room} bo zaprta za oba igralca. Vsak se nato odloči, ali jo želi arhivirati ali izbrisati. Igre ne bo mogoče nadaljevati.', { room: tableToAbandon.roomId })}</p>

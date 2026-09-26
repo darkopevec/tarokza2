@@ -6,9 +6,10 @@ An explicit choice is saved locally under `tarokza2.language`. Storage being una
 
 Changing language updates visible text, accessible labels, card names, rules, saved score explanations, errors, date formatting, page title and document language. It does not alter card IDs, bids, scoring, saved games or player-entered names. Card artwork retains the original printed deck.
 
-The home and waiting headers show the selected language as a compact flag with
-a 44px touch target. During play, the gear opens **Settings**, which contains
-the language selector and player-name editor. The native menus retain full language names and keyboard navigation.
+The header gear opens the same **Settings** on the home, waiting, and play screens.
+Card preferences come first, followed by player name, language, and devices and
+recovery. Guests see card preferences and language. The language selector shows
+the selected flag; its native menu retains full language names and keyboard navigation.
 Flags are local SVGs from flag-icons; their attribution and MIT license are in
 [`public/flags/`](../public/flags/README.md).
 

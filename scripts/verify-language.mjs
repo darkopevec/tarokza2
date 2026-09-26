@@ -35,18 +35,15 @@ async function openSettings(page) {
   await expect(page.getByRole('dialog').getByTestId('language-select')).toBeVisible();
 }
 async function choose(page, locale) {
-  const inGame = await page.locator('.game-page').isVisible();
-  if (inGame) await openSettings(page);
+  await openSettings(page);
   await language(page).selectOption(locale);
   await expect(page.locator('html')).toHaveAttribute('lang', locale);
   await expect(language(page)).toHaveValue(locale);
-  if (inGame) {
-    await noOverflow(page, `${locale} game settings`);
-    await closeDialog(page);
-    await expect(page.getByTestId('game-settings')).toBeFocused();
-  }
+  await noOverflow(page, `${locale} settings`);
+  await closeDialog(page);
+  await expect(page.getByTestId('game-settings')).toBeFocused();
 }
-async function expectGameLanguage(page, locale) {
+async function expectLanguage(page, locale) {
   await openSettings(page);
   await expect(language(page)).toHaveValue(locale);
   await closeDialog(page);
@@ -80,13 +77,13 @@ try {
     page.on('pageerror', error => report.browserErrors.push(error.message));
     await configure?.(page);
     await page.goto(origin);
-    await expect(language(page)).toBeVisible();
-    await expect(page.getByTestId('game-settings')).toHaveCount(0);
+    await expect(page.getByTestId('game-settings')).toBeVisible();
+    await expect(language(page)).toHaveCount(0);
     return page;
   }
 
   const unknown = await fresh('ja-JP');
-  await expect(language(unknown)).toHaveValue('en');
+  await expectLanguage(unknown, 'en');
   await expect(unknown.locator('html')).toHaveAttribute('lang', 'en');
   await unknown.context().close();
   report.checks.push('Unsupported browser languages fall back to English.');
@@ -96,7 +93,7 @@ try {
     ['SI', 'en-US', 'sl'], ['MX', 'en-US', 'es'], ['CH', 'fr-CH', 'fr'], ['BE', 'de-DE', 'de'], ['CA', 'fr-CA', 'fr'],
   ]) {
     const page = await fresh(browserLocale, 390, page => page.route('**/api/locale', route => route.fulfill({ json: { country } })));
-    await expect(language(page)).toHaveValue(expected);
+    await expectLanguage(page, expected);
     await expect(page.locator('html')).toHaveAttribute('lang', expected);
     assert.equal(await page.evaluate(() => localStorage.getItem('tarokza2.language')), null, 'Inferred language must not become a saved preference.');
     await page.context().close();
@@ -107,10 +104,10 @@ try {
     automaticRequests++;
     return route.fulfill({ json: { country } });
   }));
-  await expect(language(automatic)).toHaveValue('sl');
+  await expectLanguage(automatic, 'sl');
   country = 'AT';
   await automatic.reload();
-  await expect(language(automatic)).toHaveValue('de');
+  await expectLanguage(automatic, 'de');
   assert.equal(automaticRequests, 2, 'Each visit should resolve country once when there is no saved choice.');
   await automatic.context().close();
   report.checks.push('IP country sets the default, including multilingual countries; inferred choices are not saved and update on a later visit.');
@@ -120,7 +117,7 @@ try {
     await page.addInitScript(() => localStorage.setItem('tarokza2.language', 'pl'));
     await page.route('**/api/locale', route => { savedRequests++; return route.fulfill({ json: { country: 'SI' } }); });
   });
-  await expect(language(saved)).toHaveValue('pl');
+  await expectLanguage(saved, 'pl');
   assert.equal(savedRequests, 0, 'A saved explicit preference must skip country lookup.');
   await saved.context().close();
 
@@ -138,14 +135,14 @@ try {
       });
       await page.route('**/api/locale', route => { pending = route; });
     });
-    await expect(language(page)).toHaveValue('en');
+    await expectLanguage(page, 'en');
     await expect.poll(() => Boolean(pending)).toBe(true);
     await choose(page, selection);
     const response = page.waitForResponse('**/api/locale');
     await pending.fulfill({ json: { country: 'SI' } });
     await (await response).finished();
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    await expect(language(page)).toHaveValue(selection);
+    await expectLanguage(page, selection);
     await page.context().close();
   }
   report.checks.push('Saved choices skip IP lookup; delayed responses preserve manual choices, including the current language with disabled storage.');
@@ -156,7 +153,7 @@ try {
       if (result === 'malformed') return route.fulfill({ contentType: 'application/json', body: '{invalid' });
       return route.fulfill({ json: { country: null } });
     }));
-    await expect(language(page)).toHaveValue('es');
+    await expectLanguage(page, 'es');
     await page.context().close();
   }
   let timedOut = false;
@@ -165,16 +162,18 @@ try {
     page.on('requestfailed', request => { if (request.url().endsWith('/api/locale')) timedOut = true; });
     await page.route('**/api/locale', route => { timeoutRoute = route; });
   });
-  await expect(language(timeout)).toHaveValue('es');
+  await expectLanguage(timeout, 'es');
   await expect.poll(() => timedOut, { timeout: 5000 }).toBe(true);
   await timeoutRoute.fulfill({ json: { country: 'SI' } }).catch(() => {}); // Chromium may already have closed the aborted route.
-  await expect(language(timeout)).toHaveValue('es');
+  await expectLanguage(timeout, 'es');
   await timeout.context().close();
   report.checks.push('Missing, invalid, failing and timed-out country lookups keep the browser language without blocking the game.');
 
   const home = await fresh('es-ES', 320);
-  await expect(language(home)).toHaveValue('es');
+  await expectLanguage(home, 'es');
+  await openSettings(home);
   assert.deepEqual((await language(home).locator('option').evaluateAll(options => options.map(option => option.value))).sort(), [...languages].sort());
+  await closeDialog(home);
   const buttonLabels = {};
   for (const locale of languages) {
     await choose(home, locale);
@@ -185,20 +184,20 @@ try {
   }
   await choose(home, 'de');
   await home.reload();
-  await expect(language(home)).toHaveValue('de');
+  await expectLanguage(home, 'de');
   await expect(home.locator('html')).toHaveAttribute('lang', 'de');
   await home.context().close();
   report.checks.push({ languages: buttonLabels, preferencePersistsOnReload: true, homeWidth: 320 });
 
   const a = await fresh('en-GB');
   const b = await fresh('es-MX');
-  await expect(language(a)).toHaveValue('en');
-  await expect(language(b)).toHaveValue('es');
+  await expectLanguage(a, 'en');
+  await expectLanguage(b, 'es');
   await a.getByTestId('player-name').fill('Ana');
   await a.getByTestId('create-room').click();
   await expect(a.getByTestId('room-code')).toBeVisible();
-  await expect(language(a)).toBeVisible();
-  await expect(a.getByTestId('game-settings')).toHaveCount(0);
+  await expectLanguage(a, 'en');
+  await expect(language(a)).toHaveCount(0);
   const roomId = (await a.getByTestId('room-code').textContent()).trim();
   const invitation = await a.locator('.invite-url').inputValue();
   await b.goto(invitation);
@@ -250,7 +249,7 @@ try {
     await noOverflow(a, `${locale} live table at 320px`);
     assert.deepEqual(await board(a), boardBefore, `${locale}: language switching must preserve game state.`);
   }
-  await expectGameLanguage(b, 'es');
+  await expectLanguage(b, 'es');
   assert.equal(await readFile(savePath, 'utf8'), savedBefore, 'Language switching and reading dialogs must not mutate the saved game.');
   await choose(a, 'en');
   await b.setViewportSize({ width: 320, height: 844 });
@@ -260,7 +259,7 @@ try {
   }
   report.checks.push('Two players keep separate languages; card names, rules and saved score calculations translate without changing game state.');
   report.checks.push('All 12 languages fit the live table at 320px without changing game state.');
-  report.checks.push('Game language selection opens from a 44px settings button; all 12 languages fit settings at 320px and dismiss by Close or Escape with focus restored. Home and waiting screens retain the flag selector.');
+  report.checks.push('Game language selection opens from a 44px settings button; all 12 languages fit settings at 320px and dismiss by Close or Escape with focus restored. Home and waiting screens use the same Settings button and keep the language selector inside the dialog.');
 
   for (let count = 0; count < 2; count++) {
     const states = await Promise.all([a, b].map(board));
@@ -282,7 +281,7 @@ try {
   assert.deepEqual(await board(b), playedBefore);
   await b.reload();
   await expect(b.locator('.game-page')).toHaveAttribute('data-trick-number', '2');
-  await expectGameLanguage(b, 'hu');
+  await expectLanguage(b, 'hu');
   assert.equal(await readFile(savePath, 'utf8'), playedSave, 'Changing the language and reconnecting must preserve cards and scores.');
   await choose(b, 'es');
   report.checks.push('Players can bid and play across languages; changing language during a round survives reload and preserves cards and scores.');
@@ -303,7 +302,7 @@ try {
   report.checks.push({ localizedServerError: { es: spanishError, en: englishError } });
   assert.deepEqual(report.browserErrors, []);
   report.passed = true;
-  console.log('Language browser checks passed: 12 languages, game settings, IP/browser defaults, explicit-choice races, lookup timeouts, persistence, mixed-language play, dialogs, accessible card names and server errors.');
+  console.log('Language browser checks passed: 12 languages, settings on every screen, IP/browser defaults, explicit-choice races, lookup timeouts, persistence, mixed-language play, dialogs, accessible card names and server errors.');
 } finally {
   await writeFile(path.join(artifacts, 'report.json'), JSON.stringify(report, null, 2));
   await browser?.close();
