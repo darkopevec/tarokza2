@@ -14,6 +14,10 @@ const address = await server.listen(0, '127.0.0.1');
 const origin = `http://127.0.0.1:${address.port}`;
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE_PATH });
 const report = { passed: false, checks: [], screenshots: [], browserErrors: [], layouts: [] };
+const locales = ['sl', 'en', 'es', 'de', 'fr', 'it', 'cs', 'sk', 'hu', 'da', 'ro', 'pl'];
+const stories = {};
+const storyLabels = {};
+const requestedUrls = new Set();
 const nginxConfig = await readFile(new URL('../nginx.it13.conf', import.meta.url), 'utf8');
 const contentSecurityPolicy = nginxConfig.match(/add_header Content-Security-Policy "([^"]+)"/)[1];
 await mkdir(artifacts, { recursive: true });
@@ -71,6 +75,53 @@ async function verifyGallery(page, deck) {
   await expect(faces).toHaveCount(54);
   await expect.poll(() => faces.evaluateAll(images => images.map(image => new URL(image.src).pathname).sort()))
     .toEqual(cardImageUrls(deck).slice(1).map(url => url.split('?')[0]).sort());
+  await verifyStory(page, deck);
+  assert.ok(await page.getByTestId('deck-story').evaluate(story =>
+    !!(story.compareDocumentPosition(document.querySelector('.deck-section')) & Node.DOCUMENT_POSITION_FOLLOWING)),
+  `${deck}: the story appears before the card reference`);
+}
+
+async function verifyStory(page, deck) {
+  const story = page.getByRole('dialog').getByTestId('deck-story');
+  await expect(story).toBeVisible();
+  await expect(story).toHaveAttribute('data-deck', deck);
+  const title = await page.getByTestId('deck-select').locator('option:checked').textContent();
+  await expect(story.locator('h3')).toHaveText(title);
+  const copy = await story.locator('p').evaluateAll(paragraphs => paragraphs
+    .filter(paragraph => !paragraph.querySelector('a')).map(paragraph => {
+      const body = paragraph.cloneNode(true);
+      body.querySelectorAll('strong').forEach(label => label.remove());
+      return body.textContent.trim();
+    }));
+  assert.equal(copy.length, 2, `${deck}: the story includes a description and history`);
+  assert.ok(copy.every(paragraph => paragraph.length > 40), `${deck}: both story paragraphs contain useful context`);
+  const labels = await Promise.all([story.locator('p strong').textContent(), story.locator('.deck-story-sources > span').textContent()]);
+  const locale = await page.locator('html').getAttribute('lang');
+  if (locale === 'sl') { stories[deck] = copy; storyLabels[deck] = labels; }
+  else {
+    assert.ok(stories[deck], `${deck}: Slovenian baseline is available`);
+    for (let index = 0; index < copy.length; index++) {
+      assert.notEqual(copy[index], stories[deck][index], `${deck}: ${locale} translates paragraph ${index + 1}`);
+      assert.notEqual(labels[index], storyLabels[deck][index], `${deck}: ${locale} translates history/source labels`);
+    }
+  }
+  const sources = await story.locator('a').evaluateAll(anchors => anchors.map(anchor => ({
+    href: anchor.href, title: anchor.textContent.trim(), target: anchor.target, rel: anchor.rel.split(/\s+/),
+  })));
+  assert.ok(sources.length > 0, `${deck}: history cites its sources`);
+  for (const source of sources) {
+    assert.equal(new URL(source.href).protocol, 'https:', `${deck}: sources use HTTPS`);
+    assert.ok(source.title, `${deck}: source links have readable labels`);
+    assert.equal(source.target, '_blank', `${deck}: sources open separately from the game`);
+    assert.ok(source.rel.includes('noopener'), `${deck}: external sources isolate their opener`);
+    assert.ok(!requestedUrls.has(source.href), `${deck}: showing the story does not fetch its external sources`);
+  }
+}
+
+async function openSettings(page) {
+  await page.getByTestId('game-settings').click();
+  await expect(page.getByTestId('language-select')).toBeVisible();
+  await expect(page.getByRole('dialog').locator('[data-testid="settings-deck-select"], [data-testid="deck-select"], [data-testid="settings-deck-story"], [data-testid="deck-story"]')).toHaveCount(0);
 }
 
 async function verifyTableArtwork(page, deck) {
@@ -96,6 +147,7 @@ try {
       await route.fulfill({ response, headers: { ...response.headers(), 'content-security-policy': contentSecurityPolicy } });
     });
     page.on('pageerror', error => report.browserErrors.push(error.message));
+    page.on('request', request => requestedUrls.add(request.url()));
     page.on('console', message => {
       if (message.type() === 'error' && /content security policy|violates.*directive|refused to/i.test(message.text())) {
         report.browserErrors.push(message.text());
@@ -119,6 +171,45 @@ try {
     await screenshot(a, `gallery-${deck}-pips-320.png`);
   }
   await a.getByRole('dialog').getByRole('button', { name: 'Zapri', exact: true }).click();
+  await openSettings(a);
+  assert.deepEqual(await a.getByRole('dialog').locator('[data-testid]').evaluateAll(elements => elements
+    .map(element => element.dataset.testid).filter(id => ['settings-player-name', 'language-select', 'settings-devices'].includes(id))),
+  ['language-select'], 'Guest Settings contains only language preferences');
+  for (const locale of locales) {
+    await a.getByTestId('language-select').selectOption(locale);
+    await expect(a.locator('html')).toHaveAttribute('lang', locale);
+    await a.keyboard.press('Escape');
+    await a.getByTestId('deck-gallery').click();
+    for (const { id: deck } of CARD_DECKS) {
+      await a.getByTestId('deck-select').selectOption(deck);
+      await verifyStory(a, deck);
+      await layout(a, `${deck} ${locale} gallery story at 320px`);
+    }
+    await a.keyboard.press('Escape');
+    await openSettings(a);
+  }
+  assert.equal(new Set(Object.values(stories).map(copy => copy.join('\n'))).size, CARD_DECKS.length,
+    'Each deck has its own description and history');
+  await a.getByTestId('language-select').selectOption('sl');
+  await a.keyboard.press('Escape');
+  await a.setViewportSize({ width: 390, height: 844 });
+  await a.getByTestId('deck-gallery').click();
+  for (const { id: deck } of CARD_DECKS) {
+    await a.getByTestId('deck-select').selectOption(deck);
+    await verifyStory(a, deck);
+    await layout(a, `${deck} gallery story at 390px`);
+    await a.getByRole('dialog').evaluate(dialog => { dialog.scrollTop = 0; });
+    await screenshot(a, `gallery-story-${deck}-390.png`);
+  }
+  await a.keyboard.press('Escape');
+  await a.reload();
+  await a.getByTestId('deck-gallery').click();
+  await expect(a.getByTestId('deck-select')).toHaveValue('smrekar');
+  await verifyStory(a, 'smrekar');
+  await a.keyboard.press('Escape');
+  await a.setViewportSize({ width: 320, height: 844 });
+  report.checks.push('All three decks have distinct descriptions and histories through the Cards icon, before the gallery cards, with safe HTTPS source links and no source fetches; Settings contains no deck controls or stories.');
+  report.checks.push('All 12 locales translate both story paragraphs and their labels; 320px/390px galleries scroll without horizontal overflow, and the selected deck survives reload.');
   await a.getByTestId('player-name').fill('Ana');
   await a.getByTestId('create-room').click();
   await expect(a.getByTestId('room-code')).toBeVisible();
@@ -128,6 +219,12 @@ try {
   await b.getByTestId('player-name').fill('Luka');
   await b.getByTestId('join-room').click();
   await Promise.all(pages.map(page => expect(page.locator('.game-page')).toHaveAttribute('data-phase', 'bidding')));
+  await openSettings(a);
+  assert.deepEqual(await a.getByRole('dialog').locator('[data-testid]').evaluateAll(elements => elements
+    .map(element => element.dataset.testid).filter(id => ['settings-player-name', 'language-select', 'settings-devices'].includes(id))),
+  ['settings-player-name', 'language-select', 'settings-devices'],
+  'Authenticated Settings contains name, language and devices in order');
+  await a.keyboard.press('Escape');
   for (let count = 0; count < 2; count++) {
     const states = await Promise.all(pages.map(snapshot));
     const actor = states.findIndex(state => state.state.turn === state.state.you);
@@ -179,7 +276,7 @@ try {
   report.checks.push('Switching all three decks during the second trick updates faces and backs, retains played cards, legal moves, hand IDs, points, score display and the exact saved game; opponent faces and backs are independent and reload preserves Smrekar.');
   assert.deepEqual(report.browserErrors, []);
   report.passed = true;
-  console.log('PASS: mobile and desktop Slovenian/Smrekar galleries and tables, loaded pip cards under CSP, mid-round changes across all three decks and matching backs, independent artwork, unchanged saves and scores, Smrekar reload persistence.');
+  console.log('PASS: three sourced deck stories in 12 languages, mobile gallery layouts and focused Settings, loaded artwork under CSP, mid-round changes, independent artwork, unchanged saves and scores, reload persistence.');
 } finally {
   await writeFile(path.join(artifacts, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();

@@ -5,6 +5,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { chromium, expect } from '@playwright/test';
 import { detectLanguage, LANGUAGE_STORAGE_KEY, translatorFor } from '../../src/i18n.mjs';
 import { CARD_DECKS, cardBackImage, cardImage, cardImageUrls, DECK_STORAGE_KEY } from '../../src/decks.mjs';
+import { DECK_STORIES } from '../../src/deck-stories.mjs';
 import { createDeck } from '../../shared/cards.mjs';
 
 // Read-only public browser checks. No identities, tables or games are created.
@@ -17,7 +18,75 @@ const expectedHashes = Object.fromEntries(await Promise.all(
   }),
 ));
 
+async function verifyMobileHeader(page) {
+  await page.evaluate(() => document.fonts.ready);
+  const layout = await page.evaluate(() => {
+    const box = element => {
+      const { left, right, width, height } = element.getBoundingClientRect();
+      return { left, right, width, height };
+    };
+    const logo = document.querySelector('.header-brand .logo');
+    const status = document.querySelector('.header-brand .connection-status');
+    return {
+      width: innerWidth, documentWidth: document.documentElement.scrollWidth,
+      wordmark: logo.textContent, logo: box(logo), status: box(status),
+      controls: [...document.querySelectorAll('.header-right button')].map(box),
+      statusAmongActions: !!document.querySelector('.header-right .connection-status'),
+    };
+  });
+  assert.equal(layout.width, 320);
+  assert.ok(layout.documentWidth <= layout.width + 1, 'The mobile home screen must not overflow horizontally');
+  assert.match(layout.wordmark, /tarokza2/);
+  assert.ok(layout.status.left >= layout.logo.right && layout.status.left - layout.logo.right <= 10,
+    'The connection indicator must sit beside the wordmark');
+  assert.equal(layout.statusAmongActions, false);
+  assert.equal(layout.controls.length, 3, 'Guests have Cards, Help and Settings header controls');
+  for (const [index, control] of layout.controls.entries()) {
+    assert.ok(control.width >= 43.5 && control.height >= 43.5, 'Header controls retain 44px touch targets');
+    assert.ok(control.left >= 0 && control.right <= layout.width, 'Header controls fit the mobile viewport');
+    assert.ok(control.left >= (index ? layout.controls[index - 1].right : layout.status.right),
+      'The wordmark, status and header controls do not overlap');
+  }
+  await expect(page.locator('.site-header [data-testid="language-select"]')).toHaveCount(0);
+}
+
+async function verifySettings(page) {
+  const settings = page.locator('.game-settings-modal');
+  await expect(settings).toBeVisible();
+  await expect(settings.getByTestId('language-select')).toBeVisible();
+  await expect(settings.locator('[data-testid="settings-deck-select"], [data-testid="deck-select"], [data-testid="settings-deck-story"], [data-testid="deck-story"]')).toHaveCount(0);
+  await expect(settings.getByTestId('settings-player-name')).toHaveCount(0);
+  await expect(settings.getByTestId('settings-devices')).toHaveCount(0);
+  assert.equal(await page.evaluate(() => localStorage.getItem('tarokza2.device')), null,
+    'Public checks must remain an anonymous guest');
+}
+
+async function verifyDeckStory(page, deck) {
+  const locale = await page.locator('html').getAttribute('lang');
+  const translate = translatorFor(locale);
+  const expected = DECK_STORIES[deck];
+  const story = page.getByRole('dialog').getByTestId('deck-story');
+  await expect(story).toHaveCount(1);
+  await expect(story).toHaveAttribute('data-deck', deck);
+  await expect(story.locator('h3')).toHaveText(translate(CARD_DECKS.find(item => item.id === deck).name));
+  await expect(story.locator(':scope > p')).toHaveText([
+    translate(expected.description), `${translate('Zgodovina')} ${translate(expected.history)}`,
+  ]);
+  const sources = story.locator('.deck-story-sources a');
+  await expect(sources).toHaveText(expected.sources.map(source => translate(source.label)));
+  assert.deepEqual(await sources.evaluateAll(links => links.map(link => link.getAttribute('href'))),
+    expected.sources.map(source => source.url), `${deck}: source links match the release provenance`);
+  for (const link of await sources.evaluateAll(links => links.map(link => ({ href: link.href, target: link.target, rel: link.rel })))) {
+    assert.equal(new URL(link.href).protocol, 'https:');
+    assert.equal(link.target, '_blank');
+    assert.ok(link.rel.split(/\s+/).includes('noopener') && link.rel.split(/\s+/).includes('noreferrer'));
+  }
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+    `${deck}: the gallery and its story fit the mobile viewport`);
+}
+
 async function verifyDeckGallery(page, deck) {
+  await verifyDeckStory(page, deck);
   const faces = page.getByRole('dialog').locator('.card-face-image');
   await expect(faces).toHaveCount(54);
   await expect.poll(() => faces.evaluateAll(images => images.map(image => new URL(image.src).pathname).sort()))
@@ -70,7 +139,7 @@ try {
     // Both hosts share a 20 requests/second, burst-100 limit for this runner's IP.
     // Let its allowance recover between independent, uncached deck galleries.
     if (index > 0) await delay(6000);
-    const context = await browser.newContext({ locale: 'en-US' });
+    const context = await browser.newContext({ locale: 'en-US', viewport: { width: 320, height: 640 }, isMobile: true, hasTouch: true });
     await context.addInitScript(() => {
       window.securityViolations = [];
       document.addEventListener('securitypolicyviolation', event => {
@@ -98,7 +167,9 @@ try {
     assert.ok(cacheControl.includes('private') && cacheControl.includes('no-store'));
     const preferred = await page.evaluate(() => navigator.languages);
     const defaultLanguage = detectLanguage(null, preferred, detected.country);
+    await verifyMobileHeader(page);
     await page.getByTestId('game-settings').click();
+    await verifySettings(page);
     const selector = page.getByTestId('language-select');
     await expect(selector).toBeVisible();
     assert.deepEqual(await selector.locator('option').evaluateAll(options => options.map(option => option.value)), languageCodes);
@@ -119,6 +190,7 @@ try {
     await page.getByTestId('deck-gallery').click();
     const deckSelector = page.getByTestId('deck-select');
     await expect(deckSelector).toHaveValue('modiano');
+    await expect(deckSelector.locator('option[value="modiano"]')).toHaveText('Modiano');
     assert.deepEqual(await deckSelector.locator('option').evaluateAll(options => options.map(option => option.value)), CARD_DECKS.map(deck => deck.id));
     for (const [deckIndex, { id }] of CARD_DECKS.entries()) {
       if (deckIndex > 0) await delay(6000);
@@ -129,13 +201,16 @@ try {
     assert.equal(await page.evaluate(key => localStorage.getItem(key), DECK_STORAGE_KEY), 'smrekar');
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     await page.reload({ waitUntil: 'networkidle' });
+    await verifyMobileHeader(page);
     await page.getByTestId('game-settings').click();
+    await verifySettings(page);
     await expect(selector).toHaveValue(explicitLanguage);
     await expect(page.locator('html')).toHaveAttribute('lang', explicitLanguage);
     await expect(page).toHaveTitle(translatorFor(explicitLanguage)('TarokZa2 · Dobra družba. Dobre karte.'));
     await page.keyboard.press('Escape');
     await page.getByTestId('deck-gallery').click();
     await expect(deckSelector).toHaveValue('smrekar');
+    await expect(deckSelector.locator('option[value="modiano"]')).toHaveText('Modiano');
     await verifyDeckGallery(page, 'smrekar');
     assert.deepEqual(await page.evaluate(() => window.securityViolations), []);
     assert.deepEqual(errors, []);
@@ -143,7 +218,8 @@ try {
     assert.match(headers['content-security-policy'], /frame-ancestors 'none'/);
     assert.equal(headers['x-frame-options'], 'DENY');
     assert.equal(headers['strict-transport-security'], 'max-age=31536000');
-    console.log(`${host}: 12 languages, IP/browser default (${defaultLanguage}), Modiano default, all three galleries, ${Object.keys(expectedHashes).length} face/back hashes and image types (16 Slovenian + 13 Smrekar SVG), saved language/Smrekar choices, CSP and secure WebSocket checked`);
+    assert.equal(await page.evaluate(() => localStorage.getItem('tarokza2.device')), null);
+    console.log(`${host}: 320px guest header/status/touch targets, Cards-only selection, Modiano label, all three translated descriptions/histories and HTTPS sources, 12 languages, IP/browser default (${defaultLanguage}), ${Object.keys(expectedHashes).length} face/back hashes and image types (16 Slovenian + 13 Smrekar SVG), saved language/Smrekar choices, CSP and secure WebSocket checked`);
     await context.close();
   }
 } finally {

@@ -3,7 +3,7 @@ import { cardFor, createDeck, CARD_ART_VERSION } from '../shared/cards.mjs';
 export const DECK_STORAGE_KEY = 'tarokza2.deck';
 export const DEFAULT_DECK = 'modiano';
 export const CARD_DECKS = Object.freeze([
-  Object.freeze({ id: 'modiano', name: 'Modiano · Maribor' }),
+  Object.freeze({ id: 'modiano', name: 'Modiano' }),
   Object.freeze({ id: 'slovenian', name: 'Slovenski tarok · Piatnik' }),
   Object.freeze({ id: 'smrekar', name: 'Smrekarjev tarok · Hinko Smrekar' }),
 ]);

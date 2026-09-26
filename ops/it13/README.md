@@ -1,6 +1,20 @@
 # IT13 deployment
 
-The current 2026-09-26 shared Settings release uses image
+The current 2026-09-26 deck history release uses image
+`tarokza2:deck-history-20260926` and `compose.it13.yaml`. The Cards icon contains
+deck selection and short, sourced histories and descriptions for all three decks
+in all 12 languages. The default deck is labelled Modiano; the specific Maribor
+edition remains identified in its history and attribution. Settings contains
+player name, language, and devices and recovery, with language only for guests.
+
+Card artwork and gameplay are unchanged. Saved games and identities require no
+migration. Back up the stopped volume before switching images and refresh browser
+tabs afterward. Retain `tarokza2:shared-settings-20260926` for code rollback with
+the same data.
+
+## Previous shared Settings release
+
+The 2026-09-26 shared Settings release uses image
 `tarokza2:shared-settings-20260926` and `compose.it13.yaml`. The settings gear
 is available on home, waiting, and play screens. Card preferences come first,
 followed by player name, language, and devices and recovery. Guests see card

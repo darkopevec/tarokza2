@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import { cardFor, createDeck } from "../shared/cards.mjs";
 import { prepareCardImages, registerCardCache } from './card-images.mjs';
 import { CARD_DECKS, cardBackImage, cardImage, getDeck, setDeck, subscribeDeck } from './decks.mjs';
+import { DECK_STORIES } from './deck-stories.mjs';
 import { explainScoreRow } from "./score-explanation.mjs";
 import {
   ArrowRight,
@@ -152,7 +153,23 @@ function LanguagePicker({ locale }) {
   </label>;
 }
 
-function SettingsDialog({ user, locale, selectedDeck, online, busy, onSaveName, onLoadDevices, deviceSettings, onError, onClose }) {
+function DeckStory({ selectedDeck }) {
+  const story = DECK_STORIES[selectedDeck];
+  const deck = CARD_DECKS.find(deck => deck.id === selectedDeck);
+  return <section className="deck-story" data-testid="deck-story" data-deck={selectedDeck}>
+    <h3>{t(deck.name)}</h3>
+    <p>{t(story.description)}</p>
+    <p><strong>{t('Zgodovina')}</strong> {t(story.history)}</p>
+    <div className="deck-story-sources">
+      <span>{t('Viri')}</span>
+      <ul>{story.sources.map(source => <li key={source.url}>
+        <a href={source.url} target="_blank" rel="noopener noreferrer">{t(source.label)}<ArrowUpRight size={13} aria-hidden="true" /></a>
+      </li>)}</ul>
+    </div>
+  </section>;
+}
+
+function SettingsDialog({ user, locale, online, busy, onSaveName, onLoadDevices, deviceSettings, onError, onClose }) {
   const [showDevices, setShowDevices] = useState(false);
   const [loadingDevices, setLoadingDevices] = useState(false);
   const devicesButton = useRef(null);
@@ -171,13 +188,6 @@ function SettingsDialog({ user, locale, selectedDeck, online, busy, onSaveName, 
   }
   return <Modal title={t(showDevices ? 'Naprave in obnovitev' : 'Nastavitve')} className="game-settings-modal" onClose={onClose}>
     <div hidden={showDevices}>
-      <div className="settings-deck settings-section">
-        <label className="settings-label" htmlFor="settings-deck">{t('Komplet kart')}</label>
-        <select id="settings-deck" data-testid="settings-deck-select" value={selectedDeck} onChange={event => setDeck(event.target.value)}>
-          {CARD_DECKS.map(deck => <option key={deck.id} value={deck.id}>{t(deck.name)}</option>)}
-        </select>
-        <p className="settings-note">{t('Izbrani komplet velja samo v tem brskalniku.')}</p>
-      </div>
       {user && <PlayerNameSettings user={user} online={online} busy={busy || loadingDevices} onSave={onSaveName} />}
       <LanguagePicker locale={locale} />
       {user && <div className="settings-links">
@@ -262,6 +272,7 @@ function DeckGallery({ onClose, selectedDeck }) {
         </select>
       </label>
       <p className="deck-preference-note">{t("Izbrani komplet velja samo v tem brskalniku.")}</p>
+      <DeckStory selectedDeck={selectedDeck} />
       <span className="eyebrow">{t("CELOTEN KOMPLET · 54 KART")}</span>
       <p>{t("22 tarokov in po 8 kart vsake barve. Prikazane so od najmočnejše do najšibkejše.")}</p>
       <p>{t("Figure so kralj, dama, kaval in fant. V srcu in karu so še karte z enim, dvema, tremi in štirimi znaki; v piku in križu so 10, 9, 8 in 7.")}</p>
@@ -1579,7 +1590,7 @@ function App() {
           </button>
         </div>
       )}
-      {modal === 'settings' && <SettingsDialog user={user} locale={locale} selectedDeck={selectedDeck} online={online} busy={busy} onSaveName={renamePlayer} onLoadDevices={loadDevices} onError={setError}
+      {modal === 'settings' && <SettingsDialog user={user} locale={locale} online={online} busy={busy} onSaveName={renamePlayer} onLoadDevices={loadDevices} onError={setError}
         onClose={() => { setModal(null); setDeviceLink(null); }}
         deviceSettings={{ devices, busy: busy || !online, onRename: (id, name) => changeDevice('devices:rename', { id, name }),
           onRevoke: id => changeDevice('devices:revoke', { id }), onLink: () => makeDeviceLink('device'),

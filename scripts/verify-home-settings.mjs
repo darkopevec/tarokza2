@@ -13,7 +13,6 @@ const pages = [];
 let dataDir, server, browser, origin;
 const gear = page => page.getByTestId('game-settings');
 const settings = page => page.locator('.game-settings-modal');
-const deck = page => page.getByTestId('settings-deck-select');
 const language = page => page.getByTestId('language-select');
 const name = page => page.getByTestId('settings-player-name');
 const row = (page, roomId) => page.locator('.identity-table-row').filter({ hasText: roomId });
@@ -38,14 +37,14 @@ async function open(page, authenticated) {
   await expect(language(page)).toHaveCount(0);
   await gear(page).click();
   await expect(settings(page)).toBeVisible();
-  await expect(deck(page)).toBeVisible();
+  await expect(settings(page).locator('[data-testid="settings-deck-select"], [data-testid="deck-select"], [data-testid="settings-deck-story"], [data-testid="deck-story"]')).toHaveCount(0);
   await expect(language(page)).toBeVisible();
   await expect(name(page)).toHaveCount(authenticated ? 1 : 0);
   await expect(page.getByTestId('settings-devices')).toHaveCount(authenticated ? 1 : 0);
   assert.deepEqual(await settings(page).locator('[data-testid]').evaluateAll(elements => elements
-    .map(element => element.dataset.testid).filter(id => ['settings-deck-select', 'settings-player-name', 'language-select', 'settings-devices'].includes(id))),
-  authenticated ? ['settings-deck-select', 'settings-player-name', 'language-select', 'settings-devices'] : ['settings-deck-select', 'language-select'],
-  'Settings show card preferences first, then name, language and devices');
+    .map(element => element.dataset.testid).filter(id => ['settings-player-name', 'language-select', 'settings-devices'].includes(id))),
+  authenticated ? ['settings-player-name', 'language-select', 'settings-devices'] : ['language-select'],
+  'Settings show name, language and devices; guests see only language');
   await expect(gear(page)).toHaveAttribute('aria-expanded', 'true');
 }
 async function close(page) {
@@ -128,28 +127,25 @@ try {
   assert.equal(await host.evaluate(() => localStorage.getItem('tarokza2.device')), null);
   assert.equal(await host.evaluate(() => localStorage.getItem('tarokza2.pending-device')), null);
   await assert.rejects(readFile(path.join(dataDir, 'identities.json')), { code: 'ENOENT' });
-  await open(host, false);
-  assert.deepEqual(await deck(host).locator('option').evaluateAll(options => options.map(option => option.value)),
+  await host.getByTestId('deck-gallery').click();
+  assert.deepEqual(await host.getByTestId('deck-select').locator('option').evaluateAll(options => options.map(option => option.value)),
     ['modiano', 'slovenian', 'smrekar']);
   for (const choice of ['modiano', 'slovenian', 'smrekar']) {
-    await deck(host).selectOption(choice);
+    await host.getByTestId('deck-select').selectOption(choice);
     assert.equal(await host.evaluate(() => localStorage.getItem('tarokza2.deck')), choice);
-    await close(host);
+    await host.keyboard.press('Escape');
     await host.getByTestId('deck-gallery').click();
     await expect(host.getByTestId('deck-select')).toHaveValue(choice);
-    await host.keyboard.press('Escape');
-    await open(host, false);
-    await expect(deck(host)).toHaveValue(choice);
   }
-  await close(host);
+  await host.keyboard.press('Escape');
   await host.reload();
-  await open(host, false);
-  await expect(deck(host)).toHaveValue('smrekar');
-  await close(host);
+  await host.getByTestId('deck-gallery').click();
+  await expect(host.getByTestId('deck-select')).toHaveValue('smrekar');
+  await host.keyboard.press('Escape');
   assert.equal(await host.evaluate(() => localStorage.getItem('tarokza2.device')), null);
   await assert.rejects(readFile(path.join(dataDir, 'identities.json')), { code: 'ENOENT' });
-  report.checks.push('Guest Settings shows card preferences then language, supports all 12 locales at 320/390/1280px, restores focus on Escape, and never creates an identity.');
-  report.checks.push('All three deck preferences update the existing card gallery and persist after reload.');
+  report.checks.push('Guest Settings shows only language, supports all 12 locales at 320/390/1280px, restores focus on Escape, and never creates an identity.');
+  report.checks.push('All three deck preferences remain accessible through the Cards icon and persist after reload; Settings contains no deck controls or stories.');
 
   await host.setViewportSize({ width: 320, height: 568 });
   await host.context().setOffline(true);

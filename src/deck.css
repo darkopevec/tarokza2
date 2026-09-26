@@ -26,3 +26,22 @@
 .deck-intro .deck-preference-note {
   margin: 0 0 20px;
 }
+
+.deck-story {
+  padding: 18px;
+  margin: 0 0 22px;
+  border: 1px solid var(--line, #dedbd2);
+  border-radius: 12px;
+  background: #f4f5ee;
+  color: #344c40;
+  overflow-wrap: anywhere;
+}
+.deck-story h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.35; }
+.deck-story p { margin: 0 0 12px; font-size: 14px; line-height: 1.65; color: inherit; }
+.deck-story p strong { display: block; margin-bottom: 4px; font-size: 12px; }
+.deck-story-sources { border-top: 1px solid #dde2d6; padding-top: 10px; }
+.deck-story-sources > span { font-size: 12px; color: #627162; }
+.deck-story-sources ul { display: flex; flex-wrap: wrap; gap: 0 16px; margin: 0; padding: 0; list-style: none; }
+.deck-story-sources a { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 12px; color: var(--green, #244d3e); text-decoration: underline; text-underline-offset: 3px; }
+.deck-story-sources a svg { flex-shrink: 0; }
+.deck-story-sources a:focus-visible { outline: 2px solid var(--green, #244d3e); outline-offset: 3px; border-radius: 3px; }

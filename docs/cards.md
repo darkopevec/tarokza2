@@ -1,8 +1,10 @@
 # Tarok card decks
 
-The game offers three complete 54-card decks: **Modiano · Maribor**, the default, **Slovenski tarok · Piatnik**, and **Smrekarjev tarok · Hinko Smrekar**. Open **Cards → Card deck** to change the artwork for the game and card reference. The choice is saved only in the current browser and does not affect another player's choice or the game's rules, card identities, or saved hands. Modiano and Slovenski tarok use the Piatnik Ornament back described below; Smrekar uses its own matching back.
+The game offers three complete 54-card decks: **Modiano**, the default, **Slovenski tarok · Piatnik**, and **Smrekarjev tarok · Hinko Smrekar**. Open the **Cards** icon, then **Card deck** to change the artwork for the game and card reference. The choice is saved only in the current browser and does not affect another player's choice or the game's rules, card identities, or saved hands. Modiano and Slovenski tarok use the Piatnik Ornament back described below; Smrekar uses its own matching back.
 
-## Modiano · Maribor
+Each deck has a short description and history with links to the online sources. These appear above the gallery in all 12 interface languages. The factual copy and links live in [src/deck-stories.mjs](../src/deck-stories.mjs); [deck-history.md](deck-history.md) records the source-to-claim mapping and date distinctions. Historical descriptions concern the original decks; the digital artwork adaptations remain documented separately below.
+
+## Modiano
 
 The default deck uses scans of S. Modiano **Tarok Študentski servis Maribor**, dated 1995 in Wikimedia Commons. The photographs are credited to **Martin Okrslar**, uploaded by **Mrtn-kamnik**. These 54 faces are unchanged source scans.
 
