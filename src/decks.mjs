@@ -8,7 +8,7 @@ export const CARD_DECKS = Object.freeze([
   Object.freeze({ id: 'smrekar', name: 'Smrekarjev tarok · Hinko Smrekar' }),
   Object.freeze({ id: 'moser', name: 'Secesijski tarok · Ditha Moser' }),
   Object.freeze({ id: 'cego', name: 'Adler-Cego · ASS' }),
-  Object.freeze({ id: 'neumayer', name: 'Češki tarok · OTK' }),
+  Object.freeze({ id: 'neumayer', name: 'Češki tarok · OTK 165' }),
 ]);
 const deckIds = new Set(CARD_DECKS.map(deck => deck.id));
 const validDeck = value => deckIds.has(value) ? value : DEFAULT_DECK;

@@ -1,4 +1,4 @@
-// Factual summaries checked against these online sources on 2026-09-26.
+// Factual summaries checked on 2026-09-26; Czech edition corrected on 2026-09-28.
 // Dates refer to the documented copy or artwork, not an inferred publication year.
 export const DECK_STORIES = Object.freeze({
   modiano: {
@@ -42,11 +42,11 @@ export const DECK_STORIES = Object.freeze({
     ],
   },
   neumayer: {
-    description: 'Ta 54-kartni češki komplet pripada družini »Industrie und Glück«. Ima francoske barve in dvojne žanrske prizore iz vsakdanjega življenja.',
-    history: 'Tarot Museum Belgium v svoji zbirki navaja podjetje Obchodní Tiskárny kot izdajatelja kompleta Taroky O.T.K., Josefa Neumayerja pa kot graverja. Tukaj je uporabljena zgodovinska izdaja OTK št. 165.',
+    description: 'Zgodovinski komplet OTK št. 165 iz Kolína ima 54 kart s francoskimi barvami in dvojnimi prizori. Podobe se razlikujejo od sodobne izdaje Hrací karty št. 1720.',
+    history: 'Zasnova sledi avstrijskemu taroku tipa C, ki ga IPCS povezuje z J. Neumayerjem in Piatnikom okoli leta 1890. Po drugi svetovni vojni je ta vzorec tiskalo tudi podjetje Obchodní Tiskárny. Letnica prikazanega izvoda ni potrjena.',
     sources: [
-      { label: 'Tarot Museum Belgium', url: 'https://tarotmuseumbelgium.com/jeu-tarot/' },
-      { label: 'Hrací karty 1884', url: 'https://www.hracikarty.cz/produkty/standardni-karty/taroky-1720/' },
+      { label: 'WWPCM · Taroky 165', url: 'http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm' },
+      { label: 'International Playing-Card Society', url: 'https://i-p-c-s.org/pattern/ps-16.html' },
     ],
   },
 });

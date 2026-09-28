@@ -1,6 +1,21 @@
 # IT13 deployment
 
-The current 2026-09-26 collection-decks release uses image
+The current 2026-09-28 Czech source correction uses image
+`tarokza2:czech-sources-20260928` and `compose.it13.yaml`. The Czech deck is
+labelled **OTK 165** and explicitly distinguished from modern Hrací karty
+No. 1720 in all 12 languages. Its sources now link to the actual WWPCM scan
+catalogue and IPCS pattern history; the unavailable Belgium museum link and
+modern product page have been removed from this edition's in-app sources.
+The original WWPCM catalogue requires HTTP; all other story links use HTTPS.
+
+Card artwork and saved games require no migration. Back up the stopped volume
+before switching images and refresh browser tabs afterward. Retain
+`tarokza2:collection-decks-20260926` for code rollback with the same data.
+Local validation passed the build, 31 focused checks and 104 browser layouts.
+
+## Previous collection-decks release
+
+The 2026-09-26 collection-decks release uses image
 `tarokza2:collection-decks-20260926` and `compose.it13.yaml`. It adds Ditha
 Moser, Adler-Cego and historical Czech OTK artwork, bringing the Cards selector
 to six complete decks with sourced histories in all 12 languages. Modiano's

@@ -110,7 +110,9 @@ async function verifyStory(page, deck) {
   })));
   assert.ok(sources.length > 0, `${deck}: history cites its sources`);
   for (const source of sources) {
-    assert.equal(new URL(source.href).protocol, 'https:', `${deck}: sources use HTTPS`);
+    // The original No. 165 scan catalogue is only available over HTTP.
+    const originalCatalogue = deck === 'neumayer' && source.href === 'http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm';
+    assert.equal(new URL(source.href).protocol, originalCatalogue ? 'http:' : 'https:', `${deck}: source uses its supported protocol`);
     assert.ok(source.title, `${deck}: source links have readable labels`);
     assert.equal(source.target, '_blank', `${deck}: sources open separately from the game`);
     assert.ok(source.rel.includes('noopener'), `${deck}: external sources isolate their opener`);
@@ -208,7 +210,7 @@ try {
   await verifyStory(a, CARD_DECKS.at(-1).id);
   await a.keyboard.press('Escape');
   await a.setViewportSize({ width: 320, height: 844 });
-  report.checks.push('All decks have distinct descriptions and histories through the Cards icon, before the gallery cards, with safe HTTPS source links and no source fetches; Settings contains no deck controls or stories.');
+  report.checks.push('All decks have distinct descriptions and histories through the Cards icon, before the gallery cards, with isolated external source links and no source fetches; only the original No. 165 catalogue uses HTTP. Settings contains no deck controls or stories.');
   report.checks.push('All 12 locales translate both story paragraphs and their labels; 320px/390px galleries scroll without horizontal overflow, and the selected deck survives reload.');
   await a.getByTestId('player-name').fill('Ana');
   await a.getByTestId('create-room').click();

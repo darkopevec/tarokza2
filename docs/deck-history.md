@@ -69,16 +69,23 @@ open only when chosen.
   middle of the 1970s. The interface expressly attributes this history to the
   collector's research rather than presenting an inferred artist/date.
 
-## Češki tarok · OTK
+## Češki tarok · OTK 165
 
-- [Tarot Museum Belgium's collection](https://tarotmuseumbelgium.com/jeu-tarot/)
-  identifies an OTK Taroky pack, Obchodní Tiskárny as publisher and Josef Neumayer
-  as engraver. Its copy's 1961–1968 dating is **not** applied to the game's copy.
-- [Hrací karty 1884](https://www.hracikarty.cz/produkty/standardni-karty/taroky-1720/)
-  confirms the 54-card Czech Industrie & Glück pattern, everyday-life scenes
-  and Josef Neumayer attribution. No. 1720 is a product number, not a year.
-- The imported scans are WWPCM's historical Kolín No. 165 edition. The UI says
-  **OTK**, with no unsupported printing date, and does not call them No. 1720.
+Corrected and sources checked on **2026-09-28**.
+
+- [WWPCM's actual scan catalogue](http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm)
+  identifies Kolín's **Taroky No. 165**, with 54 cards. This is the edition
+  displayed in the app. Its HTTP page works; the host does not support modern HTTPS.
+- [IPCS Pattern Sheet 16](https://i-p-c-s.org/pattern/ps-16.html) connects the
+  Austrian Tarock Type C pattern with J. Neumayer's design for Piatnik around
+  1890 and documents manufacture by Obchodní Tiskárny after World War II.
+  This is pattern history, not a confirmed artist credit or date for our scanned copy.
+- The [current Hrací karty No. 1720 product](https://www.hracikarty.cz/produkty/standardni-karty/taroky-1720/)
+  has different printing and colouring. It is not the source of the displayed
+  artwork, so it is no longer listed among this edition's in-app sources.
+- The Tarot Museum Belgium link timed out during direct checks and was removed.
+  Neither its separate copy's dating nor the pattern's circa-1890 origin is
+  assigned to the game's undated scanned copy.
 
 Translations preserve the same facts. Source credits and the app's reconstructed
 or restored card faces are separate from these histories; see [cards.md](cards.md).

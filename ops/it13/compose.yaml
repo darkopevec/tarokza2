@@ -1,7 +1,7 @@
 name: tarokza2
 services:
   tarokza2:
-    image: tarokza2:collection-decks-20260926
+    image: tarokza2:czech-sources-20260928
     container_name: tarokza2
     init: true
     read_only: true

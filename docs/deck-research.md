@@ -7,7 +7,7 @@ prepared as complete playable packs; two still require source artwork.
 | --- | --- |
 | Ditha Moser, 1906 | Complete 54 faces and back; nine pip scans have lower native resolution. |
 | Adler-Cego | 44 source faces and back; ten pips reconstructed from its own suit marks. |
-| Czech Taroky | Historical OTK No. 165: 38 source faces and back, 16 reconstructed pips. Accurately labelled OTK rather than the current No. 1720 product. |
+| Czech Taroky | Historical OTK No. 165: 38 source faces and back, 16 reconstructed pips. Labelled OTK 165, with the actual WWPCM scan catalogue and IPCS pattern history as sources; the current No. 1720 product has different artwork. |
 | Chinesen Tarock, Estel 1820 | Only 12 distinct faces located; incomplete. |
 | Tarock mit Berufsdarstellungen, Steiger circa 1849 | Product preview only; incomplete. |
 

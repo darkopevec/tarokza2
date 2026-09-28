@@ -77,7 +77,9 @@ async function verifyDeckStory(page, deck) {
   assert.deepEqual(await sources.evaluateAll(links => links.map(link => link.getAttribute('href'))),
     expected.sources.map(source => source.url), `${deck}: source links match the release provenance`);
   for (const link of await sources.evaluateAll(links => links.map(link => ({ href: link.href, target: link.target, rel: link.rel })))) {
-    assert.equal(new URL(link.href).protocol, 'https:');
+    // The original No. 165 scan catalogue is only available over HTTP.
+    const originalCatalogue = deck === 'neumayer' && link.href === 'http://a.trionfi.eu/WWPCM/decks05/d02911/d02911.htm';
+    assert.equal(new URL(link.href).protocol, originalCatalogue ? 'http:' : 'https:');
     assert.equal(link.target, '_blank');
     assert.ok(link.rel.split(/\s+/).includes('noopener') && link.rel.split(/\s+/).includes('noreferrer'));
   }
@@ -219,7 +221,7 @@ try {
     assert.equal(headers['x-frame-options'], 'DENY');
     assert.equal(headers['strict-transport-security'], 'max-age=31536000');
     assert.equal(await page.evaluate(() => localStorage.getItem('tarokza2.device')), null);
-    console.log(`${host}: 320px guest header/status/touch targets, Cards-only selection, Modiano label, all ${CARD_DECKS.length} translated descriptions/histories and HTTPS sources, 12 languages, IP/browser default (${defaultLanguage}), ${Object.keys(expectedHashes).length} face/back hashes and image types, saved language/deck choices, CSP and secure WebSocket checked`);
+    console.log(`${host}: 320px guest header/status/touch targets, Cards-only selection, Modiano label, all ${CARD_DECKS.length} translated descriptions/histories and source links (HTTP only for the original No. 165 catalogue), 12 languages, IP/browser default (${defaultLanguage}), ${Object.keys(expectedHashes).length} face/back hashes and image types, saved language/deck choices, CSP and secure WebSocket checked`);
     await context.close();
   }
 } finally {
